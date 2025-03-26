@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ch.IP12.fish</groupId>
-    <artifactId>Raspifx-template</artifactId>
-    <name>RaspPiFX</name>
+    <artifactId>Ueberduengung</artifactId>
+    <name>Ueberduengung</name>
     <version>0.0.1</version>
     
     <repositories>
@@ -24,14 +24,9 @@
 
     <!-- BUILD PROPERTIES -->
     <properties>
-        <!-- The class that will be started, choose one and only one -->
-
-        <!--  <launcher.class>com.pi4j.setup.HelloFX</launcher.class> -->
          <launcher.class>ch.IP12.fish.App</launcher.class>
-        <!-- <launcher.class>com.pi4j.mvc.templatepuiapp.AppStarter</launcher.class> -->
-        <!-- <launcher.class>com.pi4j.mvc.multicontrollerapp.AppStarter</launcher.class> -->
 
-        <jar.name>JFXApp</jar.name>
+        <jar.name>Ueberduengung</jar.name>
 
         <!-- Setup for the RaspPi -->
         <pi.hostname>pi4j</pi.hostname>

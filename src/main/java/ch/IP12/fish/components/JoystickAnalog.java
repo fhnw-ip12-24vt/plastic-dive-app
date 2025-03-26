@@ -118,9 +118,6 @@ public class JoystickAnalog extends Component {
                 double magnitude = Math.sqrt(Math.pow(yActualValue, 2) + Math.pow(xActualValue, 2));
 
                 strength = (double) Math.round(Math.min(1, magnitude)*100) / 100;
-
-                System.out.println("Strength: " + strength);
-                System.out.println("Direction: " + direction);
             }
         }
     }
