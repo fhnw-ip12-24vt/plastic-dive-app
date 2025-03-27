@@ -45,7 +45,7 @@ public abstract class Moveable {
      * Updates the Object instance every x...
      * @param deltaTime
      */
-    public void update(double deltaTime, double strength, boolean playerMove){
+    public void update(double deltaTime, double strength){
         move(strength);
     }
 

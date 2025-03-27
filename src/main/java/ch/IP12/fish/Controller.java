@@ -2,7 +2,6 @@ package ch.IP12.fish;
 
 import ch.IP12.fish.components.JoystickAnalog;
 import ch.IP12.fish.model.*;
-import ch.IP12.fish.model.animations.Spritesheets;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 
@@ -87,7 +86,7 @@ class Controller {
         });
 
         if (this.joystick != null) {
-            joystick.onMove((double xPos, double yPos) -> System.out.println("moved"), () -> System.out.println("centered"));
+            joystick.onMove((double xPos, double yPos) -> {}, () -> {});
         } else {
             System.out.println("No joystick found");
         }
@@ -140,15 +139,15 @@ class Controller {
             gameTicks.getAndIncrement();
 
             if (gameTicks.get() >= 50) {
-                obstacles.add(new Obstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 2, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
+                //obstacles.add(new Obstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 2, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
                 gameTicks.set(0);
             }
 
             double deltaTime = 0.016; // Approx. 60 FPS
-            player.update(deltaTime, JoystickAnalog.getStrength(), joystick.inHomePosition());
+            player.update(deltaTime, JoystickAnalog.getStrength());
             obstacles.parallelStream().forEach(obstacle -> {
                 //Obstacle updates
-                obstacle.update(deltaTime, 0.9, false);
+                obstacle.update(deltaTime, 0.9);
 
                 //adds obstacle to deletion list if it is entirely out of frame for the player
                 if (obstacle.getX() + obstacle.getLength() < 0) deletionList.add(obstacle);

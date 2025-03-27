@@ -37,15 +37,16 @@ public class Player extends Moveable{
             speed += acceleration;
         }
 
-        if(tempDir[0] && !tempDir[1] && !((x+length+speed) > maxX)){
-            x += speed;
-        } else if(tempDir[1] && !tempDir[0] && !((x-speed) < 0)){
-            x -= speed;
-        }
-        if (tempDir[3] && !tempDir[2]  && !((y+height+speed) > maxY)) {
-            y += speed;
-        } else if (tempDir[2] && !tempDir[3] && !((y-speed) < 0)) {
-            y -= speed;
+        x += (Math.cos(Math.toRadians(direction))*(speed*strength));
+        y += (Math.sin(Math.toRadians(direction))*(speed*strength));
+    }
+
+    @Override
+    public void update(double deltaTime, double strength){
+        if (strength > 0.0){
+            move(strength);
+        } else {
+            doFriction();
         }
     }
 

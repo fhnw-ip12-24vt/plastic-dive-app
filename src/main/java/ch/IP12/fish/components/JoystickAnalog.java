@@ -75,16 +75,14 @@ public class JoystickAnalog extends Component {
         });
 
         yAxis.onNormalizedValueChange((yPos) -> {
-            yActualValue = yPos;
+            yActualValue = -yPos;
             updateVals(onMove, onCenter);
         });
-        new Thread(() -> {
-            ads1115.startContinuousReading(0.1);
-        }).start();
+        new Thread(() -> ads1115.startContinuousReading(0.1)).start();
     }
 
     private synchronized void updateVals(PositionConsumer onMove, Runnable onCenter){
-        if (inHomePosition()) {
+        if (Math.abs(xActualValue) <= homeArea && Math.abs(yActualValue) <= homeArea) {
             xLastNotifiedValue = xActualValue;
             yLastNotifiedValue = yActualValue;
 
@@ -128,10 +126,6 @@ public class JoystickAnalog extends Component {
 
     public static double getStrength(){
         return strength;
-    }
-
-    public boolean inHomePosition(){
-        return Math.abs(xActualValue) <= homeArea && Math.abs(yActualValue) <= homeArea;
     }
 
     /**

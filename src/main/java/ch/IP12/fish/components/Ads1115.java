@@ -198,8 +198,6 @@ public class Ads1115 extends I2CDevice {
         writeRegister(CONFIG_REGISTER, configRegisterTemplate | mpc.getMux() | OperationMode.SINGLE.getMode());
         //wait until ad converter has stored new value in conversion register
         //delay time is reciprocal of 1/2 of sampling time (*1000 from s to ms)
-        System.out.println(channel.name()+" "+ dataRate.sps+" "+(2000/dataRate.getSpS())+" "+CONVERSION_REGISTER);
-
         delay(Duration.ofMillis((long) (2000.0 / dataRate.getSpS())));
 
         //now we can read the channel value from conversion register
