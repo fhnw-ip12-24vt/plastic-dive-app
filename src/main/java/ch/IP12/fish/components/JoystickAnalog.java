@@ -70,7 +70,7 @@ public class JoystickAnalog extends Component {
 
     public void onMove(PositionConsumer onMove, Runnable onCenter){
         xAxis.onNormalizedValueChange((xPos) -> {
-            xActualValue = xPos;
+            xActualValue = -xPos;
             updateVals(onMove, onCenter);
         });
 
