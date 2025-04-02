@@ -5,12 +5,13 @@ import ch.IP12.fish.components.JoystickAnalog;
 import ch.IP12.fish.model.Obstacle;
 import ch.IP12.fish.model.Player;
 import ch.IP12.fish.model.animations.Spritesheets;
-import ch.IP12.fish.scenes.Scenes;
 import com.pi4j.Pi4J;
 import javafx.application.Application;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -59,7 +60,9 @@ public class App extends Application {
         View view = new View(graphicsContext, player, obstacles);
 
         //creates window and passes it the relevant objects (necessary for display)
-        Scene scene = Scenes.getGameScene(canvas);
+        StackPane root = new StackPane(canvas);
+        Scene scene = new Scene(root);
+        scene.setCursor(Cursor.NONE);
         stage.setScene(scene);
         stage.setTitle("IP12 Prototype");
         stage.show();
