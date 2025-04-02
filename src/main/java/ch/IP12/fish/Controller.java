@@ -2,6 +2,7 @@ package ch.IP12.fish;
 
 import ch.IP12.fish.components.JoystickAnalog;
 import ch.IP12.fish.model.*;
+import ch.IP12.fish.model.animations.Spritesheets;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 
@@ -116,7 +117,7 @@ class Controller {
      */
     public void startGameLogic() {
         // Run the game logic at a fixed rate
-        executor.scheduleAtFixedRate(this::gameStep, 0, 16, TimeUnit.MILLISECONDS); // 16ms ≈ 60 updates per second
+        executor.scheduleAtFixedRate(this::gameStep, 0, 16666666, TimeUnit.NANOSECONDS); // 16ms ≈ 60 updates per second
     }
 
     /**
@@ -159,7 +160,7 @@ class Controller {
             gameTicks.getAndIncrement();
 
             if (gameTicks.get() >= 50) {
-                //obstacles.add(new Obstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 2, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
+                obstacles.add(new Obstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 2, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
                 gameTicks.set(0);
             }
 

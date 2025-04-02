@@ -20,8 +20,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class App extends Application {
-    static int WIDTH = 800;
-    static int HEIGHT = 600;
+    static int WIDTH = 1920;
+    static int HEIGHT = 1080;
     static JoystickAnalog joystick;
 
     public static void main(String[] args) {
@@ -37,12 +37,12 @@ public class App extends Application {
     }
 
     public void start(Stage stage) {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        WIDTH = screenSize.width;
-        HEIGHT = screenSize.height;
+        //Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        //WIDTH = screenSize.width;
+        //HEIGHT = screenSize.height;
         stage.setResizable(false);
         stage.setFullScreenExitHint("");
-        stage.setFullScreen(true);
+        //stage.setFullScreen(true);
 
         //Creates the player and an array list for all the obstacles
         Player player =  new Player(WIDTH/2,HEIGHT/2,3, WIDTH, HEIGHT,Spritesheets.Player);

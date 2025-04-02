@@ -56,6 +56,8 @@ public class View {
         fps /= fpsArray.length;
         clock = System.currentTimeMillis();
 
+
+
         graphicsContext.setFill(Color.DARKBLUE);
         graphicsContext.fillRect(0, 0, App.WIDTH, App.HEIGHT);
 
