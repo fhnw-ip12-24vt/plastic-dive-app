@@ -22,6 +22,9 @@ class Controller {
     private static volatile boolean running = true;
     protected final AtomicInteger gameTicks = new AtomicInteger();
     protected final JoystickAnalog joystick;
+    private long clock;
+    private int[] fpsArray = new int[100];
+    private int tick = 0;
 
     Controller(Player player, List<Obstacle> obstacles, JoystickAnalog joystick) {
         this.joystick = joystick;
@@ -33,11 +36,12 @@ class Controller {
 
     /**
      * Creates Key listeners for movement logic.
+     *
      * @param scene The Scene object which will receive the listeners
      */
-    void createGameKeyListeners(Scene scene){
+    void createGameKeyListeners(Scene scene) {
         scene.setOnKeyReleased(e -> {
-            if(!running){
+            if (!running) {
                 //If the game is over and the player releases a button the key listeners are cleared
                 clearKeyListeners(scene);
                 return;
@@ -55,13 +59,13 @@ class Controller {
                 player.setTempDir(false, 3);
                 pressedKeys.remove(e.getCode());
             }
-            if(e.getCode() == KeyCode.W && pressedKeys.contains(e.getCode()) || e.getCode() == KeyCode.UP && pressedKeys.contains(e.getCode())){
+            if (e.getCode() == KeyCode.W && pressedKeys.contains(e.getCode()) || e.getCode() == KeyCode.UP && pressedKeys.contains(e.getCode())) {
                 player.setTempDir(false, 2);
                 pressedKeys.remove(e.getCode());
             }
         });
         scene.setOnKeyPressed(e -> {
-            if(!running){
+            if (!running) {
                 //If the game is over and the player presses a button the key listeners are cleared
                 clearKeyListeners(scene);
                 return;
@@ -80,7 +84,7 @@ class Controller {
                 player.setTempDir(true, 3);
                 pressedKeys.add(e.getCode());
             }
-            if(e.getCode() == KeyCode.W && !pressedKeys.contains(e.getCode()) || e.getCode() == KeyCode.UP && !pressedKeys.contains(e.getCode())){
+            if (e.getCode() == KeyCode.W && !pressedKeys.contains(e.getCode()) || e.getCode() == KeyCode.UP && !pressedKeys.contains(e.getCode())) {
                 player.setTempDir(true, 2);
                 pressedKeys.add(e.getCode());
             }
@@ -96,11 +100,14 @@ class Controller {
 
     /**
      * Clears Key listeners from provided Scene Object
+     *
      * @param scene Scene Object
      */
-    void clearKeyListeners(Scene scene){
-        scene.setOnKeyPressed(e -> {});
-        scene.setOnKeyReleased(e -> {});
+    void clearKeyListeners(Scene scene) {
+        scene.setOnKeyPressed(e -> {
+        });
+        scene.setOnKeyReleased(e -> {
+        });
 
         joystick.reset();
     }
@@ -121,7 +128,7 @@ class Controller {
         executor.shutdown();
     }
 
-    public void resetGame(){
+    public void resetGame() {
         obstacles.clear();
         player.resetPosition();
         gameTicks.set(0);
@@ -129,11 +136,24 @@ class Controller {
         startGameLogic();
     }
 
-    public static boolean isRunning(){
+    public static boolean isRunning() {
         return running;
     }
 
     private void gameStep() {
+        if ((System.currentTimeMillis() - clock) != 0) {
+            fpsArray[tick] = (int) (1000 / (System.currentTimeMillis() - clock));
+            tick++;
+        }
+        if (tick == fpsArray.length) tick = 0;
+        int fps = 0;
+        for (int i : fpsArray) {
+            fps += i;
+        }
+        fps /= fpsArray.length;
+        System.out.println("Ticks per second: " + fps);
+        clock = System.currentTimeMillis();
+
         if (running) {
             final List<Obstacle> deletionList = Collections.synchronizedList(new ArrayList<>());
             // Update the model (logic)
@@ -154,9 +174,9 @@ class Controller {
                 if (obstacle.getX() + obstacle.getLength() < 0) deletionList.add(obstacle);
 
                 //collision stops prototype
-                if (player.collidesWith(obstacle)) {
-                    stopGameLogic();
-                }
+                //if (player.collidesWith(obstacle)) {
+                    //stopGameLogic();
+                //}
             });
 
             //removes obstacles from main obstacle array

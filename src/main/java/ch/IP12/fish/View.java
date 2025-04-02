@@ -15,6 +15,8 @@ public class View {
     private final List<Obstacle> obstacles;
     private boolean initialScene = true;
     private long clock;
+    private int[] fpsArray = new int[100];
+    private int tick = 0;
 
     View(GraphicsContext graphicsContext, Player player, List<Obstacle> obstacles) {
         this.graphicsContext = graphicsContext;
@@ -30,7 +32,7 @@ public class View {
             @Override
             public void handle(long now) {
                 render();
-                if (!Controller.isRunning()){
+                if (!Controller.isRunning()) {
                     this.stop();
                 }
             }
@@ -42,11 +44,24 @@ public class View {
      * Draws the objects on the screen
      */
     private void render() {
-        //System.out.println(1000/(System.currentTimeMillis()-clock));
+        if ((System.currentTimeMillis() - clock) != 0) {
+            fpsArray[tick] = (int) (1000 / (System.currentTimeMillis() - clock));
+            tick++;
+        }
+        if (tick == fpsArray.length) tick = 0;
+        int fps = 0;
+        for (int i : fpsArray) {
+            fps += i;
+        }
+        fps /= fpsArray.length;
         clock = System.currentTimeMillis();
 
         graphicsContext.setFill(Color.DARKBLUE);
         graphicsContext.fillRect(0, 0, App.WIDTH, App.HEIGHT);
+
+        // Writes fps
+        graphicsContext.setStroke(Color.RED);
+        graphicsContext.strokeText("FPS: " + fps, 10, 10);
 
         /*
         This code can be used for a neat fading effect if we so desired for any transitions
