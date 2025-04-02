@@ -31,14 +31,14 @@ public class Player extends Moveable{
      */
     @Override
     public void move(double strength) {
-        direction = JoystickAnalog.getDegrees();
+        direction = JoystickAnalog.getDirection();
 
         if (speed < maxSpeed) {
             speed += acceleration;
         }
 
-        x += (Math.cos(Math.toRadians(direction))*(speed*strength));
-        y += (Math.sin(Math.toRadians(direction))*(speed*strength));
+        x += (Math.cos(direction)*(speed*strength));
+        y += (Math.sin(direction)*(speed*strength));
     }
 
     @Override

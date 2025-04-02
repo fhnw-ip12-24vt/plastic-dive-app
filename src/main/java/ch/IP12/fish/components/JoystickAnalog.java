@@ -105,12 +105,7 @@ public class JoystickAnalog extends Component {
                 }
 
                 // Compute the angle in radians
-                double radians = Math.atan2(-yActualValue, xActualValue);
-
-                // Convert to degrees
-                double degrees = Math.toDegrees(radians);
-
-                direction = (double) Math.round(degrees * 100) / 100;
+                direction = Math.atan2(-yActualValue, xActualValue);
 
                 //calculate magnitude of joystick direction vector
                 double magnitude = Math.sqrt(Math.pow(yActualValue, 2) + Math.pow(xActualValue, 2));
@@ -120,7 +115,7 @@ public class JoystickAnalog extends Component {
         }
     }
 
-    public static double getDegrees() {
+    public static double getDirection() {
         return direction;
     }
 
