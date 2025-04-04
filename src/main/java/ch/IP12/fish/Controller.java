@@ -122,7 +122,7 @@ public class Controller {
             obstacle.update(deltaTime, 0.9);
 
             //adds obstacle to deletion list if it is entirely out of frame for the player
-            if (obstacle.getX() + obstacle.getLength() < 0) deletionList.add(obstacle);
+            if (obstacle.isOutsideBounds()) deletionList.add(obstacle);
 
             //collision stops prototype
             if (player.collidesWith(obstacle)) {

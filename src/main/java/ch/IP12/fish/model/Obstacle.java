@@ -34,4 +34,8 @@ public class Obstacle extends Moveable{
         graphicsContext.setFill(color);
         graphicsContext.fillRect(this.getX(), this.getY(), this.getLength(), this.getHeight());
     }
+
+    public boolean isOutsideBounds(){
+        return this.x < -250 || this.y+this.height < -250 || this.x+length > this.maxX+250 || this.y+height > this.maxY+250;
+    }
 }
