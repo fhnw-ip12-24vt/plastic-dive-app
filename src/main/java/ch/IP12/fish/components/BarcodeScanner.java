@@ -1,4 +1,4 @@
-package ch.IP12.fish.difficultySelector;
+package ch.IP12.fish.components;
 
 import ch.IP12.fish.Controller;
 import ch.IP12.fish.utils.GamePhase;

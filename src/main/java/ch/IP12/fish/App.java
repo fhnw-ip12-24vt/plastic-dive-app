@@ -2,7 +2,6 @@ package ch.IP12.fish;
 
 import ch.IP12.fish.components.Ads1115;
 import ch.IP12.fish.components.JoystickAnalog;
-import ch.IP12.fish.difficultySelector.BarcodeScanner;
 import ch.IP12.fish.model.Obstacle;
 import ch.IP12.fish.model.Player;
 import ch.IP12.fish.model.animations.Spritesheets;
