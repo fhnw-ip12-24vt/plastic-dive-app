@@ -18,11 +18,10 @@ public class View {
     private double middleLayerShift = 0.0;
     private double backLayerShift = 0.0;
     private long clock;
-    private int[] fpsArray = new int[100];
-    private int tick = 0;
     private Image frontLayer = new Image("frontLayer.png");
     private Image middleLayer = new Image("middleLayer.png");
     double backgroundScalar = 3.5;
+    double layerShiftScalar = 1.0;
 
     View(GraphicsContext graphicsContext, Player player, List<Obstacle> obstacles) {
         this.graphicsContext = graphicsContext;
@@ -47,25 +46,6 @@ public class View {
      * Draws the objects on the screen
      */
     private void render() {
-    /*
-        if ((System.currentTimeMillis() - clock) != 0) {
-            fpsArray[tick] = (int) (1000 / (System.currentTimeMillis() - clock));
-            tick++;
-        }
-        if (tick == fpsArray.length) tick = 0;
-        int fps = 0;
-        for (int i : fpsArray) {
-            fps += i;
-        }
-        fps /= fpsArray.length;
-        clock = System.currentTimeMillis();
-        // Writes fps
-
-        graphicsContext.setStroke(Color.RED);
-        graphicsContext.strokeText("FPS: " + fps, 10, 10);
-
-     */
-
         graphicsContext.setFill(Color.web("#3e79dd"));
         graphicsContext.fillRect(0, 0, App.WIDTH, App.HEIGHT);
 
@@ -74,8 +54,7 @@ public class View {
 
         resetLayerShift();
 
-
-        switch (Controller.getGamePhase()) {
+        switch (Controller.GAMEPHASE) {
             case Start -> start();
             case StartingAnimation -> startingAnimation();
             case Running -> running();
@@ -88,13 +67,17 @@ public class View {
 
     private void start() {
         graphicsContext.setStroke(Color.BLACK);
-        graphicsContext.strokeText("Scan smth", App.WIDTH / 2f, App.HEIGHT / 2f);
+        graphicsContext.strokeText("Scan smth", App.WIDTH / 2, App.HEIGHT / 2);
     }
 
     private void startingAnimation() {
-        graphicsContext.strokeText("timer for 10 secs", App.WIDTH / 2f, App.HEIGHT / 2f);
-        middleLayerShift += 5;
-        frontLayerShift += 7;
+        graphicsContext.strokeText("timer for 10 secs", App.WIDTH / 2, App.HEIGHT / 2);
+        if (Controller.CLOCK > 1) {
+            layerShiftScalar += 0.1;
+            middleLayerShift += 5 * layerShiftScalar;
+            frontLayerShift += 7 * layerShiftScalar;
+        }
+
     }
 
     private void running() {
@@ -141,6 +124,7 @@ public class View {
     }
 
     private void drawBackground(Image image, double layerShift) {
+        graphicsContext.drawImage(image, layerShift - image.getWidth() * backgroundScalar, App.HEIGHT - image.getHeight() * backgroundScalar, image.getWidth() * backgroundScalar, image.getHeight() * backgroundScalar);
         graphicsContext.drawImage(image, layerShift, App.HEIGHT - image.getHeight() * backgroundScalar, image.getWidth() * backgroundScalar, image.getHeight() * backgroundScalar);
         graphicsContext.drawImage(image, layerShift + image.getWidth() * backgroundScalar, App.HEIGHT - image.getHeight() * backgroundScalar, image.getWidth() * backgroundScalar, image.getHeight() * backgroundScalar);
 

@@ -26,10 +26,11 @@ public class BarcodeScanner {
             if (event.getCode() == KeyCode.ENTER) {
                 DifficultyString += "\n";
                 if (isValid()) {
+                    System.out.println("asdf");
                     difficulty = Long.parseLong(DifficultyString.replace("\n", ""));
                     Controller.DIFFICULTY = getDifficulty();
+                    Controller.GAMEPHASE = GamePhase.StartingAnimation;
                     stopListening();
-                    Controller.gamePhase = GamePhase.StartingAnimation;
                 }
                 return;
             }

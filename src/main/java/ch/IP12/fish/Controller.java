@@ -7,7 +7,6 @@ import ch.IP12.fish.model.animations.Spritesheets;
 import ch.IP12.fish.utils.GamePhase;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,10 +21,10 @@ public class Controller {
     private final Player player;
     private final List<Obstacle> obstacles;
     private final ScheduledExecutorService executor;
-    public static volatile GamePhase gamePhase = GamePhase.Start;
+    public static volatile GamePhase GAMEPHASE = GamePhase.Start;
     protected final AtomicInteger gameTicks = new AtomicInteger();
     protected final JoystickAnalog joystick;
-    private long clock;
+    public static long CLOCK;
     private long deltatimeClock;
     public static String DIFFICULTY = "";
 
@@ -48,7 +47,7 @@ public class Controller {
 
         scene.setOnKeyReleased(e -> {
             if (e.getCode() == KeyCode.I) {
-                gamePhase = gamePhase.next();
+                GAMEPHASE = GAMEPHASE.next();
             }
         });
     }
@@ -83,12 +82,12 @@ public class Controller {
     }
 
 
-    public static GamePhase getGamePhase() {
-        return gamePhase;
+    public static GamePhase getGAMEPHASE() {
+        return GAMEPHASE;
     }
 
     private void gameStep() {
-        switch (Controller.getGamePhase()) {
+        switch (Controller.getGAMEPHASE()) {
             case Start -> start();
             case StartingAnimation -> startingAnimation();
             case Running -> running();
@@ -99,14 +98,14 @@ public class Controller {
     }
 
     private void start() {
-        clock = System.currentTimeMillis();
+        CLOCK = currentTimeSeconds();
     }
 
     private void startingAnimation() {
-        if (System.currentTimeMillis() - clock > 10000) {
-            gamePhase = gamePhase.next();
+        if (currentTimeSeconds() - CLOCK > 10) {
+            GAMEPHASE = GAMEPHASE.next();
             if (this.joystick != null) {
-                joystick.onMove((double xPos, double yPos) -> System.out.println("x:" + xPos + " y: " + yPos), () -> System.out.println("center"));
+                joystick.onMove((double xPos, double yPos) -> {}, () -> {});
             } else {
                 System.out.println("No joystick found");
             }
@@ -121,12 +120,12 @@ public class Controller {
         // Update the model (logic)
         gameTicks.getAndIncrement();
 
-        if (gameTicks.get() >= 50 && !(System.currentTimeMillis() - clock > 2400000)) {
+        if (gameTicks.get() >= 50 && !(currentTimeSeconds() - CLOCK > 240)) {
             obstacles.add(new Obstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 2, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
             gameTicks.set(0);
         }
 
-        player.update(deltaTime, joystick.getStrength(), joystick.getDirection());
+        player.update(deltaTime, JoystickAnalog.getStrength());
         obstacles.parallelStream().forEach(obstacle -> {
             //Obstacle updates
             obstacle.update(deltaTime, 0.9);
@@ -144,26 +143,30 @@ public class Controller {
         //and clears the deletion list.
         obstacles.removeAll(deletionList);
         deletionList.clear();
-        if (System.currentTimeMillis() - clock > 2400000) {
+        if (currentTimeSeconds() - CLOCK > 240) {
 
         }
-        if (System.currentTimeMillis() - clock > 2400000 && obstacles.isEmpty()) {
-            gamePhase = gamePhase.next();
+        if (currentTimeSeconds() - CLOCK > 240 && obstacles.isEmpty()) {
+            GAMEPHASE = GAMEPHASE.next();
             joystick.reset();
-            clock = System.currentTimeMillis();
+            CLOCK = currentTimeSeconds();
         }
     }
 
     private void end() {
-        if (System.currentTimeMillis() - clock > 10000) {
-            gamePhase = gamePhase.next();
-            clock = System.currentTimeMillis();
+        if (currentTimeSeconds() - CLOCK > 10) {
+            GAMEPHASE = GAMEPHASE.next();
+            CLOCK = currentTimeSeconds();
         }
     }
 
     private void highscore() {
-        if (System.currentTimeMillis() - clock > 10000) {
-            gamePhase = gamePhase.next();
+        if (currentTimeSeconds() - CLOCK > 10) {
+            GAMEPHASE = GAMEPHASE.next();
         }
+    }
+
+    private long currentTimeSeconds() {
+        return System.currentTimeMillis() / 1000;
     }
 }

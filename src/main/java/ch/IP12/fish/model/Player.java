@@ -5,6 +5,8 @@ import ch.IP12.fish.model.animations.SpriteAnimation;
 import ch.IP12.fish.model.animations.Spritesheets;
 
 public class Player extends Moveable{
+    protected final boolean[] tempDir = new boolean[4];
+
     private final double maxSpeed;
     private final double friction = 0.1;
     private final double acceleration = 0.2;
@@ -29,6 +31,8 @@ public class Player extends Moveable{
      */
     @Override
     public void move(double strength) {
+        direction = JoystickAnalog.getDirection();
+
         if (speed < maxSpeed) {
             speed += acceleration;
         }
@@ -46,11 +50,6 @@ public class Player extends Moveable{
         }
     }
 
-    public void update(double deltaTime, double strength, double direction){
-        this.direction = direction;
-        update(deltaTime, strength);
-    }
-
     public void doFriction() {
         if(speed > 0){
             speed -= friction;
@@ -60,5 +59,9 @@ public class Player extends Moveable{
     public void resetPosition() {
         x = initialXValue;
         y = initialYValue;
+    }
+
+    public void setTempDir(boolean val, int index) {
+        tempDir[index] = val;
     }
 }
