@@ -73,7 +73,7 @@ public class View {
 
     private void startingAnimation() {
         player.drawAnimation(graphicsContext);
-        graphicsContext.strokeText("timer for 10 secs", App.WIDTH / 2f, App.HEIGHT / 2f);
+        graphicsContext.strokeText(Controller.DIFFICULTY.text,  App.WIDTH / 2f, App.HEIGHT / 2f);
         if (Controller.getDELTACLOCK() > 9.9) {
             return;
         } else if (Controller.getDELTACLOCK() > 9.5) {

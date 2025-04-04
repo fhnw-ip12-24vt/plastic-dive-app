@@ -4,6 +4,7 @@ import ch.IP12.fish.components.JoystickAnalog;
 import ch.IP12.fish.components.BarcodeScanner;
 import ch.IP12.fish.model.*;
 import ch.IP12.fish.model.animations.Spritesheets;
+import ch.IP12.fish.utils.Difficulty;
 import ch.IP12.fish.utils.GamePhase;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -25,7 +26,7 @@ public class Controller {
     protected final JoystickAnalog joystick;
     public static double CLOCK;
     private double deltatimeClock;
-    public static String DIFFICULTY = "";
+    public static Difficulty DIFFICULTY;
 
     Controller(Player player, List<Obstacle> obstacles, JoystickAnalog joystick) {
         this.joystick = joystick;
