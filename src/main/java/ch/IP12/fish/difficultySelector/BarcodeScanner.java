@@ -1,5 +1,7 @@
 package ch.IP12.fish.difficultySelector;
 
+import ch.IP12.fish.Controller;
+import ch.IP12.fish.utils.GamePhase;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 
@@ -8,7 +10,7 @@ public class BarcodeScanner {
     private String DifficultyString = "\n";
     private long difficulty = 0;
 
-    private final static long EASY_DIFFICULTY = 5181539527921L;
+    private final static long EASY_DIFFICULTY = 7624841656535L;
     private final static long MEDIUM_DIFFICULTY = 6211734858498L;
     private final static long HARD_DIFFICULTY = 7751064387955L;
 
@@ -23,7 +25,12 @@ public class BarcodeScanner {
             }
             if (event.getCode() == KeyCode.ENTER) {
                 DifficultyString += "\n";
-                if (isValid()) difficulty = Long.parseLong(DifficultyString.replace("\n", ""));
+                if (isValid()) {
+                    difficulty = Long.parseLong(DifficultyString.replace("\n", ""));
+                    Controller.DIFFICULTY = getDifficulty();
+                    stopListening();
+                    Controller.gamePhase = GamePhase.StartingAnimation;
+                }
                 return;
             }
             DifficultyString += event.getCode().getChar();
@@ -47,16 +54,13 @@ public class BarcodeScanner {
     }
 
     public String getDifficulty() {
-        if (difficulty == 0) {
-            return "Invalid code";
-        }
-
         if (difficulty == EASY_DIFFICULTY) {
             return "Easy";
         } else if (difficulty == MEDIUM_DIFFICULTY) {
             return "Medium";
-        } else {
+        } else if (difficulty == HARD_DIFFICULTY){
             return "Hard";
         }
+        return "Invalid code";
     }
 }

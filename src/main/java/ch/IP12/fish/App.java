@@ -2,6 +2,7 @@ package ch.IP12.fish;
 
 import ch.IP12.fish.components.Ads1115;
 import ch.IP12.fish.components.JoystickAnalog;
+import ch.IP12.fish.difficultySelector.BarcodeScanner;
 import ch.IP12.fish.model.Obstacle;
 import ch.IP12.fish.model.Player;
 import ch.IP12.fish.model.animations.Spritesheets;
@@ -37,12 +38,12 @@ public class App extends Application {
     }
 
     public void start(Stage stage) {
-        //Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        //WIDTH = screenSize.width;
-        //HEIGHT = screenSize.height;
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        WIDTH = screenSize.width;
+        HEIGHT = screenSize.height;
         stage.setResizable(false);
         stage.setFullScreenExitHint("");
-        //stage.setFullScreen(true);
+        stage.setFullScreen(true);
 
         //Creates the player and an array list for all the obstacles
         Player player =  new Player(WIDTH/2,HEIGHT/2,3, WIDTH, HEIGHT,Spritesheets.Player);
@@ -68,6 +69,9 @@ public class App extends Application {
         stage.show();
 
         //starts the key listeners for the main scene.
+
+
+
         controller.createGameKeyListeners(scene);
         controller.startGameLogic();
 

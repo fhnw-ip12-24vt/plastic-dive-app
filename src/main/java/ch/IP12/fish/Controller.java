@@ -1,10 +1,13 @@
 package ch.IP12.fish;
 
 import ch.IP12.fish.components.JoystickAnalog;
+import ch.IP12.fish.difficultySelector.BarcodeScanner;
 import ch.IP12.fish.model.*;
 import ch.IP12.fish.model.animations.Spritesheets;
+import ch.IP12.fish.utils.GamePhase;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,17 +17,17 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-class Controller {
+public class Controller {
     private final List<KeyCode> pressedKeys = Collections.synchronizedList(new ArrayList<>());
     private final Player player;
     private final List<Obstacle> obstacles;
     private final ScheduledExecutorService executor;
-    private static volatile boolean running = true;
+    public static volatile GamePhase gamePhase = GamePhase.Start;
     protected final AtomicInteger gameTicks = new AtomicInteger();
     protected final JoystickAnalog joystick;
     private long clock;
-    private int[] fpsArray = new int[100];
-    private int tick = 0;
+    private long deltatimeClock;
+    public static String DIFFICULTY = "";
 
     Controller(Player player, List<Obstacle> obstacles, JoystickAnalog joystick) {
         this.joystick = joystick;
@@ -40,61 +43,16 @@ class Controller {
      * @param scene The Scene object which will receive the listeners
      */
     void createGameKeyListeners(Scene scene) {
+        BarcodeScanner barcodeScanner = new BarcodeScanner(scene);
+        barcodeScanner.startListening();
+
         scene.setOnKeyReleased(e -> {
-            if (!running) {
-                //If the game is over and the player releases a button the key listeners are cleared
-                clearKeyListeners(scene);
-                return;
-            }
-
-            if (e.getCode() == KeyCode.A && pressedKeys.contains(e.getCode()) || e.getCode() == KeyCode.LEFT && pressedKeys.contains(e.getCode())) {
-                player.setTempDir(false, 1);
-                pressedKeys.remove(e.getCode());
-            }
-            if (e.getCode() == KeyCode.D && pressedKeys.contains(e.getCode()) || e.getCode() == KeyCode.RIGHT && pressedKeys.contains(e.getCode())) {
-                player.setTempDir(false, 0);
-                pressedKeys.remove(e.getCode());
-            }
-            if (e.getCode() == KeyCode.S && pressedKeys.contains(e.getCode()) || e.getCode() == KeyCode.DOWN && pressedKeys.contains(e.getCode())) {
-                player.setTempDir(false, 3);
-                pressedKeys.remove(e.getCode());
-            }
-            if (e.getCode() == KeyCode.W && pressedKeys.contains(e.getCode()) || e.getCode() == KeyCode.UP && pressedKeys.contains(e.getCode())) {
-                player.setTempDir(false, 2);
-                pressedKeys.remove(e.getCode());
-            }
-        });
-        scene.setOnKeyPressed(e -> {
-            if (!running) {
-                //If the game is over and the player presses a button the key listeners are cleared
-                clearKeyListeners(scene);
-                return;
-            }
-
-            //moves player using temporary variables whilst there is no joystick present.
-            if (e.getCode() == KeyCode.A && !pressedKeys.contains(e.getCode()) || e.getCode() == KeyCode.LEFT && !pressedKeys.contains(e.getCode())) {
-                player.setTempDir(true, 1);
-                pressedKeys.add(e.getCode());
-            }
-            if (e.getCode() == KeyCode.D && !pressedKeys.contains(e.getCode()) || e.getCode() == KeyCode.RIGHT && !pressedKeys.contains(e.getCode())) {
-                player.setTempDir(true, 0);
-                pressedKeys.add(e.getCode());
-            }
-            if (e.getCode() == KeyCode.S && !pressedKeys.contains(e.getCode()) || e.getCode() == KeyCode.DOWN && !pressedKeys.contains(e.getCode())) {
-                player.setTempDir(true, 3);
-                pressedKeys.add(e.getCode());
-            }
-            if (e.getCode() == KeyCode.W && !pressedKeys.contains(e.getCode()) || e.getCode() == KeyCode.UP && !pressedKeys.contains(e.getCode())) {
-                player.setTempDir(true, 2);
-                pressedKeys.add(e.getCode());
+            if (e.getCode() == KeyCode.I) {
+                gamePhase = gamePhase.next();
             }
         });
 
-        if (this.joystick != null) {
-            joystick.onMove((double xPos, double yPos) -> {}, () -> {});
-        } else {
-            System.out.println("No joystick found");
-        }
+
 
     }
 
@@ -124,65 +82,91 @@ class Controller {
      * Stops the game logic from running and kills all other threads related to it.
      */
     public void stopGameLogic() {
-        running = false;
         executor.shutdown();
     }
 
-    public void resetGame() {
-        obstacles.clear();
-        player.resetPosition();
-        gameTicks.set(0);
-        running = true;
-        startGameLogic();
-    }
 
-    public static boolean isRunning() {
-        return running;
+    public static GamePhase getGamePhase() {
+        return gamePhase;
     }
 
     private void gameStep() {
-        if ((System.currentTimeMillis() - clock) != 0) {
-            fpsArray[tick] = (int) (1000 / (System.currentTimeMillis() - clock));
-            tick++;
+        switch (Controller.getGamePhase()) {
+            case Start -> start();
+            case StartingAnimation -> startingAnimation();
+            case Running -> running();
+            case BeforeEndAnimation -> running();
+            case End -> end();
+            case HighScore -> highscore();
         }
-        if (tick == fpsArray.length) tick = 0;
-        int fps = 0;
-        for (int i : fpsArray) {
-            fps += i;
-        }
-        fps /= fpsArray.length;
-        System.out.println("Ticks per second: " + fps);
+    }
+
+    private void start() {
         clock = System.currentTimeMillis();
+    }
 
-        if (running) {
-            final List<Obstacle> deletionList = Collections.synchronizedList(new ArrayList<>());
-            // Update the model (logic)
-            gameTicks.getAndIncrement();
-
-            if (gameTicks.get() >= 50) {
-                obstacles.add(new Obstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 2, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
-                gameTicks.set(0);
+    private void startingAnimation() {
+        if (System.currentTimeMillis() - clock > 10000) {
+            gamePhase = gamePhase.next();
+            if (this.joystick != null) {
+                joystick.onMove((double xPos, double yPos) -> System.out.println(xPos + " " + yPos), () -> System.out.println("center"));
+            } else {
+                System.out.println("No joystick found");
             }
+        }
+    }
 
-            double deltaTime = 0.016; // Approx. 60 FPS
-            player.update(deltaTime, JoystickAnalog.getStrength());
-            obstacles.parallelStream().forEach(obstacle -> {
-                //Obstacle updates
-                obstacle.update(deltaTime, 0.9);
+    private void running() {
+        double deltaTime = System.currentTimeMillis() - deltatimeClock; // Approx. 60 FPS
+        deltatimeClock = System.currentTimeMillis();
 
-                //adds obstacle to deletion list if it is entirely out of frame for the player
-                if (obstacle.getX() + obstacle.getLength() < 0) deletionList.add(obstacle);
+        final List<Obstacle> deletionList = Collections.synchronizedList(new ArrayList<>());
+        // Update the model (logic)
+        gameTicks.getAndIncrement();
 
-                //collision stops prototype
-                //if (player.collidesWith(obstacle)) {
-                    //stopGameLogic();
-                //}
-            });
+        if (gameTicks.get() >= 50 && !(System.currentTimeMillis() - clock > 2400000)) {
+            obstacles.add(new Obstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 2, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
+            gameTicks.set(0);
+        }
 
-            //removes obstacles from main obstacle array
-            //and clears the deletion list.
-            obstacles.removeAll(deletionList);
-            deletionList.clear();
+        player.update(deltaTime, JoystickAnalog.getStrength());
+        obstacles.parallelStream().forEach(obstacle -> {
+            //Obstacle updates
+            obstacle.update(deltaTime, 0.9);
+
+            //adds obstacle to deletion list if it is entirely out of frame for the player
+            if (obstacle.getX() + obstacle.getLength() < 0) deletionList.add(obstacle);
+
+            //collision stops prototype
+            if (player.collidesWith(obstacle)) {
+
+            }
+        });
+
+        //removes obstacles from main obstacle array
+        //and clears the deletion list.
+        obstacles.removeAll(deletionList);
+        deletionList.clear();
+        if (System.currentTimeMillis() - clock > 2400000) {
+
+        }
+        if (System.currentTimeMillis() - clock > 2400000 && obstacles.isEmpty()) {
+            gamePhase = gamePhase.next();
+            joystick.reset();
+            clock = System.currentTimeMillis();
+        }
+    }
+
+    private void end() {
+        if (System.currentTimeMillis() - clock > 10000) {
+            gamePhase = gamePhase.next();
+            clock = System.currentTimeMillis();
+        }
+    }
+
+    private void highscore() {
+        if (System.currentTimeMillis() - clock > 10000) {
+            gamePhase = gamePhase.next();
         }
     }
 }

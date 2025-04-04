@@ -4,6 +4,7 @@ import ch.IP12.fish.model.Obstacle;
 import ch.IP12.fish.model.Player;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import java.util.List;
@@ -13,10 +14,15 @@ public class View {
     private final GraphicsContext graphicsContext;
     private final Player player;
     private final List<Obstacle> obstacles;
-    private boolean initialScene = true;
+    private double frontLayerShift = 0.0;
+    private double middleLayerShift = 0.0;
+    private double backLayerShift = 0.0;
     private long clock;
     private int[] fpsArray = new int[100];
     private int tick = 0;
+    private Image frontLayer = new Image("frontLayer.png");
+    private Image middleLayer = new Image("middleLayer.png");
+    double backgroundScalar = 3.5;
 
     View(GraphicsContext graphicsContext, Player player, List<Obstacle> obstacles) {
         this.graphicsContext = graphicsContext;
@@ -32,9 +38,6 @@ public class View {
             @Override
             public void handle(long now) {
                 render();
-                if (!Controller.isRunning()) {
-                    this.stop();
-                }
             }
         };
         animationTimer.start();
@@ -44,6 +47,7 @@ public class View {
      * Draws the objects on the screen
      */
     private void render() {
+    /*
         if ((System.currentTimeMillis() - clock) != 0) {
             fpsArray[tick] = (int) (1000 / (System.currentTimeMillis() - clock));
             tick++;
@@ -55,15 +59,48 @@ public class View {
         }
         fps /= fpsArray.length;
         clock = System.currentTimeMillis();
-
-
-
-        graphicsContext.setFill(Color.DARKBLUE);
-        graphicsContext.fillRect(0, 0, App.WIDTH, App.HEIGHT);
-
         // Writes fps
+
         graphicsContext.setStroke(Color.RED);
         graphicsContext.strokeText("FPS: " + fps, 10, 10);
+
+     */
+
+        graphicsContext.setFill(Color.web("#3e79dd"));
+        graphicsContext.fillRect(0, 0, App.WIDTH, App.HEIGHT);
+
+        drawBackground(middleLayer, middleLayerShift);
+        drawBackground(frontLayer, frontLayerShift);
+
+        resetLayerShift();
+
+
+        switch (Controller.getGamePhase()) {
+            case Start -> start();
+            case StartingAnimation -> startingAnimation();
+            case Running -> running();
+            case BeforeEndAnimation -> running();
+            case End -> end();
+            case HighScore -> highscore();
+        }
+    }
+
+
+    private void start() {
+        graphicsContext.setStroke(Color.BLACK);
+        graphicsContext.strokeText("Scan smth", App.WIDTH / 2, App.HEIGHT / 2);
+    }
+
+    private void startingAnimation() {
+        graphicsContext.strokeText("timer for 10 secs", App.WIDTH / 2, App.HEIGHT / 2);
+        middleLayerShift += 5;
+        frontLayerShift += 7;
+    }
+
+    private void running() {
+        middleLayerShift -= 5;
+        frontLayerShift -= 7;
+
 
         /*
         This code can be used for a neat fading effect if we so desired for any transitions
@@ -89,9 +126,31 @@ public class View {
         graphicsContext.fillRect(player.getX(), player.getY(), player.getLength(), player.getHeight());
         player.drawAnimation(graphicsContext);
 
+        graphicsContext.setFill(Color.SEAGREEN);
         for (Obstacle obstacle : obstacles) {
-            graphicsContext.setFill(Color.SEAGREEN);
             graphicsContext.fillRect(obstacle.getX(), obstacle.getY(), obstacle.getLength(), obstacle.getHeight());
+        }
+    }
+
+    private void end() {
+
+    }
+
+    private void highscore() {
+
+    }
+
+    private void drawBackground(Image image, double layerShift) {
+        graphicsContext.drawImage(image, layerShift, App.HEIGHT - image.getHeight() * backgroundScalar, image.getWidth() * backgroundScalar, image.getHeight() * backgroundScalar);
+        graphicsContext.drawImage(image, layerShift + image.getWidth() * backgroundScalar, App.HEIGHT - image.getHeight() * backgroundScalar, image.getWidth() * backgroundScalar, image.getHeight() * backgroundScalar);
+
+    }
+    private void resetLayerShift() {
+        if (Math.abs(frontLayerShift) > frontLayer.getWidth() * backgroundScalar) {
+            frontLayerShift = 0.0;
+        }
+        if (Math.abs(middleLayerShift) > middleLayer.getWidth() * backgroundScalar) {
+            middleLayerShift = 0.0;
         }
     }
 }
