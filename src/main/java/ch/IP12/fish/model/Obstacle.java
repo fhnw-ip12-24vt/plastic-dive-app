@@ -2,8 +2,12 @@ package ch.IP12.fish.model;
 
 import ch.IP12.fish.model.animations.SpriteAnimation;
 import ch.IP12.fish.model.animations.Spritesheets;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
-public abstract class Obstacle extends Moveable{
+
+public class Obstacle extends Moveable{
+    Color color = Color.SEAGREEN; // temporary for demo
     public Obstacle(int x, int y, int speed, double maxX, double maxY, Spritesheets spriteSheet) {
         this(x, y, speed, maxX, maxY, spriteSheet.getSpriteAnimation());
     }
@@ -11,7 +15,7 @@ public abstract class Obstacle extends Moveable{
     public Obstacle(int x, int y, int speed, double maxX, double maxY, SpriteAnimation spriteAnimation) {
         super(x, y, speed, maxX, maxY, spriteAnimation,((Math.random()+0.5)*2));
         //forces the Obstacle to move to the left side of the screen.
-        direction = Math.toRadians(180);
+        direction = Math.PI;
     }
 
     @Override
@@ -20,5 +24,14 @@ public abstract class Obstacle extends Moveable{
         move(strength);
     }
 
-    protected abstract void adjustDirection();
+    protected void adjustDirection() {
+        // this is an empty function since we want the default to move in a straight line.
+    }
+
+    @Override
+    public void drawAnimation(GraphicsContext graphicsContext) {
+       // temporary for demo
+        graphicsContext.setFill(color);
+        graphicsContext.fillRect(this.getX(), this.getY(), this.getLength(), this.getHeight());
+    }
 }

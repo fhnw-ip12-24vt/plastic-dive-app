@@ -1,6 +1,7 @@
 package ch.IP12.fish.model;
 
 import ch.IP12.fish.model.animations.Spritesheets;
+import javafx.scene.paint.Color;
 
 public class SignObstacle extends Obstacle {
     private final double maxAngleChange = Math.toRadians((Math.random()*20)+50);
@@ -9,6 +10,7 @@ public class SignObstacle extends Obstacle {
 
     public SignObstacle(int x, int y, int speed, double maxX, double maxY, Spritesheets spriteSheet) {
         super(x, y, speed, maxX, maxY, spriteSheet);
+        this.color = Color.YELLOW;
     }
 
     @Override

@@ -82,14 +82,16 @@ public class Controller {
     }
 
     private void start() {
-        CLOCK = currentTimeSeconds();
+        CLOCK = CURRENTTIMESECONDS();
     }
 
     private void startingAnimation() {
         if (getDELTACLOCK() > 10) {
             nextPhase();
             if (this.joystick != null) {
-                joystick.onMove((double xPos, double yPos) -> {}, () -> {});
+                joystick.onMove((double xPos, double yPos) -> {
+                }, () -> {
+                });
             } else {
                 System.out.println("No joystick found");
             }
@@ -106,8 +108,10 @@ public class Controller {
         // Update the model (logic)
         gameTicks.getAndIncrement();
 
-        if (gameTicks.get() >= 50 && !(currentTimeSeconds() - CLOCK > 240)) {
+        if (gameTicks.get() >= 300 && !(CURRENTTIMESECONDS() - CLOCK > 240)) {
+            obstacles.add(new Obstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 2, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
             obstacles.add(new SignObstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 2, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
+            obstacles.add(new AtPlayerObstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 2, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet(), player));
             gameTicks.set(0);
         }
 
@@ -129,13 +133,13 @@ public class Controller {
         //and clears the deletion list.
         obstacles.removeAll(deletionList);
         deletionList.clear();
-        if (currentTimeSeconds() - CLOCK > 240) {
+        if (CURRENTTIMESECONDS() - CLOCK > 240) {
 
         }
-        if (currentTimeSeconds() - CLOCK > 240 && obstacles.isEmpty()) {
+        if (CURRENTTIMESECONDS() - CLOCK > 240 && obstacles.isEmpty()) {
             nextPhase();
             joystick.reset();
-            CLOCK = currentTimeSeconds();
+            CLOCK = CURRENTTIMESECONDS();
         }
     }
 
@@ -143,7 +147,7 @@ public class Controller {
         player.moveRight();
         if (getDELTACLOCK() > 10) {
             nextPhase();
-            CLOCK = currentTimeSeconds();
+            CLOCK = CURRENTTIMESECONDS();
         }
     }
 
@@ -153,15 +157,15 @@ public class Controller {
         }
     }
 
-    private synchronized void nextPhase(){
+    private synchronized void nextPhase() {
         GAMEPHASE = GAMEPHASE.next();
     }
 
-    private static double currentTimeSeconds() {
+    public static double CURRENTTIMESECONDS() {
         return System.currentTimeMillis() / 1000.0;
     }
 
     public static double getDELTACLOCK() {
-        return currentTimeSeconds()-CLOCK;
+        return CURRENTTIMESECONDS() - CLOCK;
     }
 }

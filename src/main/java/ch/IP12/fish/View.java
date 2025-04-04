@@ -117,7 +117,7 @@ public class View {
 
         graphicsContext.setFill(Color.SEAGREEN);
         for (Obstacle obstacle : obstacles) {
-            graphicsContext.fillRect(obstacle.getX(), obstacle.getY(), obstacle.getLength(), obstacle.getHeight());
+            obstacle.drawAnimation(graphicsContext);
         }
     }
 
