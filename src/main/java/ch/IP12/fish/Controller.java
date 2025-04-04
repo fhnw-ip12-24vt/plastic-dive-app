@@ -106,7 +106,7 @@ public class Controller {
         if (System.currentTimeMillis() - clock > 10000) {
             gamePhase = gamePhase.next();
             if (this.joystick != null) {
-                joystick.onMove((double xPos, double yPos) -> System.out.println("x:" + xPos + "y: " + yPos), () -> System.out.println("center"));
+                joystick.onMove((double xPos, double yPos) -> System.out.println("x:" + xPos + " y: " + yPos), () -> System.out.println("center"));
             } else {
                 System.out.println("No joystick found");
             }
