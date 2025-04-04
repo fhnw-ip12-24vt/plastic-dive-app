@@ -31,8 +31,8 @@ public class JoystickAnalog extends Component {
     private final double normThreshold;
     final double homeArea = 0.1;
 
-    private static double strength = 0.0;
-    private static double direction = 0.0;
+    private double strength = 0.0;
+    private double direction = 0.0;
 
     private double xActualValue;
     private double yActualValue;
@@ -115,11 +115,11 @@ public class JoystickAnalog extends Component {
         }
     }
 
-    public static double getDirection() {
+    public double getDirection() {
         return direction;
     }
 
-    public static double getStrength(){
+    public double getStrength(){
         return strength;
     }
 

@@ -88,11 +88,11 @@ public class View {
 
     private void start() {
         graphicsContext.setStroke(Color.BLACK);
-        graphicsContext.strokeText("Scan smth", App.WIDTH / 2, App.HEIGHT / 2);
+        graphicsContext.strokeText("Scan smth", App.WIDTH / 2f, App.HEIGHT / 2f);
     }
 
     private void startingAnimation() {
-        graphicsContext.strokeText("timer for 10 secs", App.WIDTH / 2, App.HEIGHT / 2);
+        graphicsContext.strokeText("timer for 10 secs", App.WIDTH / 2f, App.HEIGHT / 2f);
         middleLayerShift += 5;
         frontLayerShift += 7;
     }

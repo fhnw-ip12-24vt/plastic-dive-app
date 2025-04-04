@@ -51,9 +51,6 @@ public class Controller {
                 gamePhase = gamePhase.next();
             }
         });
-
-
-
     }
 
     /**
@@ -109,7 +106,7 @@ public class Controller {
         if (System.currentTimeMillis() - clock > 10000) {
             gamePhase = gamePhase.next();
             if (this.joystick != null) {
-                joystick.onMove((double xPos, double yPos) -> System.out.println(xPos + " " + yPos), () -> System.out.println("center"));
+                joystick.onMove((double xPos, double yPos) -> System.out.println("x:" + xPos + "y: " + yPos), () -> System.out.println("center"));
             } else {
                 System.out.println("No joystick found");
             }
@@ -129,7 +126,7 @@ public class Controller {
             gameTicks.set(0);
         }
 
-        player.update(deltaTime, JoystickAnalog.getStrength());
+        player.update(deltaTime, joystick.getStrength(), joystick.getDirection());
         obstacles.parallelStream().forEach(obstacle -> {
             //Obstacle updates
             obstacle.update(deltaTime, 0.9);
