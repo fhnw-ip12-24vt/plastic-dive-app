@@ -18,10 +18,11 @@ public class View {
     private double middleLayerShift = 0.0;
     private double backLayerShift = 0.0;
     private long clock;
-    private Image frontLayer = new Image("frontLayer.png");
-    private Image middleLayer = new Image("middleLayer.png");
+    private final Image frontLayer = new Image("frontLayer.png");
+    private final Image middleLayer = new Image("middleLayer.png");
+    private final Image backLayer = new Image("middleLayer.png");
     double backgroundScalar = 3.5;
-    double layerShiftScalar = 1.0;
+    double layerShiftScalar = 0.2;
 
     View(GraphicsContext graphicsContext, Player player, List<Obstacle> obstacles) {
         this.graphicsContext = graphicsContext;
@@ -67,13 +68,19 @@ public class View {
 
     private void start() {
         graphicsContext.setStroke(Color.BLACK);
-        graphicsContext.strokeText("Scan smth", App.WIDTH / 2, App.HEIGHT / 2);
+        graphicsContext.strokeText("Scan smth", App.WIDTH / 2f, App.HEIGHT / 2f);
     }
 
     private void startingAnimation() {
-        graphicsContext.strokeText("timer for 10 secs", App.WIDTH / 2, App.HEIGHT / 2);
-        if (Controller.CLOCK > 1) {
-            layerShiftScalar += 0.1;
+        graphicsContext.strokeText("timer for 10 secs", App.WIDTH / 2f, App.HEIGHT / 2f);
+        if (Controller.getDELTACLOCK() > 9.9) {
+            return;
+        } else if (Controller.getDELTACLOCK() > 9.7) {
+            layerShiftScalar -= 0.2;
+            middleLayerShift += 5 * layerShiftScalar;
+            frontLayerShift += 7 * layerShiftScalar;
+        } else if (Controller.getDELTACLOCK() > 9.5) {
+            layerShiftScalar += 0.2;
             middleLayerShift += 5 * layerShiftScalar;
             frontLayerShift += 7 * layerShiftScalar;
         }
@@ -135,6 +142,9 @@ public class View {
         }
         if (Math.abs(middleLayerShift) > middleLayer.getWidth() * backgroundScalar) {
             middleLayerShift = 0.0;
+        }
+        if (Math.abs(backLayerShift) > backLayer.getWidth() * backgroundScalar) {
+            backLayerShift = 0.0;
         }
     }
 }

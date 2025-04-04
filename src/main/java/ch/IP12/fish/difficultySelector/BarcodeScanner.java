@@ -39,7 +39,7 @@ public class BarcodeScanner {
     }
 
     public void stopListening(){
-        scene.setOnKeyReleased(event -> {});
+        scene.setOnKeyPressed(event -> {});
     }
 
     public boolean isValid(){

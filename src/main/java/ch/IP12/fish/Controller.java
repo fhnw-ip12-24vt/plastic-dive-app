@@ -23,13 +23,12 @@ public class Controller {
     public static volatile GamePhase GAMEPHASE = GamePhase.Start;
     protected final AtomicInteger gameTicks = new AtomicInteger();
     protected final JoystickAnalog joystick;
-    public static long CLOCK;
-    private long deltatimeClock;
+    public static double CLOCK;
+    private double deltatimeClock;
     public static String DIFFICULTY = "";
 
     Controller(Player player, List<Obstacle> obstacles, JoystickAnalog joystick) {
         this.joystick = joystick;
-
         this.player = player;
         this.obstacles = obstacles;
         this.executor = Executors.newSingleThreadScheduledExecutor();
@@ -49,20 +48,6 @@ public class Controller {
                 nextPhase();
             }
         });
-    }
-
-    /**
-     * Clears Key listeners from provided Scene Object
-     *
-     * @param scene Scene Object
-     */
-    void clearKeyListeners(Scene scene) {
-        scene.setOnKeyPressed(e -> {
-        });
-        scene.setOnKeyReleased(e -> {
-        });
-
-        joystick.reset();
     }
 
     /**
@@ -101,7 +86,7 @@ public class Controller {
     }
 
     private void startingAnimation() {
-        if (currentTimeSeconds() - CLOCK > 10) {
+        if (getDELTACLOCK() > 10) {
             nextPhase();
             if (this.joystick != null) {
                 joystick.onMove((double xPos, double yPos) -> {}, () -> {});
@@ -153,14 +138,14 @@ public class Controller {
     }
 
     private void end() {
-        if (currentTimeSeconds() - CLOCK > 10) {
+        if (getDELTACLOCK() > 10) {
             nextPhase();
             CLOCK = currentTimeSeconds();
         }
     }
 
     private void highscore() {
-        if (currentTimeSeconds() - CLOCK > 10) {
+        if (getDELTACLOCK() > 10) {
             nextPhase();
         }
     }
@@ -169,7 +154,11 @@ public class Controller {
         GAMEPHASE = GAMEPHASE.next();
     }
 
-    private long currentTimeSeconds() {
-        return System.currentTimeMillis() / 1000;
+    private static double currentTimeSeconds() {
+        return System.currentTimeMillis() / 1000.0;
+    }
+
+    public static double getDELTACLOCK() {
+        return currentTimeSeconds()-CLOCK;
     }
 }
