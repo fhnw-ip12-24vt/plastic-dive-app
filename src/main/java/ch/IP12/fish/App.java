@@ -68,9 +68,6 @@ public class App extends Application {
         stage.show();
 
         //starts the key listeners for the main scene.
-
-
-
         controller.createGameKeyListeners(scene);
         controller.startGameLogic();
 

@@ -66,7 +66,6 @@ public class Controller {
         executor.shutdown();
     }
 
-
     public static GamePhase getGAMEPHASE() {
         return GAMEPHASE;
     }
@@ -76,18 +75,18 @@ public class Controller {
             case Start -> start();
             case StartingAnimation -> startingAnimation();
             case Running -> running();
-            case BeforeEndAnimation -> running();
+            case PreEndAnimation -> running();
             case End -> end();
             case HighScore -> highscore();
         }
     }
 
     private void start() {
-        CLOCK = CURRENTTIMESECONDS();
+        CLOCK = currentTimeSeconds();
     }
 
     private void startingAnimation() {
-        if (getDELTACLOCK() > 10) {
+        if (getDeltaClock() > 10) {
             nextPhase();
             if (this.joystick != null) {
                 joystick.onMove((double xPos, double yPos) -> {
@@ -96,22 +95,22 @@ public class Controller {
             } else {
                 System.out.println("No joystick found");
             }
-        } else if (getDELTACLOCK() > 9.5) {
+        } else if (getDeltaClock() > 9.5) {
             player.moveRight();
         }
     }
 
     private void running() {
-        double deltaTime = System.currentTimeMillis() - deltatimeClock; // Approx. 60 FPS
+        double deltaTime = System.currentTimeMillis() - deltatimeClock;
         deltatimeClock = System.currentTimeMillis();
 
         final List<Obstacle> deletionList = Collections.synchronizedList(new ArrayList<>());
         // Update the model (logic)
         gameTicks.getAndIncrement();
 
-        if (gameTicks.get() >= 300 && !(CURRENTTIMESECONDS() - CLOCK > 240)) {
+        if (gameTicks.get() >= 300 && !(currentTimeSeconds() - CLOCK > 240)) {
             obstacles.add(new Obstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 2, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
-            obstacles.add(new SignObstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 2, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
+            obstacles.add(new SinObstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 2, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
             obstacles.add(new AtPlayerObstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 2, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet(), player));
             gameTicks.set(0);
         }
@@ -134,26 +133,26 @@ public class Controller {
         //and clears the deletion list.
         obstacles.removeAll(deletionList);
         deletionList.clear();
-        if (CURRENTTIMESECONDS() - CLOCK > 240) {
+        if (currentTimeSeconds() - CLOCK > 240) {
 
         }
-        if (CURRENTTIMESECONDS() - CLOCK > 240 && obstacles.isEmpty()) {
+        if (currentTimeSeconds() - CLOCK > 240 && obstacles.isEmpty()) {
             nextPhase();
             joystick.reset();
-            CLOCK = CURRENTTIMESECONDS();
+            CLOCK = currentTimeSeconds();
         }
     }
 
     private void end() {
         player.moveRight();
-        if (getDELTACLOCK() > 10) {
+        if (getDeltaClock() > 10) {
             nextPhase();
-            CLOCK = CURRENTTIMESECONDS();
+            CLOCK = currentTimeSeconds();
         }
     }
 
     private void highscore() {
-        if (getDELTACLOCK() > 10) {
+        if (getDeltaClock() > 10) {
             nextPhase();
         }
     }
@@ -162,11 +161,17 @@ public class Controller {
         GAMEPHASE = GAMEPHASE.next();
     }
 
-    public static double CURRENTTIMESECONDS() {
+    /**
+     * @return Seconds since Unix Epoch.
+     */
+    public static double currentTimeSeconds() {
         return System.currentTimeMillis() / 1000.0;
     }
 
-    public static double getDELTACLOCK() {
-        return CURRENTTIMESECONDS() - CLOCK;
+    /**
+     * @return Time since start of program in seconds.
+     */
+    public static double getDeltaClock() {
+        return currentTimeSeconds() - CLOCK;
     }
 }

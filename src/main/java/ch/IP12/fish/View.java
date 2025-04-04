@@ -18,9 +18,9 @@ public class View {
     private double middleLayerShift = 0.0;
     private double backLayerShift = 0.0;
     private long clock;
-    private final Image frontLayer = new Image("frontLayer.png");
-    private final Image middleLayer = new Image("middleLayer.png");
-    private final Image backLayer = new Image("middleLayer.png");
+    private final Image frontLayer = new Image("backgroundLayers/frontLayer.png");
+    private final Image middleLayer = new Image("backgroundLayers/middleLayer.png");
+    private final Image backLayer = new Image("backgroundLayers/middleLayer.png");
     double backgroundScalar = 3.5;
     double layerShiftScalar = 0.2;
 
@@ -59,7 +59,7 @@ public class View {
             case Start -> start();
             case StartingAnimation -> startingAnimation();
             case Running -> running();
-            case BeforeEndAnimation -> running();
+            case PreEndAnimation -> running();
             case End -> end();
             case HighScore -> highscore();
         }
@@ -74,13 +74,13 @@ public class View {
     private void startingAnimation() {
         player.drawAnimation(graphicsContext);
         graphicsContext.strokeText(Controller.DIFFICULTY.text,  App.WIDTH / 2f, App.HEIGHT / 2f);
-        if (Controller.getDELTACLOCK() > 9.9) {
+        if (Controller.getDeltaClock() > 9.9) {
             return;
-        } else if (Controller.getDELTACLOCK() > 9.5) {
+        } else if (Controller.getDeltaClock() > 9.5) {
             layerShiftScalar -= 0.2;
             middleLayerShift += 5 * layerShiftScalar;
             frontLayerShift += 7 * layerShiftScalar;
-        } else if (Controller.getDELTACLOCK() > 9) {
+        } else if (Controller.getDeltaClock() > 9) {
             layerShiftScalar += 0.2;
             middleLayerShift += 5 * layerShiftScalar;
             frontLayerShift += 7 * layerShiftScalar;

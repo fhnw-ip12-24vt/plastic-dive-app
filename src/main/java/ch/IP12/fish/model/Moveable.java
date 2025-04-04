@@ -19,6 +19,7 @@ public abstract class Moveable {
     protected final double maxX;
     protected final double maxY;
 
+    //Scalar for object size;
     protected final double spriteScale;
 
     //path to animation images
@@ -42,8 +43,8 @@ public abstract class Moveable {
     }
 
     /**
-     * Updates the Object instance every x...
-     * @param deltaTime
+     * Calls movement code of calling Moveable
+     * @param deltaTime Ensures movement amount is consistent regardless of any that may be occurring lag.
      */
     public void update(double deltaTime, double strength){
         move(strength);
