@@ -17,7 +17,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Controller {
-    private final List<KeyCode> pressedKeys = Collections.synchronizedList(new ArrayList<>());
     private final Player player;
     private final List<Obstacle> obstacles;
     private final ScheduledExecutorService executor;
@@ -47,7 +46,7 @@ public class Controller {
 
         scene.setOnKeyReleased(e -> {
             if (e.getCode() == KeyCode.I) {
-                GAMEPHASE = GAMEPHASE.next();
+                nextPhase();
             }
         });
     }
@@ -103,7 +102,7 @@ public class Controller {
 
     private void startingAnimation() {
         if (currentTimeSeconds() - CLOCK > 10) {
-            GAMEPHASE = GAMEPHASE.next();
+            nextPhase();
             if (this.joystick != null) {
                 joystick.onMove((double xPos, double yPos) -> {}, () -> {});
             } else {
@@ -125,7 +124,7 @@ public class Controller {
             gameTicks.set(0);
         }
 
-        player.update(deltaTime, JoystickAnalog.getStrength());
+        player.update(deltaTime, joystick.getStrength(), joystick.getDirection());
         obstacles.parallelStream().forEach(obstacle -> {
             //Obstacle updates
             obstacle.update(deltaTime, 0.9);
@@ -147,7 +146,7 @@ public class Controller {
 
         }
         if (currentTimeSeconds() - CLOCK > 240 && obstacles.isEmpty()) {
-            GAMEPHASE = GAMEPHASE.next();
+            nextPhase();
             joystick.reset();
             CLOCK = currentTimeSeconds();
         }
@@ -155,15 +154,19 @@ public class Controller {
 
     private void end() {
         if (currentTimeSeconds() - CLOCK > 10) {
-            GAMEPHASE = GAMEPHASE.next();
+            nextPhase();
             CLOCK = currentTimeSeconds();
         }
     }
 
     private void highscore() {
         if (currentTimeSeconds() - CLOCK > 10) {
-            GAMEPHASE = GAMEPHASE.next();
+            nextPhase();
         }
+    }
+
+    private synchronized void nextPhase(){
+        GAMEPHASE = GAMEPHASE.next();
     }
 
     private long currentTimeSeconds() {

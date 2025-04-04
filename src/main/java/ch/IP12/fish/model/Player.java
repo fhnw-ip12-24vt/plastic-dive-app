@@ -31,8 +31,6 @@ public class Player extends Moveable{
      */
     @Override
     public void move(double strength) {
-        direction = JoystickAnalog.getDirection();
-
         if (speed < maxSpeed) {
             speed += acceleration;
         }
@@ -48,6 +46,11 @@ public class Player extends Moveable{
         } else {
             doFriction();
         }
+    }
+
+    public void update(double deltaTime, double strength, double direction){
+        this.direction = direction;
+        update(deltaTime, strength);
     }
 
     public void doFriction() {
