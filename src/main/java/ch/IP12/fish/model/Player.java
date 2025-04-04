@@ -16,7 +16,7 @@ public class Player extends Moveable{
     }
 
     public Player(int x, int y, double speed, double maxX, double maxY, SpriteAnimation spriteAnimation) {
-        super(x, y, speed, maxX, maxY, spriteAnimation, 3);
+        super(x-spriteAnimation.getWidth()*3, y, speed, maxX, maxY, spriteAnimation, 3);
         maxSpeed = speed;
         this.speed = 0;
         this.initialXValue = x;
@@ -59,5 +59,9 @@ public class Player extends Moveable{
     public void resetPosition() {
         x = initialXValue;
         y = initialYValue;
+    }
+
+    public void moveRight() {
+        x += 15;
     }
 }

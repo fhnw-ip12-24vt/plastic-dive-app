@@ -72,14 +72,15 @@ public class View {
     }
 
     private void startingAnimation() {
+        player.drawAnimation(graphicsContext);
         graphicsContext.strokeText("timer for 10 secs", App.WIDTH / 2f, App.HEIGHT / 2f);
         if (Controller.getDELTACLOCK() > 9.9) {
             return;
-        } else if (Controller.getDELTACLOCK() > 9.7) {
+        } else if (Controller.getDELTACLOCK() > 9.5) {
             layerShiftScalar -= 0.2;
             middleLayerShift += 5 * layerShiftScalar;
             frontLayerShift += 7 * layerShiftScalar;
-        } else if (Controller.getDELTACLOCK() > 9.5) {
+        } else if (Controller.getDELTACLOCK() > 9) {
             layerShiftScalar += 0.2;
             middleLayerShift += 5 * layerShiftScalar;
             frontLayerShift += 7 * layerShiftScalar;
@@ -112,8 +113,6 @@ public class View {
         }
         */
 
-        graphicsContext.setFill(Color.RED);
-        graphicsContext.fillRect(player.getX(), player.getY(), player.getLength(), player.getHeight());
         player.drawAnimation(graphicsContext);
 
         graphicsContext.setFill(Color.SEAGREEN);
@@ -123,7 +122,7 @@ public class View {
     }
 
     private void end() {
-
+        player.drawAnimation(graphicsContext);
     }
 
     private void highscore() {

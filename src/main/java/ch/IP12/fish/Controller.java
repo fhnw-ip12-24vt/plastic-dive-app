@@ -93,6 +93,8 @@ public class Controller {
             } else {
                 System.out.println("No joystick found");
             }
+        } else if (getDELTACLOCK() > 9.5) {
+            player.moveRight();
         }
     }
 
@@ -138,6 +140,7 @@ public class Controller {
     }
 
     private void end() {
+        player.moveRight();
         if (getDELTACLOCK() > 10) {
             nextPhase();
             CLOCK = currentTimeSeconds();

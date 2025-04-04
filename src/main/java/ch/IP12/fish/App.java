@@ -46,7 +46,7 @@ public class App extends Application {
         stage.setFullScreen(true);
 
         //Creates the player and an array list for all the obstacles
-        Player player =  new Player(WIDTH/2,HEIGHT/2,3, WIDTH, HEIGHT,Spritesheets.Player);
+        Player player =  new Player(0,HEIGHT/2,3, WIDTH, HEIGHT,Spritesheets.Player);
         List<Obstacle> obstacles = Collections.synchronizedList(new ArrayList<>());
 
         //Creates the area which we draw all the images on
