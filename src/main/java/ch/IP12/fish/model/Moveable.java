@@ -53,8 +53,8 @@ public abstract class Moveable {
      * Moves the moveable object in the specified direction.
      */
     public void move(double strength) {
-        x += (Math.cos(Math.toRadians(direction))*(speed*strength));
-        y += (Math.sin(Math.toRadians(direction))*(speed*strength));
+        x += (Math.cos(direction)*(speed*strength));
+        y += (Math.sin(direction)*(speed*strength));
     }
 
     /**

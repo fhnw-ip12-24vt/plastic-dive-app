@@ -11,7 +11,7 @@ public abstract class Obstacle extends Moveable{
     public Obstacle(int x, int y, int speed, double maxX, double maxY, SpriteAnimation spriteAnimation) {
         super(x, y, speed, maxX, maxY, spriteAnimation,((Math.random()+0.5)*2));
         //forces the Obstacle to move to the left side of the screen.
-        direction = 180;
+        direction = Math.toRadians(180);
     }
 
     @Override
