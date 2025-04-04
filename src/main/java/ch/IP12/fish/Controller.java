@@ -107,7 +107,7 @@ public class Controller {
         gameTicks.getAndIncrement();
 
         if (gameTicks.get() >= 50 && !(currentTimeSeconds() - CLOCK > 240)) {
-            obstacles.add(new Obstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 2, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
+            obstacles.add(new SignObstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 2, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
             gameTicks.set(0);
         }
 
