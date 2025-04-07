@@ -1,40 +1,39 @@
 package ch.IP12.fish.components;
 
 import ch.IP12.fish.Controller;
+import ch.IP12.fish.utils.Difficulty;
 import ch.IP12.fish.utils.GamePhase;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 
+import java.io.IOException;
+
 public class BarcodeScanner {
     private final Scene scene;
-    private String DifficultyString = "\n";
-    private long difficulty = 0;
-
-    private final static long EASY_DIFFICULTY = 7624841656535L;
-    private final static long MEDIUM_DIFFICULTY = 6211734858498L;
-    private final static long HARD_DIFFICULTY = 7751064387955L;
-
+    private Difficulty difficulty;
+    private String s = "\n";
     public BarcodeScanner(Scene scene) {
         this.scene = scene;
     }
 
     public void startListening(){
         scene.setOnKeyPressed(event -> {
-            if (DifficultyString.replace("\n", "-").substring(DifficultyString.length()-1).equals("-")){
-                DifficultyString = "";
+            if (s.replace("\n", "-").substring(s.length()-1).equals("-")){
+                s = "";
             }
             if (event.getCode() == KeyCode.ENTER) {
-                DifficultyString += "\n";
-                if (isValid()) {
+                s += "\n";
+                try {
                     System.out.println("asdf");
-                    difficulty = Long.parseLong(DifficultyString.replace("\n", ""));
-                    Controller.DIFFICULTY = getDifficulty();
+                    Controller.DIFFICULTY = Difficulty.getDifficulty(Long.parseLong(s.replace("\n", "")));
                     Controller.GAMEPHASE = GamePhase.StartingAnimation;
                     stopListening();
+                } catch (RuntimeException ignore) {
+
                 }
                 return;
             }
-            DifficultyString += event.getCode().getChar();
+            s += event.getCode().getChar();
         });
     }
 
@@ -42,26 +41,4 @@ public class BarcodeScanner {
         scene.setOnKeyPressed(event -> {});
     }
 
-    public boolean isValid(){
-        long difficulty;
-
-        try{
-            difficulty = Long.parseLong(DifficultyString.replace("\n", ""));
-        } catch (NumberFormatException e){
-            return false;
-        }
-
-        return difficulty == EASY_DIFFICULTY || difficulty == MEDIUM_DIFFICULTY || difficulty == HARD_DIFFICULTY;
-    }
-
-    public String getDifficulty() {
-        if (difficulty == EASY_DIFFICULTY) {
-            return "Easy";
-        } else if (difficulty == MEDIUM_DIFFICULTY) {
-            return "Medium";
-        } else if (difficulty == HARD_DIFFICULTY){
-            return "Hard";
-        }
-        return "Invalid code";
-    }
 }

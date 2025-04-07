@@ -14,6 +14,7 @@ public class Obstacle extends Moveable{
 
     public Obstacle(int x, int y, int speed, double maxX, double maxY, SpriteAnimation spriteAnimation) {
         super(x, y, speed, maxX, maxY, spriteAnimation,((Math.random()+0.5)*2));
+
         //forces the Obstacle to move to the left side of the screen.
         direction = Math.PI;
     }
@@ -24,6 +25,9 @@ public class Obstacle extends Moveable{
         move(strength);
     }
 
+    /**
+     * Adjusts direction of obstacle in specified way.
+     */
     protected void adjustDirection() {
         // this is an empty function since we want the default to move in a straight line.
     }
@@ -36,6 +40,7 @@ public class Obstacle extends Moveable{
     }
 
     public boolean isOutsideBounds(){
+        //check if any of the values exceed the 250 buffer in
         return this.x < -250 || this.y+this.height < -250 || this.x+length > this.maxX+250 || this.y+height > this.maxY+250;
     }
 }

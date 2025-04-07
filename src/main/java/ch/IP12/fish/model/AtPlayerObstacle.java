@@ -5,7 +5,7 @@ import ch.IP12.fish.model.animations.Spritesheets;
 import javafx.scene.paint.Color;
 
 public class AtPlayerObstacle extends Obstacle {
-    double creationTime = Controller.CURRENTTIMESECONDS();
+    double creationTime = Controller.currentTimeSeconds();
     boolean hasChanged;
     Player player;
 
@@ -17,7 +17,7 @@ public class AtPlayerObstacle extends Obstacle {
 
     @Override
     protected void adjustDirection() {
-        if (creationTime + 2 < Controller.CURRENTTIMESECONDS() && !hasChanged) {
+        if (creationTime + 2 < Controller.currentTimeSeconds() && !hasChanged) {
             double x = player.getX() - this.x;
             double y = player.getY() - this.y;
             this.direction = Math.atan2(y, x);
