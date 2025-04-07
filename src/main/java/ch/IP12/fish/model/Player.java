@@ -23,24 +23,23 @@ public class Player extends Moveable{
         this.initialYValue = y;
     }
 
-    /**
-     * Overridden move function from super class for reason of temporary control scheme
-     */
     @Override
     public void move(double deltaTime,double strength) {
         if (speed < maxSpeed) {
             speed += acceleration;
         }
 
-        double xChange = (Math.cos(direction)*(speed*strength)) * deltaTime;
-        double yChange = (Math.sin(direction)*(speed*strength)) * deltaTime;
+        //check for possible exit from bounds of screen before doing movement
+        double xChange = (Math.cos(direction)*(speed*strength));
+        double yChange = (Math.sin(direction)*(speed*strength));
 
-        if (x+xChange > maxX || y+yChange > maxY || x+xChange < 0 || y+yChange < 0) {
-            return;
+        if (!(y+yChange > maxY-height) && !(y+yChange < 0)) {
+            y += yChange;
         }
 
-        x += xChange;
-        y += yChange;
+        if (!(x+xChange > maxX-length) && !(x+xChange < 0)){
+            x += xChange;
+        }
     }
 
     @Override

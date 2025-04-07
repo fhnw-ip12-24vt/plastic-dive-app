@@ -27,6 +27,7 @@ public class Controller {
     public static double CLOCK;
     private double deltaTimeClock;
     public static Difficulty DIFFICULTY;
+    public static int SCORE = 500;
 
     Controller(Player player, List<Obstacle> obstacles, JoystickAnalog joystick) {
         this.joystick = joystick;
@@ -47,6 +48,7 @@ public class Controller {
         scene.setOnKeyReleased(e -> {
             if (e.getCode() == KeyCode.I) {
                 nextPhase();
+                Controller.DIFFICULTY = Difficulty.Easy;
             }
         });
     }
@@ -76,7 +78,7 @@ public class Controller {
             case Start -> start();
             case StartingAnimation -> startingAnimation();
             case Running -> running();
-            case BeforeEndAnimation -> running();
+            case PreEndAnimation -> running();
             case End -> end();
             case HighScore -> highscore();
         }
@@ -87,7 +89,7 @@ public class Controller {
     }
 
     private void startingAnimation() {
-        if (getDELTACLOCK() > 10) {
+        if (GETDELTACLOCK() > 10) {
             nextPhase();
             if (this.joystick != null) {
                 joystick.onMove((double xPos, double yPos) -> {
@@ -96,7 +98,7 @@ public class Controller {
             } else {
                 System.out.println("No joystick found");
             }
-        } else if (getDELTACLOCK() > 9.5) {
+        } else if (GETDELTACLOCK() > 9.5) {
             player.moveRight();
         }
     }
@@ -111,7 +113,7 @@ public class Controller {
 
         if (gameTicks.get() >= 300 && !(CURRENTTIMESECONDS() - CLOCK > 240)) {
             obstacles.add(new Obstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 300, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
-            obstacles.add(new SignObstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 300, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
+            obstacles.add(new SinObstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 300, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
             obstacles.add(new AtPlayerObstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 100, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet(), player));
             gameTicks.set(0);
         }
@@ -126,7 +128,8 @@ public class Controller {
 
             //collision stops prototype
             if (player.collidesWith(obstacle)) {
-
+                SCORE -= 50;
+                deletionList.add(obstacle);
             }
         });
 
@@ -146,14 +149,14 @@ public class Controller {
 
     private void end() {
         player.moveRight();
-        if (getDELTACLOCK() > 10) {
+        if (GETDELTACLOCK() > 10) {
             nextPhase();
             CLOCK = CURRENTTIMESECONDS();
         }
     }
 
     private void highscore() {
-        if (getDELTACLOCK() > 10) {
+        if (GETDELTACLOCK() > 10) {
             nextPhase();
         }
     }
@@ -166,7 +169,7 @@ public class Controller {
         return System.currentTimeMillis() / 1000.0;
     }
 
-    public static double getDELTACLOCK() {
+    public static double GETDELTACLOCK() {
         return CURRENTTIMESECONDS() - CLOCK;
     }
 }

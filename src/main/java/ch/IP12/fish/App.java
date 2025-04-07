@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -23,6 +24,7 @@ public class App extends Application {
     static int WIDTH = 1920;
     static int HEIGHT = 1080;
     static JoystickAnalog joystick;
+    public static Font FONT;
 
     public static void main(String[] args) {
         var pi4j = Pi4J.newAutoContext();
@@ -52,7 +54,8 @@ public class App extends Application {
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
         graphicsContext.setImageSmoothing(false);
-
+        FONT = Font.loadFont(getClass().getResourceAsStream("/fonts/MinecraftRegular-Bmg3.otf"), 18);
+        graphicsContext.setFont(FONT);
         //Initializes the controller and starts the game
         Controller controller = new Controller(player, obstacles, joystick);
 
@@ -68,9 +71,6 @@ public class App extends Application {
         stage.show();
 
         //starts the key listeners for the main scene.
-
-
-
         controller.createGameKeyListeners(scene);
         controller.startGameLogic();
 

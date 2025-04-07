@@ -7,6 +7,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 import java.util.List;
 
@@ -19,9 +20,10 @@ public class View {
     private double middleLayerShift = 0.0;
     private double backLayerShift = 0.0;
     private long clock;
-    private final Image frontLayer = new Image("frontLayer.png");
-    private final Image middleLayer = new Image("middleLayer.png");
-    private final Image backLayer = new Image("middleLayer.png");
+    private final Image frontLayer = new Image("backgroundLayers/frontLayer.png");
+    private final Image middleLayer = new Image("backgroundLayers/middleLayer.png");
+    private final Image backLayer = new Image("backgroundLayers/middleLayer.png");
+    double backgroundScalar = 3.5;
     double layerShiftScalar = 0.2;
 
     View(GraphicsContext graphicsContext, Player player, List<Obstacle> obstacles) {
@@ -59,7 +61,7 @@ public class View {
             case Start -> start();
             case StartingAnimation -> startingAnimation();
             case Running -> running();
-            case BeforeEndAnimation -> running();
+            case PreEndAnimation -> running();
             case End -> end();
             case HighScore -> highscore();
         }
@@ -67,20 +69,23 @@ public class View {
 
 
     private void start() {
-        graphicsContext.setStroke(Color.BLACK);
-        graphicsContext.strokeText("Scan smth", App.WIDTH / 2f, App.HEIGHT / 2f);
+        graphicsContext.setFill(Color.BLACK);
+        graphicsContext.fillText("Scan smth", App.WIDTH / 2f, App.HEIGHT / 2f);
     }
 
     private void startingAnimation() {
         player.drawAnimation(graphicsContext);
-        graphicsContext.strokeText(Controller.DIFFICULTY.text,  App.WIDTH / 2f, App.HEIGHT / 2f);
-        if (Controller.getDELTACLOCK() > 9.9) {
+        graphicsContext.setFill(Color.BLACK);
+        Text text = new Text(Controller.DIFFICULTY.text);
+        text.setFont(App.FONT);
+        graphicsContext.fillText(Controller.DIFFICULTY.text,  (App.WIDTH - text.getLayoutBounds().getWidth()) / 2f, App.HEIGHT / 2f);
+        if (Controller.GETDELTACLOCK() > 9.9) {
             return;
-        } else if (Controller.getDELTACLOCK() > 9.5) {
+        } else if (Controller.GETDELTACLOCK() > 9.5) {
             layerShiftScalar -= 0.2;
             middleLayerShift += 5 * layerShiftScalar;
             frontLayerShift += 7 * layerShiftScalar;
-        } else if (Controller.getDELTACLOCK() > 9) {
+        } else if (Controller.GETDELTACLOCK() > 9) {
             layerShiftScalar += 0.2;
             middleLayerShift += 5 * layerShiftScalar;
             frontLayerShift += 7 * layerShiftScalar;
@@ -91,7 +96,8 @@ public class View {
     private void running() {
         middleLayerShift -= 5;
         frontLayerShift -= 7;
-
+        graphicsContext.setFill(Color.BLACK);
+        graphicsContext.fillText("Score: " + Controller.SCORE, 10, 30);
 
         /*
         This code can be used for a neat fading effect if we so desired for any transitions

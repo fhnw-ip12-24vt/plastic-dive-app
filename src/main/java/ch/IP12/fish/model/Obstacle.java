@@ -25,6 +25,9 @@ public class Obstacle extends Moveable {
         move(deltaTime, strength);
     }
 
+    /**
+     * Adjusts direction of obstacle in specified way.
+     */
     protected void adjustDirection() {
         // this is an empty function since we want the default to move in a straight line.
     }
@@ -36,7 +39,8 @@ public class Obstacle extends Moveable {
         graphicsContext.fillRect(this.getX(), this.getY(), this.getLength(), this.getHeight());
     }
 
-    public boolean isOutsideBounds() {
-        return this.x < -250 || this.y + this.height < -250 || this.x + length > this.maxX + 250 || this.y + height > this.maxY + 250;
+    public boolean isOutsideBounds(){
+        //check if any of the values exceed the 250 buffer in
+        return this.x < -250 || this.y+this.height < -250 || this.x+length > this.maxX+250 || this.y+height > this.maxY+250;
     }
 }
