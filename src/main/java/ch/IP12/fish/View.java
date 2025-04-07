@@ -2,6 +2,7 @@ package ch.IP12.fish;
 
 import ch.IP12.fish.model.Obstacle;
 import ch.IP12.fish.model.Player;
+import ch.IP12.fish.model.animations.Spritesheets;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -21,7 +22,6 @@ public class View {
     private final Image frontLayer = new Image("frontLayer.png");
     private final Image middleLayer = new Image("middleLayer.png");
     private final Image backLayer = new Image("middleLayer.png");
-    double backgroundScalar = 3.5;
     double layerShiftScalar = 0.2;
 
     View(GraphicsContext graphicsContext, Player player, List<Obstacle> obstacles) {
@@ -130,19 +130,19 @@ public class View {
     }
 
     private void drawBackground(Image image, double layerShift) {
-        graphicsContext.drawImage(image, layerShift - image.getWidth() * backgroundScalar, App.HEIGHT - image.getHeight() * backgroundScalar, image.getWidth() * backgroundScalar, image.getHeight() * backgroundScalar);
-        graphicsContext.drawImage(image, layerShift, App.HEIGHT - image.getHeight() * backgroundScalar, image.getWidth() * backgroundScalar, image.getHeight() * backgroundScalar);
-        graphicsContext.drawImage(image, layerShift + image.getWidth() * backgroundScalar, App.HEIGHT - image.getHeight() * backgroundScalar, image.getWidth() * backgroundScalar, image.getHeight() * backgroundScalar);
+        graphicsContext.drawImage(image, layerShift - image.getWidth() * Spritesheets.spriteScaling, App.HEIGHT - image.getHeight() * Spritesheets.spriteScaling, image.getWidth() * Spritesheets.spriteScaling, image.getHeight() * Spritesheets.spriteScaling);
+        graphicsContext.drawImage(image, layerShift, App.HEIGHT - image.getHeight() * Spritesheets.spriteScaling, image.getWidth() * Spritesheets.spriteScaling, image.getHeight() * Spritesheets.spriteScaling);
+        graphicsContext.drawImage(image, layerShift + image.getWidth() * Spritesheets.spriteScaling, App.HEIGHT - image.getHeight() * Spritesheets.spriteScaling, image.getWidth() * Spritesheets.spriteScaling, image.getHeight() * Spritesheets.spriteScaling);
 
     }
     private void resetLayerShift() {
-        if (Math.abs(frontLayerShift) > frontLayer.getWidth() * backgroundScalar) {
+        if (Math.abs(frontLayerShift) > frontLayer.getWidth() * Spritesheets.spriteScaling) {
             frontLayerShift = 0.0;
         }
-        if (Math.abs(middleLayerShift) > middleLayer.getWidth() * backgroundScalar) {
+        if (Math.abs(middleLayerShift) > middleLayer.getWidth() * Spritesheets.spriteScaling) {
             middleLayerShift = 0.0;
         }
-        if (Math.abs(backLayerShift) > backLayer.getWidth() * backgroundScalar) {
+        if (Math.abs(backLayerShift) > backLayer.getWidth() * Spritesheets.spriteScaling) {
             backLayerShift = 0.0;
         }
     }

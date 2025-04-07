@@ -14,6 +14,7 @@ public enum Spritesheets {
     LargeCluster(new SpriteAnimation(new ImageView(new Image("https://upload.wikimedia.org/wikipedia/commons/7/73/The_Horse_in_Motion.jpg")), 0, 0, 0, 0, 50, 50, Duration.millis(1000))),
     ;
 
+    public static final double spriteScaling = 3.5;
     private final SpriteAnimation spriteAnimation;
 
     Spritesheets(SpriteAnimation spriteAnimation) {

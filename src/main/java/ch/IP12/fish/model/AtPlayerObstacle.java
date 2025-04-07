@@ -21,6 +21,7 @@ public class AtPlayerObstacle extends Obstacle {
             double x = player.getX() - this.x;
             double y = player.getY() - this.y;
             this.direction = Math.atan2(y, x);
+            this.speed *= 2;
             hasChanged = true;
         }
     }

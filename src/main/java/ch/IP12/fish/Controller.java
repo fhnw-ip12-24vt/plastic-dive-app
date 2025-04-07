@@ -25,7 +25,7 @@ public class Controller {
     protected final AtomicInteger gameTicks = new AtomicInteger();
     protected final JoystickAnalog joystick;
     public static double CLOCK;
-    private double deltatimeClock;
+    private double deltaTimeClock;
     public static Difficulty DIFFICULTY;
 
     Controller(Player player, List<Obstacle> obstacles, JoystickAnalog joystick) {
@@ -102,24 +102,24 @@ public class Controller {
     }
 
     private void running() {
-        double deltaTime = System.currentTimeMillis() - deltatimeClock; // Approx. 60 FPS
-        deltatimeClock = System.currentTimeMillis();
+        double deltaTime = (System.currentTimeMillis() - deltaTimeClock) / 1000; // Approx. 60 FPS
+        deltaTimeClock = System.currentTimeMillis();
 
         final List<Obstacle> deletionList = Collections.synchronizedList(new ArrayList<>());
         // Update the model (logic)
         gameTicks.getAndIncrement();
 
         if (gameTicks.get() >= 300 && !(CURRENTTIMESECONDS() - CLOCK > 240)) {
-            obstacles.add(new Obstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 2, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
-            obstacles.add(new SignObstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 2, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
-            obstacles.add(new AtPlayerObstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 2, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet(), player));
+            obstacles.add(new Obstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 300, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
+            obstacles.add(new SignObstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 300, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
+            obstacles.add(new AtPlayerObstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 100, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet(), player));
             gameTicks.set(0);
         }
 
         player.update(deltaTime, joystick.getStrength(), joystick.getDirection());
         obstacles.parallelStream().forEach(obstacle -> {
             //Obstacle updates
-            obstacle.update(deltaTime, 0.9);
+            obstacle.update(deltaTime, 1);
 
             //adds obstacle to deletion list if it is entirely out of frame for the player
             if (obstacle.isOutsideBounds()) deletionList.add(obstacle);

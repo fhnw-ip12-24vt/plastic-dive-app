@@ -46,15 +46,15 @@ public abstract class Moveable {
      * @param deltaTime
      */
     public void update(double deltaTime, double strength){
-        move(strength);
+        move(deltaTime,strength);
     }
 
     /**
      * Moves the moveable object in the specified direction.
      */
-    public void move(double strength) {
-        x += (Math.cos(direction)*(speed*strength));
-        y += (Math.sin(direction)*(speed*strength));
+    public void move(double deltaTime,double strength) {
+        x += (Math.cos(direction)*(speed*strength)) * deltaTime;
+        y += (Math.sin(direction)*(speed*strength)) * deltaTime;
     }
 
     /**

@@ -16,7 +16,7 @@ public class Player extends Moveable{
     }
 
     public Player(int x, int y, double speed, double maxX, double maxY, SpriteAnimation spriteAnimation) {
-        super(x-spriteAnimation.getWidth()*6, y, speed, maxX, maxY, spriteAnimation, 6);
+        super((int) (x-spriteAnimation.getWidth()*Spritesheets.spriteScaling), y, speed, maxX, maxY, spriteAnimation, Spritesheets.spriteScaling);
         maxSpeed = speed;
         this.speed = 0;
         this.initialXValue = x;
@@ -27,13 +27,13 @@ public class Player extends Moveable{
      * Overridden move function from super class for reason of temporary control scheme
      */
     @Override
-    public void move(double strength) {
+    public void move(double deltaTime,double strength) {
         if (speed < maxSpeed) {
             speed += acceleration;
         }
 
-        double xChange = (Math.cos(direction)*(speed*strength));
-        double yChange = (Math.sin(direction)*(speed*strength));
+        double xChange = (Math.cos(direction)*(speed*strength)) * deltaTime;
+        double yChange = (Math.sin(direction)*(speed*strength)) * deltaTime;
 
         if (x+xChange > maxX || y+yChange > maxY || x+xChange < 0 || y+yChange < 0) {
             return;
@@ -46,7 +46,7 @@ public class Player extends Moveable{
     @Override
     public void update(double deltaTime, double strength){
         if (strength > 0.0){
-            move(strength);
+            move(deltaTime,strength);
         } else {
             doFriction();
         }
