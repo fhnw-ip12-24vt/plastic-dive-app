@@ -35,12 +35,13 @@ public class Player extends Moveable{
         double xChange = (Math.cos(direction)*(speed*strength));
         double yChange = (Math.sin(direction)*(speed*strength));
 
-        if (x+xChange > maxX || y+yChange > maxY || x+xChange < 0 || y+yChange < 0) {
-            return;
+        if (!(y+yChange > maxY-height) && !(y+yChange < 0)) {
+            y += yChange;
         }
 
-        x += xChange;
-        y += yChange;
+        if (!(x+xChange > maxX-length) && !(x+xChange < 0)){
+            x += xChange;
+        }
     }
 
     @Override
