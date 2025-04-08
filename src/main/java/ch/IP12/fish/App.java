@@ -6,6 +6,7 @@ import ch.IP12.fish.model.Obstacle;
 import ch.IP12.fish.model.Player;
 import ch.IP12.fish.model.animations.Spritesheets;
 import com.pi4j.Pi4J;
+import com.pi4j.context.Context;
 import javafx.application.Application;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -23,22 +24,24 @@ import java.util.List;
 public class App extends Application {
     static int WIDTH = 1920;
     static int HEIGHT = 1080;
-    static JoystickAnalog joystick;
     public static Font FONT;
+    Context pi4j;
 
     public static void main(String[] args) {
-        var pi4j = Pi4J.newAutoContext();
 
-        Ads1115 ads1115 = new Ads1115(pi4j);
-        joystick = new JoystickAnalog(ads1115, Ads1115.Channel.A0, Ads1115.Channel.A1);
 
         launch(args);
-
-        joystick.reset();
-        pi4j.shutdown();
     }
 
     public void start(Stage stage) {
+        pi4j = Pi4J.newAutoContext();
+
+        Ads1115 ads1115 = new Ads1115(pi4j);
+        JoystickAnalog joystick1 = new JoystickAnalog(ads1115, Ads1115.Channel.A0, Ads1115.Channel.A1);
+        JoystickAnalog joystick2 = new JoystickAnalog(ads1115, Ads1115.Channel.A2, Ads1115.Channel.A3);
+
+
+
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         WIDTH = screenSize.width;
         HEIGHT = screenSize.height;
@@ -47,9 +50,9 @@ public class App extends Application {
         stage.setFullScreen(true);
 
         //Creates the player and an array list for all the obstacles
-        Player player1 = new Player(0, HEIGHT / 2.0, 3, WIDTH, HEIGHT, Spritesheets.Player, joystick);
-        Player player2 = new Player(0, HEIGHT / 1.5, 3, WIDTH, HEIGHT, Spritesheets.Player, null);
-        List<Player> players = List.of(player1, player2);
+        Player player1 = new Player(0, HEIGHT / 2.0, 3, WIDTH, HEIGHT, Spritesheets.Player, joystick1);
+        Player player2 = new Player(0, HEIGHT / 1.5, 3, WIDTH, HEIGHT, Spritesheets.Player, joystick2);
+        List<Player> players = List.of(player1);
         List<Obstacle> obstacles = Collections.synchronizedList(new ArrayList<>());
 
         //Creates the area which we draw all the images on
@@ -60,7 +63,7 @@ public class App extends Application {
         graphicsContext.setFont(FONT);
 
         //Initializes the controller and starts the game
-        Controller controller = new Controller(players, obstacles, joystick);
+        Controller controller = new Controller(players, obstacles);
 
         //Starts the View and passes it the relevant things that are to be displayed
         View view = new View(graphicsContext, players, obstacles);
@@ -80,7 +83,14 @@ public class App extends Application {
         view.startRendering();
 
         //Stops the game if the window is exited
-        stage.setOnCloseRequest(event -> controller.stopGameLogic());
+        stage.setOnCloseRequest(event -> {
+
+
+
+
+            pi4j.shutdown();
+            controller.stopGameLogic();
+        });
     }
 
 }

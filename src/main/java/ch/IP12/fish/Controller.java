@@ -17,13 +17,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.Random;
 
 public class Controller {
     private final List<Player> players;
     private final List<Obstacle> obstacles;
     private final ScheduledExecutorService executor;
 
+    private Spawner spawner;
     private double deltaTimeClock = 0;
     private double lastHitTime = 0;
     private final AtomicInteger gameTicks = new AtomicInteger(0);
@@ -33,10 +33,11 @@ public class Controller {
     public static Difficulty DIFFICULTY;
     public static double CLOCK;
 
-    Controller(List<Player> players, List<Obstacle> obstacles, JoystickAnalog joystick) {
+    Controller(List<Player> players, List<Obstacle> obstacles) {
         this.players = players;
         this.obstacles = obstacles;
         this.executor = Executors.newSingleThreadScheduledExecutor();
+        this.spawner = new Spawner(obstacles);
     }
 
     /**
@@ -111,11 +112,9 @@ public class Controller {
         // Update the model (logic)
         gameTicks.getAndIncrement();
 
-        if (gameTicks.get() >= 300 && !(CURRENTTIMESECONDS() - CLOCK > 30)) {
+        if (gameTicks.get() >= 75 && !(CURRENTTIMESECONDS() - CLOCK > 30)) {
             Random rand = new Random();
-            obstacles.add(new Obstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 300, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
-            obstacles.add(new SinObstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 300, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
-            obstacles.add(new AtPlayerObstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 100, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet(), players.get(rand.nextInt(players.size()))));
+            spawner.spawnRandom(players.get(rand.nextInt(players.size())));
             gameTicks.set(0);
         }
 

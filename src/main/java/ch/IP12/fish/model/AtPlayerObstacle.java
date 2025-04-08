@@ -9,7 +9,7 @@ public class AtPlayerObstacle extends Obstacle {
     private boolean hasChanged;
     private final Player player;
 
-    public AtPlayerObstacle(int x, int y, int speed, double maxX, double maxY, Spritesheets spriteSheet, Player player) {
+    public AtPlayerObstacle(double x, double y, double speed, double maxX, double maxY, Spritesheets spriteSheet, Player player) {
         super(x, y, speed, maxX, maxY, spriteSheet);
         this.player = player;
         this.color = Color.RED;

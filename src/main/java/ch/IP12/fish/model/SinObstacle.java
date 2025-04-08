@@ -11,7 +11,7 @@ public class SinObstacle extends Obstacle {
     //one degree as radian static to save processing time
     private static final double RADIAN_INCREMENT = Math.toRadians(1);
 
-    public SinObstacle(int x, int y, int speed, double maxX, double maxY, Spritesheets spriteSheet) {
+    public SinObstacle(double x, double y, double speed, double maxX, double maxY, Spritesheets spriteSheet) {
         super(x, y, speed, maxX, maxY, spriteSheet);
         this.color = Color.YELLOW;
     }
