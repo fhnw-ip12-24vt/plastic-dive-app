@@ -78,14 +78,16 @@ public class View {
         graphicsContext.setFill(Color.BLACK);
         Text text = new Text(Controller.DIFFICULTY.text);
         text.setFont(App.FONT);
-        graphicsContext.fillText(Controller.DIFFICULTY.text,  (App.WIDTH - text.getLayoutBounds().getWidth()) / 2f, App.HEIGHT / 2f);
+        graphicsContext.fillText(Controller.DIFFICULTY.text,  ((App.WIDTH - text.getLayoutBounds().getWidth()) / 2f) + frontLayerShift, App.HEIGHT / 2f);
         if (Controller.GETDELTACLOCK() > 9.9) {
             return;
-        } else if (Controller.GETDELTACLOCK() > 9.5) {
-            layerShiftScalar -= 0.2;
+        } else if (Controller.GETDELTACLOCK() > 9) {
+            if (layerShiftScalar - 0.15 > 0) {
+                layerShiftScalar -= 0.15;
+            }
             middleLayerShift += 5 * layerShiftScalar;
             frontLayerShift += 7 * layerShiftScalar;
-        } else if (Controller.GETDELTACLOCK() > 9) {
+        } else if (Controller.GETDELTACLOCK() > 8.5) {
             layerShiftScalar += 0.2;
             middleLayerShift += 5 * layerShiftScalar;
             frontLayerShift += 7 * layerShiftScalar;
@@ -97,7 +99,7 @@ public class View {
         middleLayerShift -= 5;
         frontLayerShift -= 7;
         graphicsContext.setFill(Color.BLACK);
-        graphicsContext.fillText("Score: " + Controller.SCORE, 10, 30);
+        graphicsContext.fillText("Score: " + (int) Controller.SCORE, 10, 30);
 
         /*
         This code can be used for a neat fading effect if we so desired for any transitions

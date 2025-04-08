@@ -27,7 +27,8 @@ public class Controller {
     public static double CLOCK;
     private double deltaTimeClock;
     public static Difficulty DIFFICULTY;
-    public static int SCORE = 500;
+    public static double SCORE = 500;
+    private double lastHitTime = 0;
 
     Controller(Player player, List<Obstacle> obstacles, JoystickAnalog joystick) {
         this.joystick = joystick;
@@ -85,11 +86,13 @@ public class Controller {
     }
 
     private void start() {
+        deltaTimeClock = System.currentTimeMillis();
         CLOCK = CURRENTTIMESECONDS();
     }
 
     private void startingAnimation() {
         if (GETDELTACLOCK() > 10) {
+            lastHitTime = CURRENTTIMESECONDS();
             nextPhase();
             if (this.joystick != null) {
                 joystick.onMove((double xPos, double yPos) -> {
@@ -111,7 +114,7 @@ public class Controller {
         // Update the model (logic)
         gameTicks.getAndIncrement();
 
-        if (gameTicks.get() >= 300 && !(CURRENTTIMESECONDS() - CLOCK > 240)) {
+        if (gameTicks.get() >= 300 && !(CURRENTTIMESECONDS() - CLOCK > 30)) {
             obstacles.add(new Obstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 300, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
             obstacles.add(new SinObstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 300, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
             obstacles.add(new AtPlayerObstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 100, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet(), player));
@@ -128,6 +131,7 @@ public class Controller {
 
             //collision stops prototype
             if (player.collidesWith(obstacle)) {
+                lastHitTime = CURRENTTIMESECONDS();
                 SCORE -= 50;
                 deletionList.add(obstacle);
             }
@@ -137,14 +141,19 @@ public class Controller {
         //and clears the deletion list.
         obstacles.removeAll(deletionList);
         deletionList.clear();
-        if (CURRENTTIMESECONDS() - CLOCK > 240) {
 
+        if (CURRENTTIMESECONDS() > lastHitTime + 5) {
+            SCORE += 1 * deltaTime * (1+((CURRENTTIMESECONDS()-lastHitTime)/15));
         }
-        if (CURRENTTIMESECONDS() - CLOCK > 240 && obstacles.isEmpty()) {
-            nextPhase();
-            joystick.reset();
-            CLOCK = CURRENTTIMESECONDS();
+
+        if (CURRENTTIMESECONDS() - CLOCK > 30) {
+            if (obstacles.isEmpty()) {
+                nextPhase();
+                joystick.reset();
+                CLOCK = CURRENTTIMESECONDS();
+            }
         }
+
     }
 
     private void end() {
