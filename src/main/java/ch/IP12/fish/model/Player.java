@@ -46,7 +46,8 @@ public class Player extends Moveable {
         }
     }
 
-    public void update(double deltaTime) {
+    @Override
+    public void update(double deltaTime){
         if (!hasJoystick()) return;
         setDirection(joystick.getDirection());
         if (joystick.getStrength() > 0.0) {

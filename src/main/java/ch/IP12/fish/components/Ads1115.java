@@ -160,9 +160,7 @@ public class Ads1115 extends I2CDevice {
      * stops continuous reading
      */
     public void stopContinuousReading() {
-        continuousReadingActive = false;
-
-        logDebug("Continuous reading stopped");
+        if(continuousReadingActive) continuousReadingActive = false; logDebug("Continuous reading stopped");
     }
 
     /**
