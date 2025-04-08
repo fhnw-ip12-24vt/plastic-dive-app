@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 
 
 public class Obstacle extends Moveable {
-    Color color = Color.SEAGREEN; // temporary for demo
+    protected Color color = Color.SEAGREEN; // temporary for demo
 
     public Obstacle(int x, int y, int speed, double maxX, double maxY, Spritesheets spriteSheet) {
         this(x, y, speed, maxX, maxY, spriteSheet.getSpriteAnimation());
@@ -16,13 +16,13 @@ public class Obstacle extends Moveable {
     public Obstacle(int x, int y, int speed, double maxX, double maxY, SpriteAnimation spriteAnimation) {
         super(x, y, speed, maxX, maxY, spriteAnimation, ((Math.random() + 0.5) * 2));
         //forces the Obstacle to move to the left side of the screen.
-        direction = Math.PI;
+        setDirection(Math.PI);
     }
 
     @Override
-    public void update(double deltaTime, double strength) {
+    public void update(double deltaTime) {
         adjustDirection();
-        move(deltaTime, strength);
+        move(deltaTime, 1);
     }
 
     /**
@@ -41,6 +41,6 @@ public class Obstacle extends Moveable {
 
     public boolean isOutsideBounds(){
         //check if any of the values exceed the 250 buffer in
-        return this.x < -250 || this.y+this.height < -250 || this.x+length > this.maxX+250 || this.y+height > this.maxY+250;
+        return getX() < -250 || getY()+getHeight() < -250 || getX()+getLength() > getMaxX()+250 || getY()+getHeight() > getMaxY()+250;
     }
 }

@@ -12,27 +12,29 @@ import javafx.scene.input.KeyCode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Random;
 
 public class Controller {
-    private final Player player;
+    private final List<Player> players;
     private final List<Obstacle> obstacles;
     private final ScheduledExecutorService executor;
-    public static volatile GamePhase GAMEPHASE = GamePhase.Start;
-    protected final AtomicInteger gameTicks = new AtomicInteger();
-    protected final JoystickAnalog joystick;
-    public static double CLOCK;
-    private double deltaTimeClock;
-    public static Difficulty DIFFICULTY;
-    public static double SCORE = 500;
-    private double lastHitTime = 0;
 
-    Controller(Player player, List<Obstacle> obstacles, JoystickAnalog joystick) {
-        this.joystick = joystick;
-        this.player = player;
+    private double deltaTimeClock = 0;
+    private double lastHitTime = 0;
+    private final AtomicInteger gameTicks = new AtomicInteger(0);
+
+    public static volatile GamePhase GAMEPHASE = GamePhase.Start;
+    public static double SCORE = 500;
+    public static Difficulty DIFFICULTY;
+    public static double CLOCK;
+
+    Controller(List<Player> players, List<Obstacle> obstacles, JoystickAnalog joystick) {
+        this.players = players;
         this.obstacles = obstacles;
         this.executor = Executors.newSingleThreadScheduledExecutor();
     }
@@ -94,15 +96,10 @@ public class Controller {
         if (GETDELTACLOCK() > 10) {
             lastHitTime = CURRENTTIMESECONDS();
             nextPhase();
-            if (this.joystick != null) {
-                joystick.onMove((double xPos, double yPos) -> {
-                }, () -> {
-                });
-            } else {
-                System.out.println("No joystick found");
-            }
+            players.forEach(Player::startJoystick);
+
         } else if (GETDELTACLOCK() > 9.5) {
-            player.moveRight();
+            players.forEach(Player::moveRight);
         }
     }
 
@@ -115,26 +112,30 @@ public class Controller {
         gameTicks.getAndIncrement();
 
         if (gameTicks.get() >= 300 && !(CURRENTTIMESECONDS() - CLOCK > 30)) {
+            Random rand = new Random();
             obstacles.add(new Obstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 300, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
             obstacles.add(new SinObstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 300, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet()));
-            obstacles.add(new AtPlayerObstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 100, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet(), player));
+            obstacles.add(new AtPlayerObstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), 100, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet(), players.get(rand.nextInt(players.size()))));
             gameTicks.set(0);
         }
 
-        player.update(deltaTime, joystick.getStrength(), joystick.getDirection());
+        players.forEach(player -> player.update(deltaTime));
         obstacles.parallelStream().forEach(obstacle -> {
             //Obstacle updates
-            obstacle.update(deltaTime, 1);
+            obstacle.update(deltaTime);
 
             //adds obstacle to deletion list if it is entirely out of frame for the player
             if (obstacle.isOutsideBounds()) deletionList.add(obstacle);
 
             //collision stops prototype
-            if (player.collidesWith(obstacle)) {
-                lastHitTime = CURRENTTIMESECONDS();
-                SCORE -= 50;
-                deletionList.add(obstacle);
-            }
+            players.forEach(player -> {
+                if (player.collidesWith(obstacle)) {
+                    lastHitTime = CURRENTTIMESECONDS();
+                    SCORE -= 50;
+                    deletionList.add(obstacle);
+                }
+            });
+
         });
 
         //removes obstacles from main obstacle array
@@ -143,13 +144,13 @@ public class Controller {
         deletionList.clear();
 
         if (CURRENTTIMESECONDS() > lastHitTime + 5) {
-            SCORE += 1 * deltaTime * (1+((CURRENTTIMESECONDS()-lastHitTime)/15));
+            SCORE += 1 * deltaTime * (1 + ((CURRENTTIMESECONDS() - lastHitTime) / 15));
         }
 
         if (CURRENTTIMESECONDS() - CLOCK > 30) {
             if (obstacles.isEmpty()) {
                 nextPhase();
-                joystick.reset();
+                players.forEach(Player::resetJoystick);
                 CLOCK = CURRENTTIMESECONDS();
             }
         }
@@ -157,7 +158,7 @@ public class Controller {
     }
 
     private void end() {
-        player.moveRight();
+        players.forEach(Player::moveRight);
         if (GETDELTACLOCK() > 10) {
             nextPhase();
             CLOCK = CURRENTTIMESECONDS();

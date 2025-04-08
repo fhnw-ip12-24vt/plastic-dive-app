@@ -1,5 +1,6 @@
 package ch.IP12.fish.model;
 
+import ch.IP12.fish.components.JoystickAnalog;
 import ch.IP12.fish.model.animations.SpriteAnimation;
 import ch.IP12.fish.model.animations.Spritesheets;
 
@@ -11,63 +12,81 @@ public class Player extends Moveable{
     private final double initialXValue;
     private final double initialYValue;
 
-    public Player(int x, int y, double speed, double maxX, double maxY, Spritesheets spriteSheet) {
-        this(x,y,speed,maxX, maxY, spriteSheet.getSpriteAnimation());
+    private final JoystickAnalog joystick;
+
+    public Player(double x, double y, double speed, double maxX, double maxY, Spritesheets spriteSheet, JoystickAnalog joystick) {
+        this(x,y,speed,maxX, maxY, spriteSheet.getSpriteAnimation(), joystick);
     }
 
-    public Player(int x, int y, double speed, double maxX, double maxY, SpriteAnimation spriteAnimation) {
-        super((int) (x-spriteAnimation.getWidth()*Spritesheets.spriteScaling), y, speed, maxX, maxY, spriteAnimation, Spritesheets.spriteScaling);
+    public Player(double x, double y, double speed, double maxX, double maxY, SpriteAnimation spriteAnimation, JoystickAnalog joystick) {
+        super((x-spriteAnimation.getWidth()*Spritesheets.spriteScaling), y, speed, maxX, maxY, spriteAnimation, Spritesheets.spriteScaling);
         maxSpeed = speed;
-        this.speed = 0;
+        setSpeed(0);
         this.initialXValue = x;
         this.initialYValue = y;
+        this.joystick = joystick;
     }
 
     @Override
     public void move(double deltaTime,double strength) {
-        if (speed < maxSpeed) {
-            speed += acceleration;
+        if (getSpeed() < maxSpeed) {
+            setSpeed(getSpeed() + acceleration);
         }
 
         //check for possible exit from bounds of screen before doing movement
-        double xChange = (Math.cos(direction)*(speed*strength));
-        double yChange = (Math.sin(direction)*(speed*strength));
+        double xChange = (Math.cos(getDirection())*(getSpeed()*strength));
+        double yChange = (Math.sin(getDirection())*(getSpeed()*strength));
 
-        if (!(y+yChange > maxY-height) && !(y+yChange < 0)) {
-            y += yChange;
+        if (!(getY()+yChange > getY()-getHeight()) && !(getY()+yChange < 0)) {
+            setY(getY() + yChange);
         }
 
-        if (!(x+xChange > maxX-length) && !(x+xChange < 0)){
-            x += xChange;
+        if (!(getX()+xChange > getMaxY()-getLength()) && !(getX()+xChange < 0)){
+            setX(getX() + xChange);
         }
     }
 
-    @Override
-    public void update(double deltaTime, double strength){
-        if (strength > 0.0){
-            move(deltaTime,strength);
+    public void update(double deltaTime){
+        if (!hasJoystick()) return;
+        setDirection(joystick.getDirection());
+        if (joystick.getStrength() > 0.0){
+            move(deltaTime, joystick.getStrength());
         } else {
             doFriction();
         }
     }
 
-    public void update(double deltaTime, double strength, double direction){
-        this.direction = direction;
-        update(deltaTime, strength);
-    }
-
     public void doFriction() {
-        if(speed > 0){
-            speed -= friction;
+        if(getSpeed() > 0){
+            setSpeed(getSpeed()-friction);
         }
     }
 
     public void resetPosition() {
-        x = initialXValue;
-        y = initialYValue;
+        setX(initialXValue);
+        setY(initialYValue);
     }
 
     public void moveRight() {
-        x += 15;
+        setX(getX()+15);
+    }
+
+    public void startJoystick() {
+        if (hasJoystick()) {
+            joystick.onMove((double xPos, double yPos) -> {
+            }, () -> {
+            });
+        } else {
+            System.out.println("No joystick found");
+        }
+    }
+
+    public void resetJoystick() {
+        if (!hasJoystick()) return;
+        joystick.reset();
+    }
+
+    private boolean hasJoystick() {
+        return joystick != null;
     }
 }

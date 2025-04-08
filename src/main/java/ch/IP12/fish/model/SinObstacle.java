@@ -18,7 +18,7 @@ public class SinObstacle extends Obstacle {
 
     @Override
     protected void adjustDirection() {
-        double direction = this.direction; // direction is in radians
+        double direction = getDirection(); // direction is in radians
 
         //change angle in direction of wave movement (up ord down)
         if (waveUp) {
@@ -40,6 +40,6 @@ public class SinObstacle extends Obstacle {
             }
         }
 
-        this.direction = direction;
+        setDirection(direction);
     }
 }

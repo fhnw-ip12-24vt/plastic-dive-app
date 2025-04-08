@@ -7,29 +7,30 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 
 public abstract class Moveable {
-    protected double x;
-    protected double y;
+    private double x;
+    private double y;
 
-    protected double speed;
-    protected final double length;
-    protected final double height;
+    private double speed;
+    private final double length;
+    private final double height;
 
-    protected double direction;
+    private double direction;
 
-    protected final double maxX;
-    protected final double maxY;
+    private final double maxX;
+    private final double maxY;
 
     //Scalar for object size;
-    protected final double spriteScale;
+    private final double spriteScale;
+
 
     //path to animation images
-    protected final SpriteAnimation animation;
+    private final SpriteAnimation animation;
 
-    Moveable(int x, int y, double speed, double maxX, double maxY, Spritesheets spritesheets, double spriteScale){
+    Moveable(double x, double y, double speed, double maxX, double maxY, Spritesheets spritesheets, double spriteScale) {
         this(x, y, speed, maxX, maxY, spritesheets.getSpriteAnimation(), spriteScale);
     }
 
-    Moveable(int x, int y, double speed, double maxX, double maxY, SpriteAnimation spriteAnimation, double spriteScale) {
+    Moveable(double x, double y, double speed, double maxX, double maxY, SpriteAnimation spriteAnimation, double spriteScale) {
         this.x = x;
         this.y = y;
         this.speed = speed;
@@ -38,34 +39,40 @@ public abstract class Moveable {
         this.maxY = maxY;
         this.spriteScale = spriteScale;
 
-        this.length = animation.getWidth()*spriteScale-5;
-        this.height = animation.getHeight()*spriteScale-5;
+        this.length = animation.getWidth() * spriteScale - 5;
+        this.height = animation.getHeight() * spriteScale - 5;
     }
 
     /**
      * Calls movement code of calling Moveable
+     *
      * @param deltaTime Ensures movement amount is consistent regardless of any that may be occurring lag.
      */
-    public void update(double deltaTime, double strength){
-        move(deltaTime,strength);
-    }
+    public abstract void update(double deltaTime);
 
     /**
      * Moves the moveable object in the specified direction.
      */
-    public void move(double deltaTime,double strength) {
-        x += (Math.cos(direction)*(speed*strength)) * deltaTime;
-        y += (Math.sin(direction)*(speed*strength)) * deltaTime;
+    public void move(double deltaTime, double strength) {
+        x += (Math.cos(direction) * (speed * strength)) * deltaTime;
+        y += (Math.sin(direction) * (speed * strength)) * deltaTime;
     }
 
     /**
      * Checks if the current instance collides with another object.
+     *
      * @param moveable Object to be checked for overlap.
      * @return Boolean value of the check
      */
     public boolean collidesWith(Moveable moveable) {
-        return IntUtils.isRangeInRange(moveable.x, moveable.x+moveable.length, this.x, this.x+this.length)
-                && IntUtils.isRangeInRange(moveable.y, moveable.y+moveable.height, this.y, this.y+this.height);
+        return IntUtils.isRangeInRange(moveable.x, moveable.x + moveable.length, this.x, this.x + this.length)
+                && IntUtils.isRangeInRange(moveable.y, moveable.y + moveable.height, this.y, this.y + this.height);
+    }
+
+    public void drawAnimation(GraphicsContext graphicsContext) {
+        animation.play();
+        Rectangle2D viewRect = animation.getImageView().getViewport();
+        graphicsContext.drawImage(animation.getImageView().getImage(), viewRect.getMinX(), viewRect.getMinY(), viewRect.getWidth(), viewRect.getHeight(), x, y, length, height);
     }
 
     public double getX() {
@@ -84,9 +91,44 @@ public abstract class Moveable {
         return length;
     }
 
-    public void drawAnimation(GraphicsContext graphicsContext){
-        animation.play();
-        Rectangle2D viewRect = animation.getImageView().getViewport();
-        graphicsContext.drawImage(animation.getImageView().getImage(), viewRect.getMinX(), viewRect.getMinY(),viewRect.getWidth(), viewRect.getHeight(), x, y, length, height);
+    public SpriteAnimation getAnimation() {
+        return animation;
     }
+
+    public double getSpriteScale() {
+        return spriteScale;
+    }
+
+    public double getMaxY() {
+        return maxY;
+    }
+
+    public double getMaxX() {
+        return maxX;
+    }
+
+    public double getDirection() {
+        return direction;
+    }
+
+    public void setDirection(double direction) {
+        this.direction = direction;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
 }

@@ -9,12 +9,13 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+import java.util.Arrays;
 import java.util.List;
 
 
 public class View {
     private final GraphicsContext graphicsContext;
-    private final Player player;
+    private final List<Player> players;
     private final List<Obstacle> obstacles;
     private double frontLayerShift = 0.0;
     private double middleLayerShift = 0.0;
@@ -23,12 +24,12 @@ public class View {
     private final Image frontLayer = new Image("backgroundLayers/frontLayer.png");
     private final Image middleLayer = new Image("backgroundLayers/middleLayer.png");
     private final Image backLayer = new Image("backgroundLayers/middleLayer.png");
-    double backgroundScalar = 3.5;
-    double layerShiftScalar = 0.2;
+    private double backgroundScalar = 3.5;
+    private double layerShiftScalar = 0.2;
 
-    View(GraphicsContext graphicsContext, Player player, List<Obstacle> obstacles) {
+    View(GraphicsContext graphicsContext, List<Player> players, List<Obstacle> obstacles) {
         this.graphicsContext = graphicsContext;
-        this.player = player;
+        this.players = players;
         this.obstacles = obstacles;
     }
 
@@ -74,7 +75,7 @@ public class View {
     }
 
     private void startingAnimation() {
-        player.drawAnimation(graphicsContext);
+        players.forEach(player -> player.drawAnimation(graphicsContext));
         graphicsContext.setFill(Color.BLACK);
         Text text = new Text(Controller.DIFFICULTY.text);
         text.setFont(App.FONT);
@@ -121,7 +122,7 @@ public class View {
         }
         */
 
-        player.drawAnimation(graphicsContext);
+        players.forEach(player -> player.drawAnimation(graphicsContext));
 
         graphicsContext.setFill(Color.SEAGREEN);
         for (Obstacle obstacle : obstacles) {
@@ -130,7 +131,7 @@ public class View {
     }
 
     private void end() {
-        player.drawAnimation(graphicsContext);
+        players.forEach(player -> player.drawAnimation(graphicsContext));
     }
 
     private void highscore() {

@@ -47,7 +47,9 @@ public class App extends Application {
         stage.setFullScreen(true);
 
         //Creates the player and an array list for all the obstacles
-        Player player =  new Player(0,HEIGHT/2,3, WIDTH, HEIGHT,Spritesheets.Player);
+        Player player1 = new Player(0, HEIGHT / 2.0, 3, WIDTH, HEIGHT, Spritesheets.Player, joystick);
+        Player player2 = new Player(0, HEIGHT / 1.5, 3, WIDTH, HEIGHT, Spritesheets.Player, null);
+        List<Player> players = List.of(player1, player2);
         List<Obstacle> obstacles = Collections.synchronizedList(new ArrayList<>());
 
         //Creates the area which we draw all the images on
@@ -56,11 +58,12 @@ public class App extends Application {
         graphicsContext.setImageSmoothing(false);
         FONT = Font.loadFont(getClass().getResourceAsStream("/fonts/MinecraftRegular-Bmg3.otf"), 18);
         graphicsContext.setFont(FONT);
+
         //Initializes the controller and starts the game
-        Controller controller = new Controller(player, obstacles, joystick);
+        Controller controller = new Controller(players, obstacles, joystick);
 
         //Starts the View and passes it the relevant things that are to be displayed
-        View view = new View(graphicsContext, player, obstacles);
+        View view = new View(graphicsContext, players, obstacles);
 
         //creates window and passes it the relevant objects (necessary for display)
         StackPane root = new StackPane(canvas);
