@@ -1,9 +1,7 @@
 package ch.IP12.fish;
 
-import ch.IP12.fish.components.JoystickAnalog;
 import ch.IP12.fish.components.BarcodeScanner;
 import ch.IP12.fish.model.*;
-import ch.IP12.fish.model.animations.Spritesheets;
 import ch.IP12.fish.utils.Difficulty;
 import ch.IP12.fish.utils.GamePhase;
 import javafx.scene.Scene;
@@ -23,7 +21,7 @@ public class Controller {
     private final List<Obstacle> obstacles;
     private final ScheduledExecutorService executor;
 
-    private Spawner spawner;
+    private final Spawner spawner;
     private double deltaTimeClock = 0;
     private double lastHitTime = 0;
     private final AtomicInteger gameTicks = new AtomicInteger(0);
@@ -72,13 +70,17 @@ public class Controller {
         executor.shutdown();
     }
 
+    public void reset() {
+        players.forEach(Player::resetPosition);
+        GAMEPHASE = GamePhase.Start;
+    }
 
-    public static GamePhase getGAMEPHASE() {
+    public static GamePhase GETGAMEPHASE() {
         return GAMEPHASE;
     }
 
     private void gameStep() {
-        switch (Controller.getGAMEPHASE()) {
+        switch (Controller.GETGAMEPHASE()) {
             case Start -> start();
             case StartingAnimation -> startingAnimation();
             case Running -> running();
@@ -159,8 +161,7 @@ public class Controller {
     private void end() {
         players.forEach(Player::moveRight);
         if (GETDELTACLOCK() > 10) {
-            nextPhase();
-            CLOCK = CURRENTTIMESECONDS();
+            reset();
         }
     }
 

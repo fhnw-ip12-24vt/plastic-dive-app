@@ -8,7 +8,7 @@ public class BounceObstacle extends Obstacle {
 
     public BounceObstacle(double x, double y, double speed, double maxX, double maxY, Spritesheets spriteSheet) {
         super(x, y, speed, maxX, maxY, spriteSheet);
-        setDirection(Math.toRadians((Math.random() * 80) + 100));
+        setDirection(Math.toRadians((Math.random() * 120) + 120));
         this.color = Color.BURLYWOOD;
     }
     protected void adjustDirection() {
