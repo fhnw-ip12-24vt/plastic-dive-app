@@ -71,7 +71,7 @@ public class View {
 
     private void start() {
         graphicsContext.setFill(Color.BLACK);
-        graphicsContext.fillText("Scan smth", App.WIDTH / 2f, App.HEIGHT / 2f);
+        graphicsContext.fillText("Scan one of the Barcodes in front of you", App.WIDTH / 2f, App.HEIGHT / 2f);
         frontLayerShift = middleLayerShift = backLayerShift = 0;
         layerShiftScalar = 0.2;
     }
@@ -81,7 +81,7 @@ public class View {
         graphicsContext.setFill(Color.BLACK);
         Text text = new Text(Controller.DIFFICULTY.text);
         text.setFont(App.FONT);
-        graphicsContext.fillText(Controller.DIFFICULTY.text, ((App.WIDTH - text.getLayoutBounds().getWidth()) / 2f) + frontLayerShift, App.HEIGHT / 2f);
+        graphicsContext.fillText(Controller.DIFFICULTY.text, ((App.WIDTH - text.getLayoutBounds().getWidth()) / 2f) + frontLayerShift, App.HEIGHT / 3f);
         if (Controller.GETDELTACLOCK() > 9.9) {
             return;
         } else if (Controller.GETDELTACLOCK() > 9) {

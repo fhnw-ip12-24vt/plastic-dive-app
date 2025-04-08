@@ -30,12 +30,14 @@ public class Controller {
     public static double SCORE = 500;
     public static Difficulty DIFFICULTY;
     public static double CLOCK;
+    private BarcodeScanner barcodeScanner;
 
-    Controller(List<Player> players, List<Obstacle> obstacles) {
+    Controller(List<Player> players, List<Obstacle> obstacles, Scene scene) {
         this.players = players;
         this.obstacles = obstacles;
         this.executor = Executors.newSingleThreadScheduledExecutor();
         this.spawner = new Spawner(obstacles);
+        this.barcodeScanner = new BarcodeScanner(scene);
     }
 
     /**
@@ -44,8 +46,6 @@ public class Controller {
      * @param scene The Scene object which will receive the listeners
      */
     void createGameKeyListeners(Scene scene) {
-        BarcodeScanner barcodeScanner = new BarcodeScanner(scene);
-        barcodeScanner.startListening();
 
         scene.setOnKeyReleased(e -> {
             if (e.getCode() == KeyCode.I) {
@@ -61,6 +61,7 @@ public class Controller {
     public void startGameLogic() {
         // Run the game logic at a fixed rate
         executor.scheduleAtFixedRate(this::gameStep, 0, 16666666, TimeUnit.NANOSECONDS); // 16ms ≈ 60 updates per second
+        barcodeScanner.startListening();
     }
 
     /**
@@ -73,6 +74,8 @@ public class Controller {
     public void reset() {
         players.forEach(Player::resetPosition);
         GAMEPHASE = GamePhase.Start;
+        barcodeScanner.startListening();
+        SCORE = 500;
     }
 
     public static GamePhase GETGAMEPHASE() {
@@ -84,7 +87,7 @@ public class Controller {
             case Start -> start();
             case StartingAnimation -> startingAnimation();
             case Running -> running();
-            case PreEndAnimation -> running();
+            case PreEndAnimation -> preEndAnimation();
             case End -> end();
             case HighScore -> highscore();
         }
@@ -100,7 +103,7 @@ public class Controller {
             lastHitTime = CURRENTTIMESECONDS();
             nextPhase();
             players.forEach(Player::startJoystick);
-
+            CLOCK = CURRENTTIMESECONDS();
         } else if (GETDELTACLOCK() > 9.5) {
             players.forEach(Player::moveRight);
         }
@@ -156,6 +159,10 @@ public class Controller {
             }
         }
 
+    }
+
+    void preEndAnimation() {
+        nextPhase();
     }
 
     private void end() {
