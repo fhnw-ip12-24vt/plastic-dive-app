@@ -1,16 +1,19 @@
 package ch.IP12.fish.model;
 
 import ch.IP12.fish.Controller;
+import ch.IP12.fish.model.animations.SpriteAnimation;
 import ch.IP12.fish.model.animations.Spritesheets;
 import javafx.scene.paint.Color;
+
+import java.util.List;
 
 public class AtPlayerObstacle extends Obstacle {
     private final double creationTime = Controller.CURRENTTIMESECONDS();
     private boolean hasChanged;
     private final Player player;
 
-    public AtPlayerObstacle(double x, double y, double speed, double maxX, double maxY, Spritesheets spriteSheet, Player player) {
-        super(x, y, speed, maxX, maxY, spriteSheet);
+    public AtPlayerObstacle(Obstacle obstacle, Player player) {
+        super(obstacle);
         this.player = player;
         this.color = Color.RED;
     }

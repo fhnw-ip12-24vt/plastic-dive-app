@@ -1,18 +1,19 @@
 package ch.IP12.fish.model;
 
+import ch.IP12.fish.model.animations.SpriteAnimation;
 import ch.IP12.fish.model.animations.Spritesheets;
 import javafx.scene.paint.Color;
 
 public class SinObstacle extends Obstacle {
     //Randomised wave generation (random change and random start direction)
-    private final double maxAngleChange = Math.toRadians((Math.random()*20)+50);
+    private final double maxAngleChange = Math.toRadians((Math.random() * 20) + 50);
     private boolean waveUp = Math.random() > 0.5;
 
     //one degree as radian static to save processing time
     private static final double RADIAN_INCREMENT = Math.toRadians(1);
 
-    public SinObstacle(double x, double y, double speed, double maxX, double maxY, Spritesheets spriteSheet) {
-        super(x, y, speed, maxX, maxY, spriteSheet);
+    public SinObstacle(Obstacle obstacle) {
+        super(obstacle);
         this.color = Color.YELLOW;
     }
 

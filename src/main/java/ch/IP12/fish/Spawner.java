@@ -7,17 +7,18 @@ import java.util.*;
 
 public class Spawner {
     private interface factoryPattern{
-        Obstacle create(double x, double y, double speed, double maxX, double maxY, Spritesheets spritesheets,Object... params);
+        Obstacle create(Obstacle obstacle,Object... params);
     }
 
     private static final Map<Class<? extends Obstacle>, factoryPattern> factories = new HashMap<>();
 
     static {
         // Register factories for each obstacle type
-        registerFactory(Obstacle.class, (x,y,speed,maxX,maxY,spritesheets,params) -> new Obstacle(x, y,speed,maxX,maxY,spritesheets));
-        registerFactory(AtPlayerObstacle.class, (x, y, speed, maxX, maxY, spritesheets, params) -> new AtPlayerObstacle(x, y,speed/2,maxX,maxY,spritesheets,(Player) params[0]));
-        registerFactory(BounceObstacle.class, (x,y,speed,maxX,maxY,spritesheets,params) -> new BounceObstacle(x, y,speed,maxX,maxY,spritesheets));
-        registerFactory(SinObstacle.class, (x,y,speed,maxX,maxY,spritesheets,params) -> new SinObstacle(x, y,speed,maxX,maxY,spritesheets));
+        registerFactory(Obstacle.class, (obstacle,params) -> new Obstacle(obstacle));
+        registerFactory(AtPlayerObstacle.class, (obstacle,params) -> new AtPlayerObstacle(obstacle, (Player) params[0]));
+        registerFactory(BounceObstacle.class, (obstacle,params) -> new BounceObstacle(obstacle));
+        registerFactory(SinObstacle.class, (obstacle,params) -> new SinObstacle(obstacle));
+        //registerFactory(SpliterObstacle.class, (obstacle,params) -> new SpliterObstacle(obstacle, (List<Obstacle>) params[1]));
     }
 
     private static void registerFactory(Class<? extends Obstacle> clazz, factoryPattern pattern) {
@@ -29,7 +30,8 @@ public class Spawner {
         if (factory == null) {
             throw new IllegalArgumentException("No factory registered for " + obstacleClass.getName());
         }
-        return obstacleClass.cast(factory.create(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), speed, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet(), params));
+        Obstacle obstacleBase = new Obstacle(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), speed, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet());
+        return obstacleClass.cast(factory.create(obstacleBase, params));
     }
 
     int money = 0;
@@ -46,6 +48,6 @@ public class Spawner {
     }
 
     void spawnRandom(Player player) {
-        obstacles.add(spawn(classes.get(rand.nextInt(classes.size())), 300, player));
+        obstacles.add(spawn(classes.get(rand.nextInt(classes.size())), 300, player, player, player));
     }
 }

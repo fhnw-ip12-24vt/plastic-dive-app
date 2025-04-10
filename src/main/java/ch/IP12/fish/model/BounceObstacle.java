@@ -6,8 +6,8 @@ import javafx.scene.paint.Color;
 
 public class BounceObstacle extends Obstacle {
 
-    public BounceObstacle(double x, double y, double speed, double maxX, double maxY, Spritesheets spriteSheet) {
-        super(x, y, speed, maxX, maxY, spriteSheet);
+    public BounceObstacle(Obstacle obstacle) {
+        super(obstacle);
         setDirection(Math.toRadians((Math.random() * 120) + 120));
         this.color = Color.BURLYWOOD;
     }

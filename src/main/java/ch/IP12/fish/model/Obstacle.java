@@ -19,6 +19,10 @@ public class Obstacle extends Moveable {
         setDirection(Math.PI);
     }
 
+    public Obstacle(Obstacle other) {
+        this(other.getX(), other.getY(), other.getSpeed(), other.getMaxX(), other.getMaxY(), other.getAnimation());
+    }
+
     @Override
     public void update(double deltaTime) {
         adjustDirection();
