@@ -37,6 +37,7 @@ public class Spawner {
     Random rand = new Random();
     List<Class<? extends Obstacle>> classes;
     List<Obstacle> obstacles;
+
     Spawner(List<Obstacle> obstacles) {
         this.obstacles = obstacles;
         classes = new ArrayList<>();
