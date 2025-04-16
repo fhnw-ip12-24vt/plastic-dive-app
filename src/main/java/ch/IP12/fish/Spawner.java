@@ -26,9 +26,7 @@ public class Spawner {
 
     public static <T extends Obstacle> T spawn(Class<T> obstacleClass, double speed, Object... params) {
         factoryPattern factory = factories.get(obstacleClass);
-        if (factory == null) {
-            throw new IllegalArgumentException("No factory registered for " + obstacleClass.getName());
-        }
+        if (factory == null) throw new IllegalArgumentException("No factory registered for " + obstacleClass.getName());
         return obstacleClass.cast(factory.create(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), speed, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet(), params));
     }
 

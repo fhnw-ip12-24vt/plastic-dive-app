@@ -24,8 +24,8 @@ import java.util.List;
 public class App extends Application {
     static int WIDTH = 1920;
     static int HEIGHT = 1080;
-    public static Font FONT;
-    Context pi4j;
+    static Font FONT;
+    private Context pi4j;
 
     public static void main(String[] args) {
         launch(args);
@@ -38,13 +38,10 @@ public class App extends Application {
         JoystickAnalog joystick1 = new JoystickAnalog(ads1115, Ads1115.Channel.A0, Ads1115.Channel.A1);
         //JoystickAnalog joystick2 = new JoystickAnalog(ads1115, Ads1115.Channel.A2, Ads1115.Channel.A3);
 
-
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         WIDTH = screenSize.width;
         HEIGHT = screenSize.height;
-        stage.setResizable(false);
-        stage.setFullScreenExitHint("");
-        stage.setFullScreen(true);
+        setupStage(stage);
 
         //Creates the player and an array list for all the obstacles
         Player player1 = new Player(0, HEIGHT / 2.0, 3, WIDTH, HEIGHT, Spritesheets.Player, joystick1);
@@ -54,26 +51,18 @@ public class App extends Application {
         List<Obstacle> obstacles = Collections.synchronizedList(new ArrayList<>());
 
         //Creates the area which we draw all the images on
-        Canvas canvas = new Canvas(WIDTH, HEIGHT);
-        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-        graphicsContext.setImageSmoothing(false);
-        FONT = Font.loadFont(getClass().getResourceAsStream("/fonts/MinecraftRegular-Bmg3.otf"), 12);
-        graphicsContext.setFont(FONT);
+        Canvas canvas = setupCanvas();
 
         //creates window and passes it the relevant objects (necessary for display)
-        StackPane root = new StackPane(canvas);
-        Scene scene = new Scene(root);
-        scene.setCursor(Cursor.NONE);
+        Scene scene = createScene(canvas);
         stage.setScene(scene);
-        stage.setTitle("IP12 Prototype");
         stage.show();
 
         //Initializes the controller and starts the game
         Controller controller = new Controller(players, obstacles, scene);
 
         //Starts the View and passes it the relevant things that are to be displayed
-        View view = new View(graphicsContext, players, obstacles);
-
+        View view = new View(canvas.getGraphicsContext2D(), players, obstacles);
 
         //starts the key listeners for the main scene.
         controller.createGameKeyListeners(scene); // for debugging
@@ -82,12 +71,33 @@ public class App extends Application {
         view.startRendering();
 
         //Stops the game if the window is exited
-        stage.setOnCloseRequest(event -> {
-
-
-            pi4j.shutdown();
-            controller.stopGameLogic();
-        });
+        stage.setOnCloseRequest(event -> {pi4j.shutdown(); controller.stopGameLogic();});
     }
 
+    private void setupStage(Stage stage) {
+        stage.setResizable(false);
+        stage.setFullScreenExitHint("");
+        stage.setFullScreen(true);
+        stage.setTitle("IP12 Prototype");
+    }
+
+    private Canvas setupCanvas() {
+        Canvas canvas = new Canvas(WIDTH, HEIGHT);
+        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
+        graphicsContext.setImageSmoothing(false);
+
+        //load custom font
+        FONT = Font.loadFont(getClass().getResourceAsStream("/fonts/MinecraftRegular-Bmg3.otf"), 12);
+        graphicsContext.setFont(FONT);
+
+        return canvas;
+    }
+
+    private Scene createScene(Canvas canvas) {
+        StackPane root = new StackPane(canvas);
+        Scene scene = new Scene(root);
+        scene.setCursor(Cursor.NONE);
+
+        return scene;
+    }
 }
