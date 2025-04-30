@@ -61,7 +61,7 @@ public class App extends Application {
     }
 
     private Canvas setupCanvas(World world) {
-        Canvas canvas = new Canvas(world.getHeight(), world.getWidth());
+        Canvas canvas = new Canvas(world.getWidth(), world.getHeight());
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
         graphicsContext.setImageSmoothing(false);
 
