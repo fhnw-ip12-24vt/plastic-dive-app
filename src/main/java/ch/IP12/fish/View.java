@@ -1,12 +1,13 @@
 package ch.IP12.fish;
 
 import ch.IP12.fish.model.Obstacle;
-import ch.IP12.fish.model.Player;
+import ch.IP12.fish.model.World;
 import ch.IP12.fish.model.animations.Spritesheets;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.util.Arrays;
@@ -15,22 +16,22 @@ import java.util.List;
 
 public class View {
     private final GraphicsContext graphicsContext;
-    private final List<Player> players;
-    private final List<Obstacle> obstacles;
+    private final Font font = Font.loadFont(getClass().getResourceAsStream("/fonts/MinecraftRegular-Bmg3.otf"), 12);
+    private final World world;
     private double frontLayerShift = 0.0;
     private double middleLayerShift = 0.0;
     private double backLayerShift = 0.0;
-    private long clock;
     private final Image frontLayer = new Image("backgroundLayers/frontLayer.png");
     private final Image middleLayer = new Image("backgroundLayers/middleLayer.png");
     private final Image backLayer = new Image("backgroundLayers/middleLayer.png");
     private double backgroundScalar = 3.5;
     private double layerShiftScalar = 0.2;
 
-    View(GraphicsContext graphicsContext, List<Player> players, List<Obstacle> obstacles) {
+    View(GraphicsContext graphicsContext, World world) {
         this.graphicsContext = graphicsContext;
-        this.players = players;
-        this.obstacles = obstacles;
+        this.world = world;
+
+        graphicsContext.setFont(font);
     }
 
     /**
@@ -51,14 +52,14 @@ public class View {
      */
     private void render() {
         graphicsContext.setFill(Color.web("#3e79dd"));
-        graphicsContext.fillRect(0, 0, App.WIDTH, App.HEIGHT);
+        graphicsContext.fillRect(0, 0, world.getWidth(), world.getHeight());
 
         drawBackground(middleLayer, middleLayerShift);
         drawBackground(frontLayer, frontLayerShift);
 
         resetLayerShift();
 
-        switch (Controller.GAMEPHASE) {
+        switch (world.getGamePhase()) {
             case Start -> start();
             case StartingAnimation -> startingAnimation();
             case Running -> running();
@@ -71,17 +72,17 @@ public class View {
 
     private void start() {
         graphicsContext.setFill(Color.BLACK);
-        graphicsContext.fillText("Scan one of the Barcodes in front of you", App.WIDTH / 2f, App.HEIGHT / 2f);
+        graphicsContext.fillText("Scan one of the Barcodes in front of you", world.getWidth() / 2f, world.getHeight() / 2f);
         frontLayerShift = middleLayerShift = backLayerShift = 0;
         layerShiftScalar = 0.2;
     }
 
     private void startingAnimation() {
-        players.forEach(player -> player.drawAnimation(graphicsContext));
+        world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
         graphicsContext.setFill(Color.BLACK);
-        Text text = new Text(Controller.DIFFICULTY.text);
+        Text text = new Text(world.getDifficulty().text);
         text.setFont(App.FONT);
-        graphicsContext.fillText(Controller.DIFFICULTY.text, ((App.WIDTH - text.getLayoutBounds().getWidth()) / 2f) + frontLayerShift, App.HEIGHT / 3f);
+        graphicsContext.fillText(world.getDifficulty().text, ((world.getWidth() - text.getLayoutBounds().getWidth()) / 2f) + frontLayerShift, world.getHeight() / 3f);
         if (Controller.GETDELTACLOCK() > 9.9) {
             return;
         } else if (Controller.GETDELTACLOCK() > 9) {
@@ -102,7 +103,7 @@ public class View {
         middleLayerShift -= 5;
         frontLayerShift -= 7;
         graphicsContext.setFill(Color.BLACK);
-        graphicsContext.fillText("Score: " + (int) Controller.SCORE, 10, 30);
+        graphicsContext.fillText("Score: " + (int) world.getScore(), 10, 30);
 
         /*
         This code can be used for a neat fading effect if we so desired for any transitions
@@ -124,16 +125,16 @@ public class View {
         }
         */
 
-        players.forEach(player -> player.drawAnimation(graphicsContext));
+        world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
 
         graphicsContext.setFill(Color.SEAGREEN);
-        for (Obstacle obstacle : obstacles) {
+        for (Obstacle obstacle : world.getObstacles()) {
             obstacle.drawAnimation(graphicsContext);
         }
     }
 
     private void end() {
-        players.forEach(player -> player.drawAnimation(graphicsContext));
+        world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
     }
 
     private void highscore() {
@@ -141,9 +142,9 @@ public class View {
     }
 
     private void drawBackground(Image image, double layerShift) {
-        graphicsContext.drawImage(image, layerShift - image.getWidth() * Spritesheets.spriteScaling, App.HEIGHT - image.getHeight() * Spritesheets.spriteScaling, image.getWidth() * Spritesheets.spriteScaling, image.getHeight() * Spritesheets.spriteScaling);
-        graphicsContext.drawImage(image, layerShift, App.HEIGHT - image.getHeight() * Spritesheets.spriteScaling, image.getWidth() * Spritesheets.spriteScaling, image.getHeight() * Spritesheets.spriteScaling);
-        graphicsContext.drawImage(image, layerShift + image.getWidth() * Spritesheets.spriteScaling, App.HEIGHT - image.getHeight() * Spritesheets.spriteScaling, image.getWidth() * Spritesheets.spriteScaling, image.getHeight() * Spritesheets.spriteScaling);
+        graphicsContext.drawImage(image, layerShift - image.getWidth() * Spritesheets.spriteScaling, world.getHeight() - image.getHeight() * Spritesheets.spriteScaling, image.getWidth() * Spritesheets.spriteScaling, image.getHeight() * Spritesheets.spriteScaling);
+        graphicsContext.drawImage(image, layerShift, world.getHeight() - image.getHeight() * Spritesheets.spriteScaling, image.getWidth() * Spritesheets.spriteScaling, image.getHeight() * Spritesheets.spriteScaling);
+        graphicsContext.drawImage(image, layerShift + image.getWidth() * Spritesheets.spriteScaling, world.getHeight() - image.getHeight() * Spritesheets.spriteScaling, image.getWidth() * Spritesheets.spriteScaling, image.getHeight() * Spritesheets.spriteScaling);
 
     }
 

@@ -4,6 +4,7 @@ import ch.IP12.fish.components.Ads1115;
 import ch.IP12.fish.components.JoystickAnalog;
 import ch.IP12.fish.model.Obstacle;
 import ch.IP12.fish.model.Player;
+import ch.IP12.fish.model.World;
 import ch.IP12.fish.model.animations.Spritesheets;
 import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
@@ -22,10 +23,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class App extends Application {
-    static int WIDTH = 1920;
-    static int HEIGHT = 1080;
-    static Font FONT;
-    private Context pi4j;
+    public static Font FONT;
+    Context pi4j;
 
     public static void main(String[] args) {
         launch(args);
@@ -34,35 +33,36 @@ public class App extends Application {
     public void start(Stage stage) {
         pi4j = Pi4J.newAutoContext();
 
-        Ads1115 ads1115 = new Ads1115(pi4j);
-        JoystickAnalog joystick1 = new JoystickAnalog(ads1115, Ads1115.Channel.A0, Ads1115.Channel.A1);
-        //JoystickAnalog joystick2 = new JoystickAnalog(ads1115, Ads1115.Channel.A2, Ads1115.Channel.A3);
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        WIDTH = screenSize.width;
-        HEIGHT = screenSize.height;
-        setupStage(stage);
+        stage.setResizable(false);
+        stage.setFullScreenExitHint("");
+        stage.setFullScreen(true);
 
+        World world = new World(pi4j);
         //Creates the player and an array list for all the obstacles
-        Player player1 = new Player(0, HEIGHT / 2.0, 3, WIDTH, HEIGHT, Spritesheets.Player, joystick1);
-        // Player player2 = new Player(0, HEIGHT / 1.5, 3, WIDTH, HEIGHT, Spritesheets.Player, joystick2);
-        List<Player> players = List.of(player1);
 
-        List<Obstacle> obstacles = Collections.synchronizedList(new ArrayList<>());
 
         //Creates the area which we draw all the images on
-        Canvas canvas = setupCanvas();
+        Canvas canvas = new Canvas(world.getWidth(), world.getHeight());
+        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
+        graphicsContext.setImageSmoothing(false);
+
+
 
         //creates window and passes it the relevant objects (necessary for display)
-        Scene scene = createScene(canvas);
+        StackPane root = new StackPane(canvas);
+        Scene scene = new Scene(root);
+        scene.setCursor(Cursor.NONE);
         stage.setScene(scene);
+        stage.setTitle("IP12 Prototype");
         stage.show();
 
         //Initializes the controller and starts the game
-        Controller controller = new Controller(players, obstacles, scene);
+        Controller controller = new Controller(world, scene);
 
         //Starts the View and passes it the relevant things that are to be displayed
-        View view = new View(canvas.getGraphicsContext2D(), players, obstacles);
+        View view = new View(graphicsContext, world);
+
 
         //starts the key listeners for the main scene.
         controller.createGameKeyListeners(scene); // for debugging
@@ -71,6 +71,10 @@ public class App extends Application {
         view.startRendering();
 
         //Stops the game if the window is exited
+        stage.setOnCloseRequest(event -> {
+            pi4j.shutdown();
+            controller.stopGameLogic();
+        });
         stage.setOnCloseRequest(event -> {pi4j.shutdown(); controller.stopGameLogic();});
     }
 
@@ -82,7 +86,7 @@ public class App extends Application {
     }
 
     private Canvas setupCanvas() {
-        Canvas canvas = new Canvas(WIDTH, HEIGHT);
+        Canvas canvas = new Canvas(world.getHeight(), world.getWidth());
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
         graphicsContext.setImageSmoothing(false);
 

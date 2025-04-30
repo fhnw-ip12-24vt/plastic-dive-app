@@ -6,45 +6,55 @@ import ch.IP12.fish.model.animations.Spritesheets;
 import java.util.*;
 
 public class Spawner {
-    private interface factoryPattern{
-        Obstacle create(double x, double y, double speed, double maxX, double maxY, Spritesheets spritesheets,Object... params);
+
+    private interface factoryPattern {
+        Obstacle create(Obstacle obstacle, Object... params);
     }
 
     private static final Map<Class<? extends Obstacle>, factoryPattern> factories = new HashMap<>();
 
     static {
         // Register factories for each obstacle type
-        registerFactory(Obstacle.class, (x,y,speed,maxX,maxY,spritesheets,params) -> new Obstacle(x, y,speed,maxX,maxY,spritesheets));
-        registerFactory(AtPlayerObstacle.class, (x, y, speed, maxX, maxY, spritesheets, params) -> new AtPlayerObstacle(x, y,speed/2,maxX,maxY,spritesheets,(Player) params[0]));
-        registerFactory(BounceObstacle.class, (x,y,speed,maxX,maxY,spritesheets,params) -> new BounceObstacle(x, y,speed,maxX,maxY,spritesheets));
-        registerFactory(SinObstacle.class, (x,y,speed,maxX,maxY,spritesheets,params) -> new SinObstacle(x, y,speed,maxX,maxY,spritesheets));
+        registerFactory(Obstacle.class, (obstacle, params) -> new Obstacle(obstacle));
+        registerFactory(AtPlayerObstacle.class, (obstacle, params) -> new AtPlayerObstacle(obstacle, (Player) params[1]));
+        registerFactory(BounceObstacle.class, (obstacle, params) -> new BounceObstacle(obstacle));
+        registerFactory(SinObstacle.class, (obstacle, params) -> new SinObstacle(obstacle));
+        registerFactory(SplitterObstacle.class, (obstacle, params) -> new SplitterObstacle(obstacle, (Class<? extends Obstacle>) params[0]));
+    }
+
+    static Random rand = new Random();
+    static List<Class<? extends Obstacle>> classes = new ArrayList<>(factories.keySet());
+
+    private Spawner() {
     }
 
     private static void registerFactory(Class<? extends Obstacle> clazz, factoryPattern pattern) {
         factories.put(clazz, pattern);
     }
 
-    public static <T extends Obstacle> T spawn(Class<T> obstacleClass, double speed, Object... params) {
+    public static <T extends Obstacle> T create(Class<T> obstacleClass, double speed, Object... params) {
         factoryPattern factory = factories.get(obstacleClass);
-        if (factory == null) throw new IllegalArgumentException("No factory registered for " + obstacleClass.getName());
-        return obstacleClass.cast(factory.create(App.WIDTH, (int) ((Math.random() * (App.HEIGHT))), speed, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet(), params));
+        if (factory == null) {
+            throw new IllegalArgumentException("No factory registered for " + obstacleClass.getName());
+        }
+        Obstacle obstacleBase = new Obstacle(App.WIDTH, rand.nextInt(App.WIDTH), speed, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet());
+        System.out.println(obstacleClass.getName());
+        return obstacleClass.cast(factory.create(obstacleBase, params));
     }
 
-    int money = 0;
-    int moneyIncrement = 5;
-    int priceScalar = 1;
-
-    Random rand = new Random();
-    List<Class<? extends Obstacle>> classes;
-    List<Obstacle> obstacles;
-
-    Spawner(List<Obstacle> obstacles) {
-        this.obstacles = obstacles;
-        classes = new ArrayList<>();
-        classes.addAll(factories.keySet());
+    public static void spawnRandom(Player player) {
+        obstacles.add(create(classes.get(rand.nextInt(classes.size())), 300, classes.get(rand.nextInt(classes.size()-1)), player));
     }
 
-    void spawnRandom(Player player) {
-        obstacles.add(spawn(classes.get(rand.nextInt(classes.size())), 300, player));
+    public static <T extends Obstacle> void spawn(Class<T> obstacleClass, double speed, Object... params) {
+        obstacles.add(create(obstacleClass, speed, classes.get(rand.nextInt(classes.size())), params));
+    }
+
+    public static void remove(List<Obstacle> deletionList) {
+        obstacles.removeAll(deletionList);
+    }
+
+    public static void remove(Obstacle obstacle) {
+        obstacles.remove(obstacle);
     }
 }

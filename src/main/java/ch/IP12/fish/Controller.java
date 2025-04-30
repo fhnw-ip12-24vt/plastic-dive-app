@@ -17,26 +17,18 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Controller {
-    private final List<Player> players;
-    private final List<Obstacle> obstacles;
+    private final World world;
     private final ScheduledExecutorService executor;
 
-    private final Spawner spawner;
     private double deltaTimeClock = 0;
     private double lastHitTime = 0;
     private final AtomicInteger gameTicks = new AtomicInteger(0);
 
-    public static volatile GamePhase GAMEPHASE = GamePhase.Start;
-    public static double SCORE = 500;
-    public static Difficulty DIFFICULTY;
-    public static double CLOCK;
     private BarcodeScanner barcodeScanner;
 
-    Controller(List<Player> players, List<Obstacle> obstacles, Scene scene) {
-        this.players = players;
-        this.obstacles = obstacles;
+    Controller(World world, Scene scene) {
+        this.world = world;
         this.executor = Executors.newSingleThreadScheduledExecutor();
-        this.spawner = new Spawner(obstacles);
         this.barcodeScanner = new BarcodeScanner(scene);
     }
 
@@ -49,8 +41,8 @@ public class Controller {
 
         scene.setOnKeyReleased(e -> {
             if (e.getCode() == KeyCode.I) {
-                nextPhase();
-                Controller.DIFFICULTY = Difficulty.Easy;
+                world.nextPhase();
+                world.setDifficulty(Difficulty.Easy);
             }
         });
     }
@@ -72,18 +64,13 @@ public class Controller {
     }
 
     public void reset() {
-        players.forEach(Player::resetPosition);
-        GAMEPHASE = GamePhase.Start;
+        world.getPlayers().forEach(Player::resetPosition);
         barcodeScanner.startListening();
-        SCORE = 500;
     }
 
-    public static GamePhase GETGAMEPHASE() {
-        return GAMEPHASE;
-    }
 
     private void gameStep() {
-        switch (Controller.GETGAMEPHASE()) {
+        switch (world.getGamePhase()) {
             case Start -> start();
             case StartingAnimation -> startingAnimation();
             case Running -> running();
@@ -95,17 +82,17 @@ public class Controller {
 
     private void start() {
         deltaTimeClock = System.currentTimeMillis();
-        CLOCK = CURRENTTIMESECONDS();
+        world.resetClock();
     }
 
     private void startingAnimation() {
-        if (GETDELTACLOCK() > 10) {
+        if (world.getDeltaClock() > 10) {
             lastHitTime = CURRENTTIMESECONDS();
-            nextPhase();
-            players.forEach(Player::startJoystick);
-            CLOCK = CURRENTTIMESECONDS();
-        } else if (GETDELTACLOCK() > 9.5) {
-            players.forEach(Player::moveRight);
+            world.nextPhase();
+            world.getPlayers().forEach(Player::startJoystick);
+            world.resetClock();
+        } else if (world.getDeltaClock() > 9.5) {
+            world.getPlayers().forEach(Player::moveRight);
         }
     }
 
@@ -117,14 +104,14 @@ public class Controller {
         // Update the model (logic)
         gameTicks.getAndIncrement();
 
-        if (gameTicks.get() >= 75 && !(CURRENTTIMESECONDS() - CLOCK > 30)) {
+        if (gameTicks.get() >= 75 && !(CURRENTTIMESECONDS() - world.getClock() > 30)) {
             Random rand = new Random();
-            spawner.spawnRandom(players.get(rand.nextInt(players.size())));
+            Spawner.spawnRandom(world.getRandomPlayer());
             gameTicks.set(0);
         }
 
-        players.forEach(player -> player.update(deltaTime));
-        obstacles.parallelStream().forEach(obstacle -> {
+        world.getPlayers().forEach(player -> player.update(deltaTime));
+        world.getObstacles().parallelStream().forEach(obstacle -> {
             //Obstacle updates
             obstacle.update(deltaTime);
 
@@ -132,10 +119,10 @@ public class Controller {
             if (obstacle.isOutsideBounds()) deletionList.add(obstacle);
 
             //collision stops prototype
-            players.forEach(player -> {
+            world.getPlayers().forEach(player -> {
                 if (player.collidesWith(obstacle)) {
                     lastHitTime = CURRENTTIMESECONDS();
-                    SCORE -= 50;
+                    world.getScore() -= 50;
                     deletionList.add(obstacle);
                 }
             });
@@ -144,7 +131,7 @@ public class Controller {
 
         //removes obstacles from main obstacle array
         //and clears the deletion list.
-        obstacles.removeAll(deletionList);
+        Spawner.remove(deletionList);
         deletionList.clear();
 
         if (CURRENTTIMESECONDS() > lastHitTime + 5) {
@@ -152,21 +139,21 @@ public class Controller {
         }
 
         if (CURRENTTIMESECONDS() - CLOCK > 30) {
-            if (obstacles.isEmpty()) {
+            if (world.isObstaclesEmpty()) {
                 nextPhase();
-                players.forEach(Player::resetJoystick);
-                CLOCK = CURRENTTIMESECONDS();
+                world.getPlayers().forEach(Player::resetJoystick);
+                world.resetClock();
             }
         }
 
     }
 
     void preEndAnimation() {
-        nextPhase();
+        world.nextPhase();
     }
 
     private void end() {
-        players.forEach(Player::moveRight);
+        world.getPlayers().forEach(Player::moveRight);
         if (GETDELTACLOCK() > 10) {
             reset();
         }
@@ -174,19 +161,7 @@ public class Controller {
 
     private void highscore() {
         if (GETDELTACLOCK() > 10) {
-            nextPhase();
+            world.nextPhase();
         }
-    }
-
-    private synchronized void nextPhase() {
-        GAMEPHASE = GAMEPHASE.next();
-    }
-
-    public static double CURRENTTIMESECONDS() {
-        return System.currentTimeMillis() / 1000.0;
-    }
-
-    public static double GETDELTACLOCK() {
-        return CURRENTTIMESECONDS() - CLOCK;
     }
 }
