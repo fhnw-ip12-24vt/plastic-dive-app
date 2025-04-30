@@ -7,6 +7,8 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 
 public abstract class Moveable {
+    protected World world;
+
     private double x;
     private double y;
 
@@ -26,11 +28,7 @@ public abstract class Moveable {
     //path to animation images
     private final SpriteAnimation animation;
 
-    Moveable(double x, double y, double speed, double maxX, double maxY, Spritesheets spritesheets, double spriteScale) {
-        this(x, y, speed, maxX, maxY, spritesheets.getSpriteAnimation(), spriteScale);
-    }
-
-    Moveable(double x, double y, double speed, double maxX, double maxY, SpriteAnimation spriteAnimation, double spriteScale) {
+    Moveable(double x, double y, double speed, double maxX, double maxY, SpriteAnimation spriteAnimation, double spriteScale, World world) {
         this.x = x;
         this.y = y;
         this.speed = speed;
@@ -41,6 +39,8 @@ public abstract class Moveable {
 
         this.length = animation.getWidth() * spriteScale - 5;
         this.height = animation.getHeight() * spriteScale - 5;
+
+        this.world = world;
     }
 
     /**
@@ -131,4 +131,7 @@ public abstract class Moveable {
         this.x = x;
     }
 
+    public World getWorld() {
+        return world;
+    }
 }

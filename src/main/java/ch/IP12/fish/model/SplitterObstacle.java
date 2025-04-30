@@ -1,30 +1,29 @@
 package ch.IP12.fish.model;
 
-import ch.IP12.fish.Controller;
 import ch.IP12.fish.Spawner;
-
-import java.util.List;
 
 public class SplitterObstacle extends Obstacle {
     private final Class<? extends Obstacle> obstacle;
-    private final double creationTime = Controller.CURRENTTIMESECONDS();
+    private final double creationTime = world.currentTimeSeconds();
+    private final Spawner spawner;
 
-    public SplitterObstacle(Obstacle obstacle, Class<? extends Obstacle> obstacleToSpawn) {
+    public SplitterObstacle(Obstacle obstacle, Class<? extends Obstacle> obstacleToSpawn, Spawner spawner) {
         super(obstacle);
         this.obstacle = obstacleToSpawn;
+        this.spawner = spawner;
     }
 
     @Override
     public void adjustDirection() {
-        if (creationTime + 2 < Controller.CURRENTTIMESECONDS()) {
-            Spawner.remove(this);
+        if (creationTime + 2 < world.currentTimeSeconds()) {
+            spawner.remove(this);
             split();
         }
     }
 
     private void split() {
         System.out.println("ASDF");
-        Spawner.spawn(obstacle,this.getSpeed());
-        Spawner.spawn(obstacle,this.getSpeed());
+        spawner.spawn(obstacle,this.getSpeed());
+        spawner.spawn(obstacle,this.getSpeed());
     }
 }

@@ -5,7 +5,6 @@ import ch.IP12.fish.components.JoystickAnalog;
 import ch.IP12.fish.model.animations.Spritesheets;
 import ch.IP12.fish.utils.Difficulty;
 import ch.IP12.fish.utils.GamePhase;
-import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
 import javafx.scene.text.Font;
 
@@ -16,25 +15,26 @@ import java.util.List;
 import java.util.Random;
 
 public class World {
-    double width = 1920;
-    double height = 1080;
+    private double width = 1920;
+    private double height = 1080;
 
-    List<Obstacle> obstacles;
-    List<Player> players;
+    private final List<Obstacle> obstacles;
+    private final List<Player> players;
 
-    GamePhase gamePhase;
-    int score;
-    Difficulty difficulty;
-    double clock;
+    private GamePhase gamePhase = GamePhase.Start;
+    private int score;
+    private Difficulty difficulty;
+    private double clock;
+    public Font font;
 
     public World(Context pi4j) {
-
         Ads1115 ads1115 = new Ads1115(pi4j);
         JoystickAnalog joystick1 = new JoystickAnalog(ads1115, Ads1115.Channel.A0, Ads1115.Channel.A1);
         //JoystickAnalog joystick2 = new JoystickAnalog(ads1115, Ads1115.Channel.A2, Ads1115.Channel.A3);
 
-        Player player1 = new Player(0, width / 2.0, 3, width, height, Spritesheets.Player, joystick1);
-        // Player player2 = new Player(0, HEIGHT / 1.5, 3, WIDTH, HEIGHT, Spritesheets.Player, joystick2);
+        Player player1 = new Player(0, width / 2.0, 3, width, height, Spritesheets.Player, joystick1, this);
+        // Player player2 = new Player(0, HEIGHT / 1.5, 3, WIDTH, HEIGHT, Spritesheets.Player, joystick2, this);
+
         players = List.of(player1);
 
         obstacles = Collections.synchronizedList(new ArrayList<>());
@@ -44,8 +44,6 @@ public class World {
         height = screenSize.height;
     }
 
-
-
     public double getWidth() {
         return width;
     }
@@ -53,6 +51,7 @@ public class World {
     public double getHeight() {
         return height;
     }
+
 
     public List<Obstacle> getObstacles() {
         return obstacles;
@@ -62,24 +61,8 @@ public class World {
         return players;
     }
 
-    public GamePhase getGamePhase() {
-        return gamePhase;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public Difficulty getDifficulty() {
-        return difficulty;
-    }
-
     public boolean isObstaclesEmpty() {
         return obstacles.isEmpty();
-    }
-
-    public synchronized void nextPhase() {
-        gamePhase = gamePhase.next();
     }
 
     public Player getRandomPlayer() {
@@ -90,10 +73,64 @@ public class World {
         return players.get(random.nextInt(players.size()));
     }
 
-    public Difficulty setDifficulty(Difficulty difficulty) {
-        return this.difficulty = difficulty;
+
+    public synchronized void nextPhase() {
+        gamePhase = gamePhase.next();
+    }
+
+    public GamePhase getGamePhase() {
+        return gamePhase;
+    }
+
+    public void setGamePhase(GamePhase gamePhase) {
+        this.gamePhase = gamePhase;
+    }
+
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+
+    public int getScore() {
+        return score;
+    }
+
+    public void incrementScore(int amount) {
+        score += amount;
+    }
+
+    public void decrementScore(int amount) {
+        score -= amount;
+    }
+
+
+    public double getClock() {
+        return clock;
     }
 
     public void resetClock() {
+        clock = currentTimeSeconds();
+    }
+
+    public double currentTimeSeconds() {
+        return System.currentTimeMillis() / 1000.0;
+    }
+
+    public double getDeltaClock() {
+        return currentTimeSeconds() - clock;
+    }
+
+
+    public void setFont(Font font) {
+        this.font = font;
+    }
+
+    public Font getFont() {
+        return font;
     }
 }

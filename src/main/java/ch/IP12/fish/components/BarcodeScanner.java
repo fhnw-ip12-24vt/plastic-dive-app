@@ -1,6 +1,7 @@
 package ch.IP12.fish.components;
 
 import ch.IP12.fish.Controller;
+import ch.IP12.fish.model.World;
 import ch.IP12.fish.utils.Difficulty;
 import ch.IP12.fish.utils.GamePhase;
 import javafx.scene.Scene;
@@ -9,11 +10,13 @@ import javafx.scene.input.KeyCode;
 import java.io.IOException;
 
 public class BarcodeScanner {
+    private World world;
     private final Scene scene;
     private Difficulty difficulty;
     private String s = "\n";
-    public BarcodeScanner(Scene scene) {
+    public BarcodeScanner(Scene scene, World world) {
         this.scene = scene;
+        this.world = world;
     }
 
     public void startListening(){
@@ -25,8 +28,8 @@ public class BarcodeScanner {
                 s += "\n";
                 try {
                     System.out.println("asdf");
-                    Controller.DIFFICULTY = Difficulty.getDifficulty(Long.parseLong(s.replace("\n", "")));
-                    Controller.GAMEPHASE = GamePhase.StartingAnimation;
+                    world.setDifficulty(Difficulty.getDifficulty(Long.parseLong(s.replace("\n", ""))));
+                    world.setGamePhase(GamePhase.StartingAnimation);
                     stopListening();
                 } catch (RuntimeException ignore) {
 

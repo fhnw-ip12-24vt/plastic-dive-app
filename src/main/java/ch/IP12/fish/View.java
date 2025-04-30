@@ -10,10 +10,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-import java.util.Arrays;
-import java.util.List;
-
-
 public class View {
     private final GraphicsContext graphicsContext;
     private final Font font = Font.loadFont(getClass().getResourceAsStream("/fonts/MinecraftRegular-Bmg3.otf"), 12);
@@ -81,17 +77,17 @@ public class View {
         world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
         graphicsContext.setFill(Color.BLACK);
         Text text = new Text(world.getDifficulty().text);
-        text.setFont(App.FONT);
+        text.setFont(world.getFont());
         graphicsContext.fillText(world.getDifficulty().text, ((world.getWidth() - text.getLayoutBounds().getWidth()) / 2f) + frontLayerShift, world.getHeight() / 3f);
-        if (Controller.GETDELTACLOCK() > 9.9) {
+        if (world.getDeltaClock() > 9.9) {
             return;
-        } else if (Controller.GETDELTACLOCK() > 9) {
+        } else if (world.getDeltaClock() > 9) {
             if (layerShiftScalar - 0.15 > 0) {
                 layerShiftScalar -= 0.15;
             }
             middleLayerShift += 5 * layerShiftScalar;
             frontLayerShift += 7 * layerShiftScalar;
-        } else if (Controller.GETDELTACLOCK() > 8.5) {
+        } else if (world.getDeltaClock() > 8.5) {
             layerShiftScalar += 0.2;
             middleLayerShift += 5 * layerShiftScalar;
             frontLayerShift += 7 * layerShiftScalar;
@@ -103,7 +99,7 @@ public class View {
         middleLayerShift -= 5;
         frontLayerShift -= 7;
         graphicsContext.setFill(Color.BLACK);
-        graphicsContext.fillText("Score: " + (int) world.getScore(), 10, 30);
+        graphicsContext.fillText("Score: " + world.getScore(), 10, 30);
 
         /*
         This code can be used for a neat fading effect if we so desired for any transitions

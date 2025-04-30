@@ -1,23 +1,21 @@
 package ch.IP12.fish.model;
 
-import ch.IP12.fish.Controller;
-import ch.IP12.fish.model.animations.Spritesheets;
 import javafx.scene.paint.Color;
 
 public class AtPlayerObstacle extends Obstacle {
-    private final double creationTime = Controller.CURRENTTIMESECONDS();
+    private final double creationTime = world.currentTimeSeconds();
     private boolean hasChanged;
     private final Player player;
 
-    public AtPlayerObstacle(double x, double y, double speed, double maxX, double maxY, Spritesheets spriteSheet, Player player) {
-        super(x, y, speed, maxX, maxY, spriteSheet);
-        this.player = player;
+    public AtPlayerObstacle(Obstacle obstacle, Player param) {
+        super(obstacle);
+        this.player = param;
         this.color = Color.RED;
     }
 
     @Override
     protected void adjustDirection() {
-        if (creationTime + 2 < Controller.CURRENTTIMESECONDS() && !hasChanged) {
+        if (creationTime + 2 < world.currentTimeSeconds() && !hasChanged) {
             double x = player.getX() - getX();
             double y = player.getY() - getY();
             setDirection(Math.atan2(y, x));

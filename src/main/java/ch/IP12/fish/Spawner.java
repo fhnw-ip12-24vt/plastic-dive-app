@@ -6,55 +6,57 @@ import ch.IP12.fish.model.animations.Spritesheets;
 import java.util.*;
 
 public class Spawner {
+    private final World world;
 
     private interface factoryPattern {
         Obstacle create(Obstacle obstacle, Object... params);
     }
 
-    private static final Map<Class<? extends Obstacle>, factoryPattern> factories = new HashMap<>();
+    private final Map<Class<? extends Obstacle>, factoryPattern> factories = new HashMap<>();
 
-    static {
+    {
         // Register factories for each obstacle type
         registerFactory(Obstacle.class, (obstacle, params) -> new Obstacle(obstacle));
         registerFactory(AtPlayerObstacle.class, (obstacle, params) -> new AtPlayerObstacle(obstacle, (Player) params[1]));
         registerFactory(BounceObstacle.class, (obstacle, params) -> new BounceObstacle(obstacle));
         registerFactory(SinObstacle.class, (obstacle, params) -> new SinObstacle(obstacle));
-        registerFactory(SplitterObstacle.class, (obstacle, params) -> new SplitterObstacle(obstacle, (Class<? extends Obstacle>) params[0]));
+        registerFactory(SplitterObstacle.class, (obstacle, params) -> new SplitterObstacle(obstacle, (Class<? extends Obstacle>) params[0], this));
     }
 
-    static Random rand = new Random();
-    static List<Class<? extends Obstacle>> classes = new ArrayList<>(factories.keySet());
+    Random rand = new Random();
+    List<Class<? extends Obstacle>> classes = new ArrayList<>(this.factories.keySet());
 
-    private Spawner() {
+    public Spawner(World world) {
+        this.world = world;
     }
 
-    private static void registerFactory(Class<? extends Obstacle> clazz, factoryPattern pattern) {
+    private void registerFactory(Class<? extends Obstacle> clazz, factoryPattern pattern) {
         factories.put(clazz, pattern);
     }
 
-    public static <T extends Obstacle> T create(Class<T> obstacleClass, double speed, Object... params) {
+    public <T extends Obstacle> T create(Class<T> obstacleClass, double speed, Object... params) {
         factoryPattern factory = factories.get(obstacleClass);
         if (factory == null) {
             throw new IllegalArgumentException("No factory registered for " + obstacleClass.getName());
         }
-        Obstacle obstacleBase = new Obstacle(App.WIDTH, rand.nextInt(App.WIDTH), speed, App.WIDTH, App.HEIGHT, Spritesheets.getRandomSpritesheet());
+        Obstacle obstacleBase = new Obstacle(world.getWidth(), rand.nextDouble((int)world.getWidth()), speed, world.getWidth(), world.getHeight(), Spritesheets.getRandomSpritesheet(), world);
         System.out.println(obstacleClass.getName());
         return obstacleClass.cast(factory.create(obstacleBase, params));
     }
 
-    public static void spawnRandom(Player player) {
-        obstacles.add(create(classes.get(rand.nextInt(classes.size())), 300, classes.get(rand.nextInt(classes.size()-1)), player));
+    public void spawnRandom(Player player) {
+        world.getObstacles().add(create(classes.get(rand.nextInt(classes.size())), 300, classes.get(rand.nextInt(classes.size()-1)), player));
     }
 
-    public static <T extends Obstacle> void spawn(Class<T> obstacleClass, double speed, Object... params) {
-        obstacles.add(create(obstacleClass, speed, classes.get(rand.nextInt(classes.size())), params));
+    public <T extends Obstacle> void spawn(Class<T> obstacleClass, double speed, Object... params) {
+        world.getObstacles().add(create(obstacleClass, speed, classes.get(rand.nextInt(classes.size())), params));
     }
 
-    public static void remove(List<Obstacle> deletionList) {
-        obstacles.removeAll(deletionList);
+    public void remove(List<Obstacle> deletionList) {
+        world.getObstacles().removeAll(deletionList);
     }
 
-    public static void remove(Obstacle obstacle) {
-        obstacles.remove(obstacle);
+    public void remove(Obstacle obstacle) {
+        world.getObstacles().remove(obstacle);
     }
 }

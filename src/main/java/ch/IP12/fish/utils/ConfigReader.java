@@ -4,29 +4,26 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.FileAttribute;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ConfigReader {
-    private static ConfigReader instance;
     private Map<String, String> config;
     private final Logger logger;
 
-    private ConfigReader(Path path) {
+    public ConfigReader(Path path) {
         logger = Logger.getInstance();
         readFile(path);
     }
 
-    public static ConfigReader getInstance(Path path) {
-        if (path == null) throw new RuntimeException("Configuration path cannot be null");
-        if (instance == null) instance = new ConfigReader(path);
-        return instance;
-    }
-
-    public static ConfigReader getInstance(String path) {
-        if (path == null) throw new RuntimeException("Configuration path cannot be null");
-        return getInstance(Path.of(path));
+    public ConfigReader(String path) {
+        this(Path.of(path));
     }
 
     public Map<String, String> getConfig() {
@@ -34,23 +31,48 @@ public class ConfigReader {
     }
 
     private void readFile(Path path) {
-        try (BufferedReader reader = Files.newBufferedReader(path)) {
+        if (!Files.exists(path) && !Files.isDirectory(path)) {
+            if (!Files.exists(path.getParent())) {
+                try {
+                    Files.createDirectories(path.getParent());
+                } catch (IOException e) {
+                    logger.logError("Could not create directory: " + path.getParent());
+                }
+            }
+            Set<PosixFilePermission> permissions = PosixFilePermissions.fromString("rwxrwxrwx");
+            FileAttribute<Set<PosixFilePermission>> posixFilePerms = PosixFilePermissions.asFileAttribute(permissions);
 
+            try{
+                Files.createFile(path, posixFilePerms);
+            } catch (IOException e) {
+                logger.logError(e.getMessage());
+            }
+            return;
+        }
+
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
             List<String> lines = new ArrayList<>();
 
             String line = "";
+            boolean openString = false;
 
             while (reader.ready()) {
-                String temp = reader.readLine();
+                String tempLine = reader.readLine();
 
-                if (temp.trim().isEmpty()) continue;
+                if (tempLine.trim().isEmpty()) continue;
 
-                line += temp;
+                for (int i = 0; i < tempLine.length(); i++) {
+                    char tempChar = tempLine.charAt(i);
 
-                if (line.endsWith(";")) {
-                    line = line.substring(0, line.length() - 1);
-                    lines.add(line);
-                    line = "";
+                    if (openString && tempChar == '"') openString = false;
+                    else if (!openString && tempChar == '"') openString = true;
+                    else line += tempChar;
+
+                    if (line.endsWith(";")) {
+                        line = line.substring(0, line.length() - 1);
+                        lines.add(line);
+                        line = "";
+                    }
                 }
             }
 

@@ -3,14 +3,12 @@ package ch.IP12.fish;
 import ch.IP12.fish.components.BarcodeScanner;
 import ch.IP12.fish.model.*;
 import ch.IP12.fish.utils.Difficulty;
-import ch.IP12.fish.utils.GamePhase;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -18,18 +16,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Controller {
     private final World world;
+    private final Spawner spawner;
     private final ScheduledExecutorService executor;
 
     private double deltaTimeClock = 0;
     private double lastHitTime = 0;
     private final AtomicInteger gameTicks = new AtomicInteger(0);
 
-    private BarcodeScanner barcodeScanner;
+    private final BarcodeScanner barcodeScanner;
 
     Controller(World world, Scene scene) {
         this.world = world;
         this.executor = Executors.newSingleThreadScheduledExecutor();
-        this.barcodeScanner = new BarcodeScanner(scene);
+        this.barcodeScanner = new BarcodeScanner(scene, world);
+        spawner = new Spawner(world);
     }
 
     /**
@@ -87,7 +87,7 @@ public class Controller {
 
     private void startingAnimation() {
         if (world.getDeltaClock() > 10) {
-            lastHitTime = CURRENTTIMESECONDS();
+            lastHitTime = world.currentTimeSeconds();
             world.nextPhase();
             world.getPlayers().forEach(Player::startJoystick);
             world.resetClock();
@@ -104,9 +104,8 @@ public class Controller {
         // Update the model (logic)
         gameTicks.getAndIncrement();
 
-        if (gameTicks.get() >= 75 && !(CURRENTTIMESECONDS() - world.getClock() > 30)) {
-            Random rand = new Random();
-            Spawner.spawnRandom(world.getRandomPlayer());
+        if (gameTicks.get() >= 75 && !(world.getDeltaClock() > 30)) {
+            spawner.spawnRandom(world.getRandomPlayer());
             gameTicks.set(0);
         }
 
@@ -121,8 +120,8 @@ public class Controller {
             //collision stops prototype
             world.getPlayers().forEach(player -> {
                 if (player.collidesWith(obstacle)) {
-                    lastHitTime = CURRENTTIMESECONDS();
-                    world.getScore() -= 50;
+                    lastHitTime = world.currentTimeSeconds();
+                    world.decrementScore(50);
                     deletionList.add(obstacle);
                 }
             });
@@ -131,16 +130,16 @@ public class Controller {
 
         //removes obstacles from main obstacle array
         //and clears the deletion list.
-        Spawner.remove(deletionList);
+        spawner.remove(deletionList);
         deletionList.clear();
 
-        if (CURRENTTIMESECONDS() > lastHitTime + 5) {
-            SCORE += 1 * deltaTime * (1 + ((CURRENTTIMESECONDS() - lastHitTime) / 15));
+        if (world.currentTimeSeconds() > lastHitTime + 5) {
+            world.incrementScore((int)(1 * deltaTime * (1 + ((world.currentTimeSeconds()) - lastHitTime) / 15)));
         }
 
-        if (CURRENTTIMESECONDS() - CLOCK > 30) {
+        if (world.getDeltaClock() > 30) {
             if (world.isObstaclesEmpty()) {
-                nextPhase();
+                world.nextPhase();
                 world.getPlayers().forEach(Player::resetJoystick);
                 world.resetClock();
             }
@@ -154,13 +153,13 @@ public class Controller {
 
     private void end() {
         world.getPlayers().forEach(Player::moveRight);
-        if (GETDELTACLOCK() > 10) {
+        if (world.getDeltaClock() > 10) {
             reset();
         }
     }
 
     private void highscore() {
-        if (GETDELTACLOCK() > 10) {
+        if (world.getDeltaClock() > 10) {
             world.nextPhase();
         }
     }

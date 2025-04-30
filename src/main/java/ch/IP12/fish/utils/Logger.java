@@ -31,21 +31,28 @@ public class Logger {
     }
 
     public synchronized void log(String message) {
-        message = "\n[" + (getDateTimeString()) + "] "+(message.trim());
+        String log = "\n[" + (getDateTimeString()) + "] "+(message.trim());
         try{
-            Files.write(path, message.getBytes(), WRITE);
+            Files.write(path, log.getBytes(), WRITE);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public synchronized void logError(String message, String stackTrace) {
+        String log = "\n------Error------\n" + "[" + (getDateTimeString()) + "]\n" + (message.trim());
+        if (stackTrace != null) log += "\nStacktrace" + stackTrace;
+        log += "\n-----------------";
+
+        try{
+            Files.write(path, log.getBytes(), WRITE);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
 
     public synchronized void logError(String message) {
-        message = "\n------Error------\n" + "[" + (getDateTimeString()) + "]\n" +(message.trim()) + "\n-----------------";
-        try{
-            Files.write(path, message.getBytes(), WRITE);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+        logError(message, null);
     }
 
     private String getDateTimeString() {
