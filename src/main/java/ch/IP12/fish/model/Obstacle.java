@@ -9,18 +9,14 @@ import javafx.scene.paint.Color;
 public class Obstacle extends Moveable {
     protected Color color = Color.SEAGREEN; // temporary for demo
 
-    public Obstacle(double x, double y, double speed, double maxX, double maxY, Spritesheets spriteSheet, World world) {
-        this(x, y, speed, maxX, maxY, spriteSheet.getSpriteAnimation(), world);
-    }
-
-    public Obstacle(double x, double y, double speed, double maxX, double maxY, SpriteAnimation spriteAnimation, World world) {
-        super(x, y, speed, maxX, maxY, spriteAnimation, ((Math.random() + 0.5) * 2), world);
+    public Obstacle(double y, double speed, SpriteAnimation spriteAnimation, World world) {
+        super(world.getWidth(), y, speed, spriteAnimation, ((Math.random() + 0.5) * 2), world);
         //forces the Obstacle to move to the left side of the screen.
         setDirection(Math.PI);
     }
 
     public Obstacle(Obstacle obstacle) {
-        super(obstacle.getX(), obstacle.getY(), obstacle.getSpeed(), obstacle.getMaxX(), obstacle.getMaxY(), obstacle.getAnimation(), obstacle.getSpriteScale(), obstacle.getWorld());
+        super(obstacle.getX(), obstacle.getY(), obstacle.getSpeed(), obstacle.getAnimation(), obstacle.getSpriteScale(), obstacle.getWorld());
         color = obstacle.color;
     }
 

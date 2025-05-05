@@ -18,9 +18,6 @@ public abstract class Moveable {
 
     private double direction;
 
-    private final double maxX;
-    private final double maxY;
-
     //Scalar for object size;
     private final double spriteScale;
 
@@ -28,13 +25,11 @@ public abstract class Moveable {
     //path to animation images
     private final SpriteAnimation animation;
 
-    Moveable(double x, double y, double speed, double maxX, double maxY, SpriteAnimation spriteAnimation, double spriteScale, World world) {
+    Moveable(double x, double y, double speed, SpriteAnimation spriteAnimation, double spriteScale, World world) {
         this.x = x;
         this.y = y;
         this.speed = speed;
         this.animation = spriteAnimation;
-        this.maxX = maxX;
-        this.maxY = maxY;
         this.spriteScale = spriteScale;
 
         this.length = animation.getWidth() * spriteScale - 5;
@@ -100,11 +95,11 @@ public abstract class Moveable {
     }
 
     public double getMaxY() {
-        return maxY;
+        return world.getHeight();
     }
 
     public double getMaxX() {
-        return maxX;
+        return world.getWidth();
     }
 
     public double getDirection() {

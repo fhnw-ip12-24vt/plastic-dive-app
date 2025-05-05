@@ -10,12 +10,8 @@ public class Player extends Moveable {
 
     private final JoystickAnalog joystick;
 
-    public Player(double x, double y, double speed, double maxX, double maxY, Spritesheets spriteSheet, JoystickAnalog joystick, World world) {
-        this(x, y, speed, maxX, maxY, spriteSheet.getSpriteAnimation(), joystick, world);
-    }
-
-    public Player(double x, double y, double speed, double maxX, double maxY, SpriteAnimation spriteAnimation, JoystickAnalog joystick, World world) {
-        super((x - spriteAnimation.getWidth() * Spritesheets.spriteScaling), y, speed, maxX, maxY, spriteAnimation, Spritesheets.spriteScaling, world);
+    public Player(double x, double y, double speed, SpriteAnimation spriteAnimation, JoystickAnalog joystick, World world) {
+        super((x - spriteAnimation.getWidth() * Spritesheets.spriteScaling), y, speed, spriteAnimation, Spritesheets.spriteScaling, world);
         setSpeed(speed);
         this.initialXValue = (x - spriteAnimation.getWidth() * Spritesheets.spriteScaling);
         this.initialYValue = y;

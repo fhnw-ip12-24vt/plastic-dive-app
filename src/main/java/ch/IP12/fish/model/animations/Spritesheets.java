@@ -1,5 +1,6 @@
 package ch.IP12.fish.model.animations;
 
+import javafx.animation.Animation;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
@@ -26,13 +27,13 @@ public enum Spritesheets {
      *
      * @return Obstacle sprite sheet.
      */
-    public static Spritesheets getRandomSpritesheet() {
+    public static SpriteAnimation getRandomAnimation() {
         if (values().length == 1) {
-            return values()[0];
+            return values()[0].getSpriteAnimation();
         }
         //random number based on the size of the sprite sheet list.
         int randInt = new Random().nextInt(1, values().length);
-        return values()[randInt];
+        return values()[randInt].getSpriteAnimation();
     }
 
     /**

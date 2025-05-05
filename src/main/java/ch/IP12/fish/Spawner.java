@@ -13,7 +13,6 @@ public class Spawner {
     }
 
     private final Map<Class<? extends Obstacle>, factoryPattern> factories = new HashMap<>();
-
     {
         // Register factories for each obstacle type
         registerFactory(Obstacle.class, (obstacle, params) -> new Obstacle(obstacle));
@@ -39,7 +38,7 @@ public class Spawner {
         if (factory == null) {
             throw new IllegalArgumentException("No factory registered for " + obstacleClass.getName());
         }
-        Obstacle obstacleBase = new Obstacle(world.getWidth(), rand.nextDouble((int)world.getWidth()), speed, world.getWidth(), world.getHeight(), Spritesheets.getRandomSpritesheet(), world);
+        Obstacle obstacleBase = new Obstacle(rand.nextDouble((int)world.getWidth()), speed, Spritesheets.getRandomAnimation(), world);
         System.out.println(obstacleClass.getName());
         return obstacleClass.cast(factory.create(obstacleBase, params));
     }

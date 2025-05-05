@@ -32,7 +32,7 @@ public class World {
         JoystickAnalog joystick1 = new JoystickAnalog(ads1115, Ads1115.Channel.A0, Ads1115.Channel.A1);
         //JoystickAnalog joystick2 = new JoystickAnalog(ads1115, Ads1115.Channel.A2, Ads1115.Channel.A3);
 
-        Player player1 = new Player(0, width / 2.0, 3, width, height, Spritesheets.Player, joystick1, this);
+        Player player1 = new Player(0, width / 2.0, 3, Spritesheets.Player.getSpriteAnimation(), joystick1, this);
         // Player player2 = new Player(0, HEIGHT / 1.5, 3, WIDTH, HEIGHT, Spritesheets.Player, joystick2, this);
 
         players = List.of(player1);
