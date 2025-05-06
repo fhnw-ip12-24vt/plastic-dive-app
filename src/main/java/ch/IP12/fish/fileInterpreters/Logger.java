@@ -1,4 +1,4 @@
-package ch.IP12.fish.utils;
+package ch.IP12.fish.fileInterpreters;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
