@@ -7,13 +7,10 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class LanguageLoader {
-    private final Logger logger;
+    private final Logger logger = Logger.getInstance();;
     private final World world;
     private List<String> langElements;
 
@@ -26,13 +23,13 @@ public class LanguageLoader {
             elementsPath = Path.of(this.getClass().getResource("/languages/.Elements.txt").toURI());
             defaultLanguagePackPath = Path.of(this.getClass().getResource("/languages/en.txt").toURI());
         } catch (URISyntaxException | NullPointerException e) {
+            logger.logError("Could not translate internal language pack information location");
             throw new RuntimeException(e);
         }
     }
 
     public LanguageLoader(World world) {
         this.world = world;
-        this.logger = Logger.getInstance();
         readElements();
 
         String selectedLanguage = world.getConfigValue("lang");
@@ -40,16 +37,23 @@ public class LanguageLoader {
             readLanguageFile(Path.of(this.getClass().getResource("/languages/" + selectedLanguage + ".txt").toURI()));
         } catch(RuntimeException e){
             System.out.println("Failed to load selected language pack, attempting to load default language pack");
-            logger.logError("Failed to load selected language pack, attempting to load default language pack");
+
+            if (world.getConfigValue("log").equals("detailed"))
+                logger.logError("Failed to load selected language pack, attempting to load default language pack", e.getStackTrace());
+            else logger.logError("Failed to load selected language pack, attempting to load default language pack");
 
             try {
                 readLanguageFile(defaultLanguagePackPath);
             } catch(RuntimeException e1){
-                logger.logError("Failed to load default language Pack");
+                if (world.getConfigValue("log").equals("detailed"))
+                    logger.logError("Failed to load default language Pack", e1.getStackTrace());
+                else logger.logError("Failed to load default language Pack");
                 throw new RuntimeException(e1);
             }
         } catch (URISyntaxException e) {
-            logger.logError("Failed to translate language pack location");
+            if (world.getConfigValue("log").equals("detailed"))
+                logger.logError("Failed to translate language pack location", e.getStackTrace());
+            else logger.logError("Failed to translate language pack location");
             throw new RuntimeException(e);
         }
     }
@@ -58,8 +62,8 @@ public class LanguageLoader {
         langElements = new ArrayList<>();
 
         if (!Files.exists(elementsPath)) {
-            logger.logError("Could not find config Elements definition file.");
-            throw new RuntimeException("Could not find config Elements definition file.");
+            logger.logError("Could not find config Elements definition file");
+            throw new RuntimeException("Could not find config Elements definition file");
         }
 
         try (BufferedReader reader = Files.newBufferedReader(elementsPath)) {
@@ -81,15 +85,18 @@ public class LanguageLoader {
                 }
             }
         } catch (IOException e){
-            logger.logError("Could not read config Elements definition file.");
-            throw new RuntimeException("Could not read config Elements definition file.");
+            if (world.getConfigValue("log").equals("detailed"))
+                logger.logError("Could not read config Elements definition file", e.getStackTrace());
+            else logger.logError("Could not read config Elements definition file");
+
+            throw new RuntimeException("Could not read config Elements definition file");
         }
     }
 
     private void readLanguageFile(Path path) {
         if (!Files.exists(path)) {
-            logger.logError("Could not find language definition file.");
-            throw new RuntimeException("Could not find language definition file.");
+            logger.logError("Language definition file does not exist");
+            throw new RuntimeException("Language definition file does not exist");
         }
 
         try (BufferedReader reader = Files.newBufferedReader(path)) {
@@ -123,7 +130,10 @@ public class LanguageLoader {
 
             interpretLanguageFile(lines);
         } catch (IOException e) {
-            logger.logError(e.getMessage());
+            if (world.getConfigValue("log").equals("detailed"))
+                logger.logError(e.getMessage(), e.getStackTrace());
+            else logger.logError(e.getMessage());
+
             throw new RuntimeException(e);
         }
     }

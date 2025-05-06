@@ -14,7 +14,7 @@ import static java.nio.file.StandardOpenOption.WRITE;
 public class Config {
     private final World world;
     private List<String> configElements;
-    private final Logger logger;
+    private final Logger logger = Logger.getInstance();
 
     //default config paths (stored in resources folder)
     private final Path elementsPath;
@@ -25,24 +25,24 @@ public class Config {
             elementsPath = Path.of(this.getClass().getResource("/defaultConfig/.Elements.txt").toURI());
             defaultConfigPath = Path.of(this.getClass().getResource("/defaultConfig/config.txt").toURI());
         } catch (URISyntaxException e) {
+            logger.logError("Could not translate default config information location");
             throw new RuntimeException(e);
         }
     }
 
 
-    public Config(String path, World world) {
+    public Config(String name, World world) {
         this.world = world;
-        logger = Logger.getInstance();
         readElements();
-        readConfig((Path.of(path)).toAbsolutePath());
+        readConfig((Path.of(name)).toAbsolutePath());
     }
 
     private void readElements(){
         configElements = new ArrayList<>();
 
         if (!Files.exists(elementsPath)) {
-            logger.logError("Could not find config Elements definition file.");
-            throw new RuntimeException("Could not find config Elements definition file.");
+            logger.logError("Could not find config Elements definition file");
+            throw new RuntimeException("Could not find config Elements definition file");
         }
 
         try (BufferedReader reader = Files.newBufferedReader(elementsPath)) {
@@ -64,8 +64,8 @@ public class Config {
                 }
             }
         } catch (IOException e){
-            logger.logError("Could not read config Elements definition file.");
-            throw new RuntimeException("Could not read config Elements definition file.");
+            logger.logError("Could not read config Elements definition file");
+            throw new RuntimeException("Could not read config Elements definition file");
         }
     }
 
@@ -143,9 +143,16 @@ public class Config {
 
         try (BufferedReader reader = Files.newBufferedReader(defaultConfigPath)) {
             String text = "";
+            boolean first = true;
+
             while (reader.ready()) {
                 String tempLine = reader.readLine();
-                text = text + "\n" + tempLine;
+
+                if (first) {
+                    text = text + "\n";
+                    first = false;
+                }
+                text = text + tempLine;
             }
 
             Files.write(path, text.getBytes(), WRITE);
