@@ -158,10 +158,6 @@ public class World {
         this.config = config;
     }
 
-    public void updateConfig(String key, String value) {
-        config.merge(key, value, (oldValue, newValue) -> newValue);
-    }
-
     public String getConfigValue(String key) {
         return config.get(key);
     }
@@ -169,10 +165,6 @@ public class World {
 
     public void setTextMapData(Map<String, String> textMap) {
         this.textMap = textMap;
-    }
-
-    public void updateTextMap(String key, String value) {
-        textMap.merge(key, value, (oldValue, newValue) -> newValue);
     }
 
     public String getTextMapValue(String key) {
