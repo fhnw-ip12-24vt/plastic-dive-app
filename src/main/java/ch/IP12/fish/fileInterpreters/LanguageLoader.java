@@ -1,7 +1,10 @@
 package ch.IP12.fish.fileInterpreters;
 
+import ch.IP12.fish.model.World;
+
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -9,29 +12,45 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class languageLoader {
+public class LanguageLoader {
     private final Logger logger;
+    private final World world;
     private List<String> langElements;
-    private Map<String, String> textMap;
 
     //default language paths (stored in resources folder)
-    private final Path elementsPath = Path.of("languages/.Elements.txt");
+    private final Path elementsPath;
+    private final Path defaultLanguagePackPath;
 
-    private final Path defaultEnPath = Path.of("languages/en.txt");
-    private final Path defaultDePath = Path.of("languages/de.txt");
-    private final Path defaultFrPath = Path.of("languages/fr.txt");
+    {
+        try {
+            elementsPath = Path.of(this.getClass().getResource("/languages/.Elements.txt").toURI());
+            defaultLanguagePackPath = Path.of(this.getClass().getResource("/languages/en.txt").toURI());
+        } catch (URISyntaxException | NullPointerException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-    public languageLoader(Config config, Logger logger) {
-        this.logger = logger;
+    public LanguageLoader(World world) {
+        this.world = world;
+        this.logger = Logger.getInstance();
         readElements();
-        switch (config.getConfigValue("lang")) {
-            case "en": readLanguageFile(defaultEnPath); break;
-            case "de": readLanguageFile(defaultDePath); break;
-            case "fr": readLanguageFile(defaultFrPath); break;
-            default: {
-                readLanguageFile(defaultEnPath);
-                logger.logError("Unknown language file: " + config.getConfigValue("lang") + ", loading english instead");
+
+        String selectedLanguage = world.getConfigValue("lang");
+        try{
+            readLanguageFile(Path.of(this.getClass().getResource("/languages/" + selectedLanguage + ".txt").toURI()));
+        } catch(RuntimeException e){
+            System.out.println("Failed to load selected language pack, attempting to load default language pack");
+            logger.logError("Failed to load selected language pack, attempting to load default language pack");
+
+            try {
+                readLanguageFile(defaultLanguagePackPath);
+            } catch(RuntimeException e1){
+                logger.logError("Failed to load default language Pack");
+                throw new RuntimeException(e1);
             }
+        } catch (URISyntaxException e) {
+            logger.logError("Failed to translate language pack location");
+            throw new RuntimeException(e);
         }
     }
 
@@ -98,16 +117,19 @@ public class languageLoader {
                         line = "";
                     }
                 }
+
+                if (!line.trim().isEmpty()) line = line + "\n";
             }
 
             interpretLanguageFile(lines);
         } catch (IOException e) {
             logger.logError(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
     private void interpretLanguageFile(List<String> lines){
-        textMap = new HashMap<>();
+        Map<String, String> textMap = new HashMap<>();
 
         lines.parallelStream().filter(l -> !l.trim().isEmpty()).forEach(s -> {
             s = s.replace("\r", "");
@@ -121,12 +143,19 @@ public class languageLoader {
             String value = "";
 
             //readd extra colons
-            for (int i = 1; i < sections.length-1; i++) value += (":" + sections[i]);
+            for (int i = 1; i < sections.length; i++) {
+                if(i > 1) value = value + (":" + sections[i]);
+                else value = sections[i];
+            }
 
             //if .Elements.txt contains found key, insert it into stored configs
             if (langElements.contains(key)) {
                 textMap.merge(key, value, (oldValue, newValue) -> newValue);
             }
         });
+
+        if (textMap.size() < langElements.size()) throw new RuntimeException("Missing text in language pack");
+
+        world.setTextMapData(textMap);
     }
 }

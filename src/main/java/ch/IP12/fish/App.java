@@ -1,5 +1,8 @@
 package ch.IP12.fish;
 
+import ch.IP12.fish.fileInterpreters.Config;
+import ch.IP12.fish.fileInterpreters.LanguageLoader;
+import ch.IP12.fish.fileInterpreters.Logger;
 import ch.IP12.fish.model.World;
 import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
@@ -22,6 +25,10 @@ public class App extends Application {
     public void start(Stage stage) {
         pi4j = Pi4J.newAutoContext();
         World world = new World(pi4j);
+        Logger.getInstance("log.txt");
+
+        Config config = new Config("config.txt", world);
+        LanguageLoader languageLoader = new LanguageLoader(world);
 
         setupStage(stage);
 

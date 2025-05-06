@@ -1,0 +1,7 @@
+//all text has to be filled out for the pack to be accepted, new lines are supported inside quote symbols ("")
+scanText:"lorm ipsum dolor sit amt";
+shirtInfoEasyText:"lorm ipsum dolor sit amt";
+shirtInfoMediumText:"lorm ipsum dolor sit amt";
+shirtInfoHardText:"lorm ipsum dolor sit amt";
+victoryText:"lorm ipsum dolor sit amt";
+highscoreText:"lorm ipsum dolor sit amt";

@@ -9,14 +9,15 @@ import com.pi4j.context.Context;
 import javafx.scene.text.Font;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 public class World {
     private double width = 1920;
     private double height = 1080;
+
+    private Map<String, String> config;
+    private Map<String, String> textMap;
 
     private final List<Obstacle> obstacles;
     private final List<Player> players;
@@ -132,5 +133,30 @@ public class World {
 
     public Font getFont() {
         return font;
+    }
+
+    public void setConfigData(Map<String, String> config) {
+        this.config = config;
+    }
+
+    public void updateConfig(String key, String value) {
+        config.merge(key, value, (oldValue, newValue) -> newValue);
+    }
+
+    public String getConfigValue(String key) {
+        return config.get(key);
+    }
+
+
+    public void setTextMapData(Map<String, String> textMap) {
+        this.textMap = textMap;
+    }
+
+    public void updateTextMap(String key, String value) {
+        textMap.merge(key, value, (oldValue, newValue) -> newValue);
+    }
+
+    public String getTextMapValue(String key) {
+        return textMap.get(key);
     }
 }

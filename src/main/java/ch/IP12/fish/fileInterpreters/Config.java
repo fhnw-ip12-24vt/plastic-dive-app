@@ -1,33 +1,40 @@
 package ch.IP12.fish.fileInterpreters;
 
+import ch.IP12.fish.model.World;
+
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.attribute.FileAttribute;
-import java.nio.file.attribute.PosixFilePermission;
-import java.nio.file.attribute.PosixFilePermissions;
 import java.util.*;
 
 import static java.nio.file.StandardOpenOption.WRITE;
 
 public class Config {
-    private Map<String, String> config;
+    private final World world;
     private List<String> configElements;
     private final Logger logger;
 
     //default config paths (stored in resources folder)
-    private final Path elementsPath = Path.of("defaultConfig/.Elements.txt");
-    private final Path defaultConfigPath = Path.of("defaultConfig/config.txt");
+    private final Path elementsPath;
+    private final Path defaultConfigPath;
 
-    public Config(Path path) {
-        logger = Logger.getInstance();
-        readElements();
-        readConfig(path);
+    {
+        try {
+            elementsPath = Path.of(this.getClass().getResource("/defaultConfig/.Elements.txt").toURI());
+            defaultConfigPath = Path.of(this.getClass().getResource("/defaultConfig/config.txt").toURI());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public String getConfigValue(String key) {
-        return config.get(key);
+
+    public Config(String path, World world) {
+        this.world = world;
+        logger = Logger.getInstance();
+        readElements();
+        readConfig((Path.of(path)).toAbsolutePath());
     }
 
     private void readElements(){
@@ -70,7 +77,8 @@ public class Config {
             }
 
             fillDefaultConfig(path);
-            return;
+        } else if (!Files.exists(path)) {
+            throw new RuntimeException("Invalid config file location");
         }
 
         try (BufferedReader reader = Files.newBufferedReader(path)) {
@@ -98,6 +106,8 @@ public class Config {
                         line = "";
                     }
                 }
+
+                if (!line.trim().isEmpty()) line = line + "\n";
             }
 
             interpretConfig(lines);
@@ -115,11 +125,9 @@ public class Config {
                 return false;
             }
         }
-        Set<PosixFilePermission> permissions = PosixFilePermissions.fromString("rwxrwxrwx");
-        FileAttribute<Set<PosixFilePermission>> posixFilePerms = PosixFilePermissions.asFileAttribute(permissions);
 
         try{
-            Files.createFile(path, posixFilePerms);
+            Files.createFile(path);
             fillDefaultConfig(path);
         } catch (IOException e) {
             logger.logError(e.getMessage());
@@ -133,17 +141,21 @@ public class Config {
             throw new RuntimeException("Default config file does not exist");
         }
 
-        try (BufferedReader reader = Files.newBufferedReader(path)) {
+        try (BufferedReader reader = Files.newBufferedReader(defaultConfigPath)) {
+            String text = "";
             while (reader.ready()) {
-                Files.write(path, reader.readLine().getBytes(), WRITE);
+                String tempLine = reader.readLine();
+                text = text + "\n" + tempLine;
             }
+
+            Files.write(path, text.getBytes(), WRITE);
         }catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     private void interpretConfig(List<String> lines){
-        config = new HashMap<>();
+        Map<String, String> config = new HashMap<>();
 
         lines.parallelStream().filter(l -> !l.trim().isEmpty()).forEach(s -> {
             s = s.replace("\r", "");
@@ -157,12 +169,22 @@ public class Config {
             String value = "";
 
             //readd extra colons
-            for (int i = 1; i < sections.length-1; i++) value += (":" + sections[i]);
+            for (int i = 1; i < sections.length; i++) {
+                if(i > 1) value = value + (":" + sections[i]);
+                else value = sections[i];
+            }
 
             //if .Elements.txt contains found key, insert it into stored configs
             if (configElements.contains(key)) {
                 config.merge(key, value, (oldValue, newValue) -> newValue);
             }
         });
+
+        if (config.size() < configElements.size()) {
+            logger.logError("Missing config elements");
+            throw new RuntimeException("Missing config elements");
+        }
+
+        world.setConfigData(config);
     }
 }
