@@ -11,23 +11,28 @@ import java.util.*;
 
 import static java.nio.file.StandardOpenOption.WRITE;
 
-public class ConfigReader {
+public class Config {
     private Map<String, String> config;
     private List<String> configElements;
     private final Logger logger;
 
-    public ConfigReader(Path path) {
+    //default config paths (stored in resources folder)
+    private final Path elementsPath = Path.of("defaultConfig/.Elements.txt");
+    private final Path defaultConfigPath = Path.of("defaultConfig/config.txt");
+
+    public Config(Path path) {
         logger = Logger.getInstance();
+        readElements();
         readConfig(path);
     }
 
-    public Map<String, String> getConfig() {
-        return config;
+    public String getConfigValue(String key) {
+        return config.get(key);
     }
 
     private void readElements(){
         configElements = new ArrayList<>();
-        Path elementsPath = Path.of("/defaultConfig/.Elements.txt");
+
         if (!Files.exists(elementsPath)) {
             logger.logError("Could not find config Elements definition file.");
             throw new RuntimeException("Could not find config Elements definition file.");
@@ -84,6 +89,7 @@ public class ConfigReader {
 
                     if (openString && tempChar == '"') openString = false;
                     else if (!openString && tempChar == '"') openString = true;
+                    else if (tempChar == '/' && tempLine.charAt(i + 1) == '/'&& !openString) break;
                     else line += tempChar;
 
                     if (line.endsWith(";")) {
@@ -123,7 +129,6 @@ public class ConfigReader {
     }
 
     private void fillDefaultConfig(Path path) {
-        Path defaultConfigPath = Path.of("/defaultConfig/config.txt");
         if (!Files.exists(defaultConfigPath)) {
             throw new RuntimeException("Default config file does not exist");
         }
