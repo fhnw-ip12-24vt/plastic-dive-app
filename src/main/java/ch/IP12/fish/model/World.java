@@ -117,10 +117,6 @@ public class World {
     }
 
 
-    public double getClock() {
-        return clock;
-    }
-
     public void resetClock() {
         clock = currentTimeSeconds();
     }
@@ -142,6 +138,7 @@ public class World {
         return font;
     }
 
+
     public Spawner getSpawner() {
         return spawner;
     }
@@ -153,6 +150,7 @@ public class World {
     public void removeObstacle(List<Obstacle> deletionList) {
         getObstacles().removeAll(deletionList);
     }
+
 
     public void setConfigData(Map<String, String> config) {
         this.config = config;
