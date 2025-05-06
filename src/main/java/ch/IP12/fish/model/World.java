@@ -1,5 +1,6 @@
 package ch.IP12.fish.model;
 
+import ch.IP12.fish.Spawner;
 import ch.IP12.fish.components.Ads1115;
 import ch.IP12.fish.components.JoystickAnalog;
 import ch.IP12.fish.model.animations.Spritesheets;
@@ -25,7 +26,9 @@ public class World {
     private int score;
     private Difficulty difficulty;
     private double clock;
-    public Font font;
+    private Font font;
+
+    private final Spawner spawner;
 
     public World(Context pi4j) {
         Ads1115 ads1115 = new Ads1115(pi4j);
@@ -42,6 +45,9 @@ public class World {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         width = screenSize.width;
         height = screenSize.height;
+
+
+        spawner = new Spawner(this);
     }
 
     public double getWidth() {
@@ -132,5 +138,17 @@ public class World {
 
     public Font getFont() {
         return font;
+    }
+
+    public Spawner getSpawner() {
+        return spawner;
+    }
+
+    public void removeObstacle(Obstacle obstacle) {
+        getObstacles().remove(obstacle);
+    }
+
+    public void removeObstacle(List<Obstacle> deletionList) {
+        getObstacles().removeAll(deletionList);
     }
 }

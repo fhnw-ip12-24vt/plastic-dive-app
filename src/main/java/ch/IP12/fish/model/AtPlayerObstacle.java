@@ -7,9 +7,9 @@ public class AtPlayerObstacle extends Obstacle {
     private boolean hasChanged;
     private final Player player;
 
-    public AtPlayerObstacle(Obstacle obstacle, Player param) {
+    public AtPlayerObstacle(Obstacle obstacle) {
         super(obstacle);
-        this.player = param;
+        this.player = world.getRandomPlayer();
         this.color = Color.RED;
     }
 

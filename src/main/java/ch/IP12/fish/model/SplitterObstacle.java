@@ -16,7 +16,7 @@ public class SplitterObstacle extends Obstacle {
     @Override
     public void adjustDirection() {
         if (creationTime + 2 < world.currentTimeSeconds()) {
-            spawner.remove(this);
+            world.removeObstacle(this);
             split();
         }
     }
