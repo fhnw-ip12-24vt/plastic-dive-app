@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Random;
 
 public class World {
-    private double width = 1920;
-    private double height = 1080;
+    private final double width;
+    private final double height;
 
     private Map<String, String> config;
     private Map<String, String> textMap;
@@ -33,7 +33,12 @@ public class World {
     private final Spawner spawner;
 
     public World(Context pi4j) {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        width = screenSize.width;
+        height = screenSize.height;
+
         Ads1115 ads1115 = new Ads1115(pi4j);
+
         JoystickAnalog joystick1 = new JoystickAnalog(ads1115, Ads1115.Channel.A0, Ads1115.Channel.A1);
         //JoystickAnalog joystick2 = new JoystickAnalog(ads1115, Ads1115.Channel.A2, Ads1115.Channel.A3);
 
@@ -43,11 +48,6 @@ public class World {
         players = List.of(player1);
 
         obstacles = Collections.synchronizedList(new ArrayList<>());
-
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        width = screenSize.width;
-        height = screenSize.height;
-
 
         spawner = new Spawner(this);
     }
