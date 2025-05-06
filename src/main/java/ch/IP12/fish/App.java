@@ -23,13 +23,21 @@ public class App extends Application {
     }
 
     public void start(Stage stage) {
+        Logger logger = Logger.getInstance("log.txt");
+        logger.start();
+        logger.log("Start sequence started");
+
         pi4j = Pi4J.newAutoContext();
+        logger.log("Pi4J context initialized");
+
         World world = new World(pi4j);
-        Logger.getInstance("log.txt");
 
-        Config config = new Config("config.txt", world);
-        LanguageLoader languageLoader = new LanguageLoader(world);
+        //load config and text (in selected language) into world object
+        Config ignored1 = new Config("config.txt", world);
+        LanguageLoader ignored2 = new LanguageLoader(world);
+        logger.log("Loaded configs and language pack");
 
+        //base settings for stage applied
         setupStage(stage);
 
         //Creates the area which we draw all the images on
@@ -40,23 +48,28 @@ public class App extends Application {
         Scene scene = createScene(canvas);
         stage.setScene(scene);
         stage.show();
+        logger.log("Window initialized and setup");
 
         //Initializes the controller and starts the game
         Controller controller = new Controller(world, scene);
 
         //Starts the View and passes it the relevant things that are to be displayed
         View view = new View(graphicsContext, world);
+        logger.log("View and Controller initialized");
 
         //starts the key listeners for the main scene.
         controller.createGameKeyListeners(scene); // for debugging
         controller.startGameLogic();
 
         view.startRendering();
+        logger.log("Start Sequence finished");
 
         //Stops the game if the window is exited
         stage.setOnCloseRequest(event -> {
             controller.stopGameLogic();
             pi4j.shutdown();
+            logger.log("Program Shutdown");
+            logger.end();
         });
     }
 
