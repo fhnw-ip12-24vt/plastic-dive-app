@@ -1,0 +1,6 @@
+scanText;
+shirtInfoEasyText;
+shirtInfoMediumText;
+shirtInfoHardText;
+victoryText;
+highscoreText;
