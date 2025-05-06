@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Controller {
     private final World world;
-    private final Spawner spawner;
     private final ScheduledExecutorService executor;
 
     private double deltaTimeClock = 0;
@@ -29,7 +28,6 @@ public class Controller {
         this.world = world;
         this.executor = Executors.newSingleThreadScheduledExecutor();
         this.barcodeScanner = new BarcodeScanner(scene, world);
-        spawner = new Spawner(world);
     }
 
     /**
@@ -105,7 +103,7 @@ public class Controller {
         gameTicks.getAndIncrement();
 
         if (gameTicks.get() >= 75 && !(world.getDeltaClock() > 30)) {
-            spawner.spawnRandom(world.getRandomPlayer());
+            world.getSpawner().spawnRandom(world.getRandomPlayer());
             gameTicks.set(0);
         }
 
@@ -130,7 +128,7 @@ public class Controller {
 
         //removes obstacles from main obstacle array
         //and clears the deletion list.
-        spawner.remove(deletionList);
+        world.removeObstacle(deletionList);
         deletionList.clear();
 
         if (world.currentTimeSeconds() > lastHitTime + 5) {

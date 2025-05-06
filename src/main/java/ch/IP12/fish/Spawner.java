@@ -16,7 +16,7 @@ public class Spawner {
     {
         // Register factories for each obstacle type
         registerFactory(Obstacle.class, (obstacle, params) -> new Obstacle(obstacle));
-        registerFactory(AtPlayerObstacle.class, (obstacle, params) -> new AtPlayerObstacle(obstacle, (Player) params[1]));
+        registerFactory(AtPlayerObstacle.class, (obstacle, params) -> new AtPlayerObstacle(obstacle));
         registerFactory(BounceObstacle.class, (obstacle, params) -> new BounceObstacle(obstacle));
         registerFactory(SinObstacle.class, (obstacle, params) -> new SinObstacle(obstacle));
         registerFactory(SplitterObstacle.class, (obstacle, params) -> new SplitterObstacle(obstacle, (Class<? extends Obstacle>) params[0], this));
@@ -51,11 +51,7 @@ public class Spawner {
         world.getObstacles().add(create(obstacleClass, speed, classes.get(rand.nextInt(classes.size())), params));
     }
 
-    public void remove(List<Obstacle> deletionList) {
-        world.getObstacles().removeAll(deletionList);
-    }
 
-    public void remove(Obstacle obstacle) {
-        world.getObstacles().remove(obstacle);
-    }
+
+
 }
