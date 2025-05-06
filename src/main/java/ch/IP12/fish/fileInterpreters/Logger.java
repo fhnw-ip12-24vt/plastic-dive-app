@@ -47,7 +47,7 @@ public class Logger {
 
     public synchronized void logError(String message, StackTraceElement[] stackTrace) {
         String log = "\n------Error------\n" + "[" + (getDateTimeString()) + "]\n" + (message.trim());
-        if (stackTrace != null) log += "\nStacktrace" + stackTrace;
+        if (stackTrace != null) log += "\nStacktrace" + formatStacktraceArray(stackTrace);
         log += "\n-----------------";
 
         try{

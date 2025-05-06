@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import java.util.*;
 
 public class LanguageLoader {
-    private final Logger logger = Logger.getInstance();;
+    private final Logger logger = Logger.getInstance();
     private final World world;
     private List<String> langElements;
 
