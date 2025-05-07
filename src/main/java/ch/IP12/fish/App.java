@@ -19,7 +19,17 @@ public class App extends Application {
     Context pi4j;
 
     public static void main(String[] args) {
-        launch(args);
+        try {
+            launch(args);
+        }
+        catch (Exception e) {
+            try {
+                Logger.getInstance().end();
+            } catch (Exception e1) {
+                throw e;
+            }
+            throw e;
+        }
     }
 
     public void start(Stage stage) {
