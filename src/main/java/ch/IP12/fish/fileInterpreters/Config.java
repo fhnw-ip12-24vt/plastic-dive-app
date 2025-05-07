@@ -148,8 +148,9 @@ public class Config {
             while (reader.ready()) {
                 String tempLine = reader.readLine();
 
-                if (first) {
+                if (!first) {
                     text = text + "\n";
+                } else {
                     first = false;
                 }
                 text = text + tempLine;
