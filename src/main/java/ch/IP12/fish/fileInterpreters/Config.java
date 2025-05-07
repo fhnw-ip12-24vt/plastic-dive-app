@@ -153,6 +153,7 @@ public class Config {
                 } else {
                     first = false;
                 }
+
                 text = text + tempLine;
             }
 
