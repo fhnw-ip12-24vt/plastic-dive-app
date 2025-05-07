@@ -15,5 +15,7 @@
 
 /system/
 /logs/
-/config.txt
-/log.txt
+/config
+/log
+/testConfig
+/testLog

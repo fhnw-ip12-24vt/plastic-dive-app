@@ -1,6 +1,12 @@
-//options are en, de or fr
+//this is a comment
+testVal1:"Test simple";
+testVal2:"Multiline
+
+test";
+testVal3:"test multiline empty
+
+
+";
 lang:en;
-//options are detailed or simple
 log:detailed;
-//options are 1 or 2
 maxPlayerCount:1;

@@ -33,7 +33,7 @@ public class App extends Application {
     }
 
     public void start(Stage stage) {
-        Logger logger = Logger.getInstance("log.txt");
+        Logger logger = Logger.getInstance("log");
         logger.start();
         logger.log("Start sequence started");
 
@@ -43,7 +43,7 @@ public class App extends Application {
         World world = new World(pi4j);
 
         //load config and text (in selected language) into world object
-        Config ignored1 = new Config("config.txt", world);
+        Config ignored1 = new Config("config", world);
         LanguageLoader ignored2 = new LanguageLoader(world);
         logger.log("Loaded configs and language pack");
 

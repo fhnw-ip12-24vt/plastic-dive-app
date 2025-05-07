@@ -160,6 +160,10 @@ public class World {
         return config.get(key);
     }
 
+    public int getConfigSize() {
+        return config.size();
+    }
+
 
     public void setTextMapData(Map<String, String> textMap) {
         this.textMap = textMap;
@@ -167,5 +171,9 @@ public class World {
 
     public String getTextMapValue(String key) {
         return textMap.get(key);
+    }
+
+    public int getTextMapSize() {
+        return textMap.size();
     }
 }
