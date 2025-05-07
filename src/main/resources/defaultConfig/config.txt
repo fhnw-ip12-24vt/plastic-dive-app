@@ -3,4 +3,4 @@ lang:en;
 //options are detailed or simple
 log:detailed;
 //options are 1 or 2
-playerCount:1;
+maxPlayerCount:1;
