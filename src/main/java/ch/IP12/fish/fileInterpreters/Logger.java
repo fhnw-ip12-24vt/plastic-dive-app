@@ -8,11 +8,15 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.SYNC;
+import static java.nio.file.StandardOpenOption.DSYNC;
 
 public class Logger {
     private final Path path;
     private static Logger instance;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss z");
+    private StringBuilder buffer = new StringBuilder();
+    private int syncCountDown = 10;
 
     private Logger(Path path) {
         this.path = path.toAbsolutePath();
@@ -38,11 +42,9 @@ public class Logger {
 
     public synchronized void log(String message) {
         String log = "\n[" + (getDateTimeString()) + "] "+(message.trim());
-        try{
-            Files.write(path, log.getBytes(), APPEND);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+
+        buffer.append(log);
+        sync();
     }
 
     public synchronized void logError(String message, StackTraceElement[] stackTrace) {
@@ -50,11 +52,8 @@ public class Logger {
         if (stackTrace != null) log += "\nStacktrace" + formatStacktraceArray(stackTrace);
         log += "\n-----------------";
 
-        try{
-            Files.write(path, log.getBytes(), APPEND);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+        buffer.append(log);
+        sync();
     }
 
     public synchronized void logError(String message) {
@@ -67,7 +66,7 @@ public class Logger {
         try (BufferedReader reader = Files.newBufferedReader(path)) {
             if (reader.readLine() != null) log = "\n" + log;
 
-            Files.write(path, log.getBytes(), APPEND);
+            Files.write(path, log.getBytes(), APPEND, SYNC);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -75,8 +74,25 @@ public class Logger {
 
     public void end(){
         String log = "\n--------- [End  " + getDateTimeString() + "] ---------\n";
+
+        buffer.append(log);
+        flush();
+    }
+
+    private void sync(){
+        if(syncCountDown > 0) {
+            syncCountDown--;
+            return;
+        }
+
+        flush();
+
+        if (syncCountDown == 0) syncCountDown = 10;
+    }
+
+    private void flush(){
         try{
-            Files.write(path, log.getBytes(), APPEND);
+            Files.write(path, buffer.toString().getBytes(), APPEND, DSYNC);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }

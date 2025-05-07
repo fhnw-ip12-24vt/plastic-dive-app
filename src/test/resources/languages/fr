@@ -1,7 +1,7 @@
 //all text has to be filled out for the pack to be accepted, new lines are supported inside quote symbols ("")
-scanText:"lorem ipsum dolor si ame";
-shirtInfoEasyText:"lorem ipsum dolor si ame";
-shirtInfoMediumText:"lorem ipsum dolor si ame";
-shirtInfoHardText:"lorem ipsum dolor si ame";
-victoryText:"lorem ipsum dolor si ame";
-highscoreText:"lorem ipsum dolor si ame";
+scanText:"lorem ipsum dolor sit amet";
+shirtInfoEasyText:"lorem ipsum dolor sit amet";
+shirtInfoMediumText:"lorem ipsum dolor sit amet";
+shirtInfoHardText:"lorem ipsum dolor sit amet";
+victoryText:"lorem ipsum dolor sit amet";
+highscoreText:"lorem ipsum dolor sit amet";
