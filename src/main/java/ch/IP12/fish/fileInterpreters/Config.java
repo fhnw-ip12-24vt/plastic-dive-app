@@ -24,7 +24,7 @@ public class Config {
         try {
             elementsPath = Path.of(this.getClass().getResource("/defaultConfig/.Elements.txt").toURI());
             defaultConfigPath = Path.of(this.getClass().getResource("/defaultConfig/config.txt").toURI());
-        } catch (URISyntaxException e) {
+        } catch (URISyntaxException | NullPointerException e) {
             logger.logError("Could not translate default config information location");
             throw new RuntimeException(e);
         }
