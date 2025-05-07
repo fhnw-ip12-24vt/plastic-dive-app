@@ -22,8 +22,8 @@ public class Config {
 
     {
         try {
-            elementsPath = Path.of(this.getClass().getResource("/defaultConfig/.Elements.txt").toURI());
-            defaultConfigPath = Path.of(this.getClass().getResource("/defaultConfig/config.txt").toURI());
+            elementsPath = Path.of(this.getClass().getResource("/defaultConfig/.elements").toURI());
+            defaultConfigPath = Path.of(this.getClass().getResource("/defaultConfig/config").toURI());
         } catch (URISyntaxException | NullPointerException e) {
             logger.logError("Could not translate default config information location");
             throw new RuntimeException(e);
@@ -183,7 +183,7 @@ public class Config {
                 else value = sections[i];
             }
 
-            //if .Elements.txt contains found key, insert it into stored configs
+            //if .elements contains found key, insert it into stored configs
             if (configElements.contains(key)) {
                 config.merge(key, value, (oldValue, newValue) -> newValue);
             }

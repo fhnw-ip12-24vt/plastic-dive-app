@@ -20,8 +20,8 @@ public class LanguageLoader {
 
     {
         try {
-            elementsPath = Path.of(this.getClass().getResource("/languages/.Elements.txt").toURI());
-            defaultLanguagePackPath = Path.of(this.getClass().getResource("/languages/en.txt").toURI());
+            elementsPath = Path.of(this.getClass().getResource("/languages/.elements").toURI());
+            defaultLanguagePackPath = Path.of(this.getClass().getResource("/languages/en").toURI());
         } catch (URISyntaxException | NullPointerException e) {
             logger.logError("Could not translate internal language pack information location");
             throw new RuntimeException(e);
@@ -34,7 +34,7 @@ public class LanguageLoader {
 
         String selectedLanguage = world.getConfigValue("lang");
         try{
-            readLanguageFile(Path.of(this.getClass().getResource("/languages/" + selectedLanguage + ".txt").toURI()));
+            readLanguageFile(Path.of(this.getClass().getResource("/languages/" + selectedLanguage).toURI()));
         } catch(RuntimeException e){
             System.out.println("Failed to load selected language pack, attempting to load default language pack");
 
@@ -158,7 +158,7 @@ public class LanguageLoader {
                 else value = sections[i];
             }
 
-            //if .Elements.txt contains found key, insert it into stored configs
+            //if .elements contains found key, insert it into stored configs
             if (langElements.contains(key)) {
                 textMap.merge(key, value, (oldValue, newValue) -> newValue);
             }

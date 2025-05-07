@@ -96,7 +96,7 @@ public class App extends Application {
         graphicsContext.setImageSmoothing(false);
 
         //load custom font
-        world.setFont(Font.loadFont(getClass().getResourceAsStream("/fonts/MinecraftRegular-Bmg3.otf"), 12));
+        world.setFont(Font.loadFont(this.getClass().getResourceAsStream("/fonts/MinecraftRegular-Bmg3.otf"), 12));
         graphicsContext.setFont(world.getFont());
 
         return canvas;
