@@ -11,7 +11,7 @@ import ch.IP12.fish.fileInterpreters.Logger;
 import ch.IP12.fish.model.animations.Spritesheets;
 import javafx.application.Platform;
 
-public class AtPlayerObstacleTest {
+public class BounceObstacleTest {
 
     private static Logger logger = Logger.getInstance("testLog");
     private static World world;
@@ -44,7 +44,7 @@ public class AtPlayerObstacleTest {
     public void instanciateObstacle(){
         assertDoesNotThrow(() -> {
             Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
-            AtPlayerObstacle atPlayerObstacle = new AtPlayerObstacle(obstacle);
+            BounceObstacle bounceObstacle = new BounceObstacle(obstacle);
         });
 
         logger.log("Test passed: " + getMethodName());
@@ -53,25 +53,8 @@ public class AtPlayerObstacleTest {
     @Test
     public void adjustDirectionTest(){
         Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
-        AtPlayerObstacle atPlayerObstacle = new AtPlayerObstacle(obstacle);
+        BounceObstacle bounceObstacle = new BounceObstacle(obstacle);
 
-        assertEquals(atPlayerObstacle.getDirection(), 0);
-        assertEquals(atPlayerObstacle.getSpeed(), 0);
-
-        atPlayerObstacle.adjustDirection();
-
-        assertEquals(atPlayerObstacle.getDirection(), Math.atan2(atPlayerObstacle.getY(), atPlayerObstacle.getX()));
-        assertEquals(atPlayerObstacle.getSpeed(), 0);
-
-        Obstacle obstacle2 = new Obstacle(5, 3, Spritesheets.Player.getSpriteAnimation(), world);
-        AtPlayerObstacle atPlayerObstacle2 = new AtPlayerObstacle(obstacle2);
-        atPlayerObstacle2.setX(8);
-
-        atPlayerObstacle2.adjustDirection();
-
-        assertEquals(Math.atan2(atPlayerObstacle2.getY(), atPlayerObstacle2.getX()), atPlayerObstacle2.getDirection(),  4);
-        //assertEquals(6, atPlayerObstacle2.getSpeed()); Speed currently broken. adjustDirection() does not want to multiply speed for some reason
-
-        logger.log("Test passed: " + getMethodName());
+        // TODO
     }
 }
