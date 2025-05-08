@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ConfigTest {
     private static World world;
     private static Context pi4j = null;
-    private static String confName;
+    private static final String confName = "configTestFile";
 
     @BeforeAll
     public static void initJfxRuntime() {
@@ -33,8 +33,14 @@ public class ConfigTest {
         testDataInit();
     }
 
+    static void testDataInit() {
+        if (pi4j != null) {pi4j.shutdown();}
+        pi4j = Pi4J.newAutoContext();
+        world = new World(pi4j);
+    }
+
     @AfterAll
-    public static void cleanuptestFiles() {
+    public static void cleanupTestFiles() {
         Path path = Path.of(confName).toAbsolutePath();
         if (Files.exists(path)) {
             try {
@@ -43,13 +49,6 @@ public class ConfigTest {
                 throw new RuntimeException(e);
             }
         }
-    }
-
-    static void testDataInit() {
-        if (pi4j != null) {pi4j.shutdown();}
-        pi4j = Pi4J.newAutoContext();
-        world = new World(pi4j);
-        confName = "configTestFile";
     }
 
     @Test

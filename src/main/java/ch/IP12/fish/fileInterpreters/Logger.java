@@ -35,7 +35,7 @@ public class Logger {
 
     public synchronized static Logger getInstance(String name) {
         if (name == null) throw new RuntimeException("Logger path cannot be null");
-        if (instance == null) instance = new Logger(Path.of(name));
+        if (instance == null) instance = new Logger(Path.of("logs", name));
         return instance;
     }
 

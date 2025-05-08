@@ -6,8 +6,13 @@ import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
 import javafx.application.Platform;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,7 +36,19 @@ public class LanguageLoaderTest {
         if (pi4j != null) {pi4j.shutdown();}
         pi4j = Pi4J.newAutoContext();
         world = new World(pi4j);
-        new Config("testConfig", world);
+        new Config("configTestFile", world);
+    }
+
+    @AfterAll
+    public static void cleanup() {
+        Path path = Path.of("configTestFile");
+        if (Files.exists(path)) {
+            try {
+                Files.delete(path);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Test
