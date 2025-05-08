@@ -10,6 +10,7 @@ public class BarcodeScanner {
     private final World world;
     private final Scene scene;
     private String s = "\n";
+
     public BarcodeScanner(Scene scene, World world) {
         this.scene = scene;
         this.world = world;
