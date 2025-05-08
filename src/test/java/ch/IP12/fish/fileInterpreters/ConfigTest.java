@@ -42,6 +42,7 @@ public class ConfigTest {
     @AfterAll
     public static void cleanupTestFiles() {
         Path path = Path.of(confName).toAbsolutePath();
+
         if (Files.exists(path)) {
             try {
                 Files.delete(path);
@@ -53,44 +54,27 @@ public class ConfigTest {
 
     @Test
     public void testInstantiationOfConfigWhenFileDoesNotExists() {
-        Path path = Path.of(confName).toAbsolutePath();
-        if (Files.exists(path)){
-            try {
-                Files.delete(Path.of(confName).toAbsolutePath());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        cleanupTestFiles();
 
         assertDoesNotThrow(() -> new Config(confName, world));
-        assertTrue(Files.exists(path));
+        assertTrue(Files.exists(Path.of(confName)));
     }
 
     @Test
     public void testCallOfConfigWhenFileExists() {
         testDataInit();
-        Path path = Path.of(confName).toAbsolutePath();
-
-        if (!Files.exists(Path.of(confName).toAbsolutePath())) {
-            assertDoesNotThrow(() -> new Config(confName, world));
-        }
+        cleanupTestFiles();
 
         assertDoesNotThrow(() -> new Config(confName, world));
-        assertTrue(Files.exists(path));
+        assertTrue(Files.exists(Path.of(confName)));
     }
 
     @Test
     public void testValueStorageOfConfig(){
-        Path path = Path.of(confName).toAbsolutePath();
-        if (Files.exists(path)){
-            try {
-                Files.delete(Path.of(confName).toAbsolutePath());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        cleanupTestFiles();
+
         assertDoesNotThrow(() -> new Config(confName, world));
-        assertTrue(Files.exists(path));
+        assertTrue(Files.exists(Path.of(confName)));
 
         assertEquals(6, world.getConfigSize());
 

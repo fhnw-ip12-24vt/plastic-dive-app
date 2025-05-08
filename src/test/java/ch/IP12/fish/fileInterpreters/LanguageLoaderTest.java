@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LanguageLoaderTest {
     private static World world;
     private static Context pi4j = null;
+    private static String confName = "configTestFile";
 
     @BeforeAll
     public static void initJfxRuntime() {
@@ -36,12 +37,12 @@ public class LanguageLoaderTest {
         if (pi4j != null) {pi4j.shutdown();}
         pi4j = Pi4J.newAutoContext();
         world = new World(pi4j);
-        new Config("configTestFile", world);
+        new Config(confName, world);
     }
 
     @AfterAll
     public static void cleanup() {
-        Path path = Path.of("configTestFile");
+        Path path = Path.of(confName).toAbsolutePath();
         if (Files.exists(path)) {
             try {
                 Files.delete(path);

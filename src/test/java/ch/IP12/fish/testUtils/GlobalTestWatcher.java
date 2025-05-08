@@ -113,7 +113,8 @@ public class GlobalTestWatcher implements TestWatcher, BeforeAllCallback, AfterA
         if (logToFile)
             logger.log("Test Failed: " + testName + " - Reason: " + cause.getMessage());
 
-        failedTestsByClass.get(currentTestClass.getSimpleName()).add(testName);
+        failedTestsByClass.get(currentTestClass).add(testName);
+
         handleTestFailure(context, cause);
     }
 
