@@ -11,6 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class GlobalTestWatcher implements TestWatcher, BeforeAllCallback, AfterAllCallback, ExtensionContext.Store.CloseableResource {
     private static final Logger logger = Logger.getInstance("testLog");
+
+    private Class<?> currentTestClass;
     private static final Set<Class<?>> initializedClasses = ConcurrentHashMap.newKeySet();
     private static final Map<Class<?>, List<String>> failedTestsByClass = new ConcurrentHashMap<>();
 
@@ -41,6 +43,7 @@ public class GlobalTestWatcher implements TestWatcher, BeforeAllCallback, AfterA
             // One-time class initialization
             if (initializedClasses.add(testClass)) {
                 failedTestsByClass.putIfAbsent(testClass, new ArrayList<>());
+                this.currentTestClass = testClass;
                 System.out.println("[INIT] Starting Tests from: " + testClass.getSimpleName());
                 if (logToFile)
                     logger.log("[INIT] Starting Tests from: " + testClass.getSimpleName());
@@ -109,6 +112,8 @@ public class GlobalTestWatcher implements TestWatcher, BeforeAllCallback, AfterA
         System.out.println("Test Failed: " + testName + " - Reason: " + cause.getMessage());
         if (logToFile)
             logger.log("Test Failed: " + testName + " - Reason: " + cause.getMessage());
+
+        failedTestsByClass.get(currentTestClass.getSimpleName()).add(testName);
         handleTestFailure(context, cause);
     }
 

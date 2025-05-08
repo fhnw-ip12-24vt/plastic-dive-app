@@ -1,19 +1,16 @@
 package ch.IP12.fish.model;
 
-import static ch.IP12.fish.utils.StackUtils.getClassName;
-import static ch.IP12.fish.utils.StackUtils.getMethodName;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import ch.IP12.fish.testUtils.WatchTests;
 import org.junit.jupiter.api.*;
 
-import ch.IP12.fish.fileInterpreters.Logger;
 import ch.IP12.fish.model.animations.Spritesheets;
 import javafx.application.Platform;
 
+@WatchTests
 public class BounceObstacleTest {
-
-    private static Logger logger = Logger.getInstance("testLog");
     private static World world;
     private static Player player;
 
@@ -24,10 +21,6 @@ public class BounceObstacleTest {
         } catch (Exception e) {
             Platform.startup(() -> {});
         }
-
-        logger.start();
-        logger.log("Starting " + getClassName());
-        logger.log("Test data initialized");
     }
 
     @BeforeEach
@@ -46,8 +39,6 @@ public class BounceObstacleTest {
             Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
             BounceObstacle bounceObstacle = new BounceObstacle(obstacle);
         });
-
-        logger.log("Test passed: " + getMethodName());
     }
 
     @Test

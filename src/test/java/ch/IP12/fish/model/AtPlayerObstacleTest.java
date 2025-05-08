@@ -1,19 +1,16 @@
 package ch.IP12.fish.model;
 
-import static ch.IP12.fish.utils.StackUtils.getClassName;
-import static ch.IP12.fish.utils.StackUtils.getMethodName;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import ch.IP12.fish.testUtils.WatchTests;
 import org.junit.jupiter.api.*;
 
-import ch.IP12.fish.fileInterpreters.Logger;
 import ch.IP12.fish.model.animations.Spritesheets;
 import javafx.application.Platform;
 
+@WatchTests
 public class AtPlayerObstacleTest {
-
-    private static Logger logger = Logger.getInstance("testLog");
     private static World world;
     private static Player player;
 
@@ -24,10 +21,6 @@ public class AtPlayerObstacleTest {
         } catch (Exception e) {
             Platform.startup(() -> {});
         }
-
-        logger.start();
-        logger.log("Starting " + getClassName());
-        logger.log("Test data initialized");
     }
 
     @BeforeEach
@@ -46,8 +39,6 @@ public class AtPlayerObstacleTest {
             Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
             AtPlayerObstacle atPlayerObstacle = new AtPlayerObstacle(obstacle);
         });
-
-        logger.log("Test passed: " + getMethodName());
     }
 
     @Test
@@ -71,7 +62,5 @@ public class AtPlayerObstacleTest {
 
         assertEquals(Math.atan2(atPlayerObstacle2.getY(), atPlayerObstacle2.getX()), atPlayerObstacle2.getDirection(),  4);
         //assertEquals(6, atPlayerObstacle2.getSpeed()); Speed currently broken. adjustDirection() does not want to multiply speed for some reason
-
-        logger.log("Test passed: " + getMethodName());
     }
 }
