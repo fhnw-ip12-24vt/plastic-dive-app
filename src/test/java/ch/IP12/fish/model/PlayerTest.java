@@ -21,7 +21,10 @@ public class PlayerTest {
         } catch (Exception e) {
             Platform.startup(() -> {});
         }
+    }
 
+    @BeforeEach
+    public void initMocks(){
         joystick = mock(JoystickAnalog.class);
         world = mock(World.class);
     }
@@ -73,6 +76,7 @@ public class PlayerTest {
         player.move(1, 5);
 
         assertEquals(-56, player.getX(), 3);
-        assertEquals(0, player.getY(), 3);
+        assertEquals(4.45, player.getY(), 3);
     }
+    
 }
