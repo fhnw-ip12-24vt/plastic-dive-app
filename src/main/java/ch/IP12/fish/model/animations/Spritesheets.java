@@ -1,6 +1,5 @@
 package ch.IP12.fish.model.animations;
 
-import javafx.animation.Animation;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;

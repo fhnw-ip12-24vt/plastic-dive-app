@@ -14,6 +14,10 @@ import static java.nio.file.StandardOpenOption.DSYNC;
 public class Logger {
     private final Path path;
     private static Logger instance;
+
+    private boolean started = false;
+    private boolean finished = false;
+
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss z");
     private StringBuilder buffer = new StringBuilder();
     private int syncCountDown = 10;
@@ -41,14 +45,14 @@ public class Logger {
     }
 
     public synchronized void log(String message) {
-        String log = "\n[" + (getDateTimeString()) + "] "+(message.trim());
+        String log = "\n[" + (getDateTimeString()) + "] "+(message);
 
         buffer.append(log);
         sync();
     }
 
     public synchronized void logError(String message, StackTraceElement[] stackTrace) {
-        String log = "\n------Error------\n" + "[" + (getDateTimeString()) + "]\n" + (message.trim());
+        String log = "\n------Error------\n" + "[" + (getDateTimeString()) + "]\n" + (message);
         if (stackTrace != null) log += "\nStacktrace" + formatStacktraceArray(stackTrace);
         log += "\n-----------------";
 
@@ -60,7 +64,9 @@ public class Logger {
         logError(message, null);
     }
 
-    public void start(){
+    public synchronized void start(){
+        if (started) return;
+
         String log = "--------- [Start  " + getDateTimeString() +"] ---------";
 
         try (BufferedReader reader = Files.newBufferedReader(path)) {
@@ -69,17 +75,22 @@ public class Logger {
             Files.write(path, log.getBytes(), APPEND, SYNC);
         } catch (Exception e) {
             System.err.println(e.getMessage());
+        } finally {
+            started = true;
         }
     }
 
-    public void end(){
+    public synchronized void end(){
+        if (finished) return;
+
         String log = "\n--------- [End  " + getDateTimeString() + "] ---------\n";
 
         buffer.append(log);
         flush();
+        finished = true;
     }
 
-    private void sync(){
+    private synchronized void sync(){
         if(syncCountDown > 0) {
             syncCountDown--;
             return;
@@ -90,12 +101,14 @@ public class Logger {
         if (syncCountDown == 0) syncCountDown = 10;
     }
 
-    private void flush(){
+    private synchronized void flush(){
         try{
             Files.write(path, buffer.toString().getBytes(), APPEND, DSYNC);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
+
+        buffer = new StringBuilder();
     }
 
     private String formatStacktraceArray(StackTraceElement[] stackTrace) {

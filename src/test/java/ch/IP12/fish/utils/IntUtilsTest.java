@@ -1,20 +1,15 @@
 package ch.IP12.fish.utils;
 
-import ch.IP12.fish.fileInterpreters.Logger;
 import javafx.application.Platform;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static ch.IP12.fish.utils.IntUtils.isInRange;
 import static ch.IP12.fish.utils.IntUtils.isRangeInRange;
-import static ch.IP12.fish.utils.StackUtils.getClassName;
-import static ch.IP12.fish.utils.StackUtils.getMethodName;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class IntUtilsTest {
-    private static Logger logger = Logger.getInstance("testLog");
 
     @BeforeAll
     public static void initJfxRuntime() {
@@ -23,14 +18,6 @@ public class IntUtilsTest {
         } catch (Exception e) {
             Platform.startup(() -> {});
         }
-
-        logger.start();
-        logger.log("Starting " + getClassName());
-    }
-
-    @AfterAll
-    static void endLog(){
-        logger.end();
     }
 
     @Test
@@ -43,8 +30,6 @@ public class IntUtilsTest {
 
         value = 0;
         assertTrue(isInRange(value, 0, 100));
-
-        logger.log("Test passed: " + getMethodName());
     }
 
     @Test
@@ -60,8 +45,6 @@ public class IntUtilsTest {
 
         value = Integer.MIN_VALUE;
         assertFalse(isInRange(value, 0, 100));
-
-        logger.log("Test passed: " + getMethodName());
     }
 
     @Test
@@ -72,8 +55,6 @@ public class IntUtilsTest {
         assertTrue(isRangeInRange(min, max, 100, 200));
         assertTrue(isRangeInRange(min, max, 0, 100));
         assertTrue(isRangeInRange(min, max, -100, 0));
-
-        logger.log("Test passed: " + getMethodName());
     }
 
     @Test
@@ -83,7 +64,5 @@ public class IntUtilsTest {
 
         assertFalse(isRangeInRange(min, max, 101, 201));
         assertFalse(isRangeInRange(min, max, -101, -1));
-
-        logger.log("Test passed: " + getMethodName());
     }
 }

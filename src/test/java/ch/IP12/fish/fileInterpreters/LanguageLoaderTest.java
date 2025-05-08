@@ -1,21 +1,20 @@
 package ch.IP12.fish.fileInterpreters;
 
 import ch.IP12.fish.model.World;
+import ch.IP12.fish.testUtils.WatchTests;
 import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
 import javafx.application.Platform;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static ch.IP12.fish.utils.StackUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+@WatchTests
 public class LanguageLoaderTest {
     private static World world;
     private static Context pi4j = null;
-    private static Logger logger = Logger.getInstance("testLog");
 
     @BeforeAll
     public static void initJfxRuntime() {
@@ -25,11 +24,7 @@ public class LanguageLoaderTest {
             Platform.startup(() -> {});
         }
 
-        logger.start();
-        logger.log("Starting " + getClassName());
-
         testDataInit();
-        logger.log("Test data initialized");
     }
 
     static void testDataInit() {
@@ -39,17 +34,10 @@ public class LanguageLoaderTest {
         new Config("testConfig", world);
     }
 
-    @AfterAll
-    static void endLog(){
-        logger.end();
-    }
-
     @Test
     public void testInstantiationOfLanguagePack() {
         assertDoesNotThrow(() -> new LanguageLoader(world));
         assertTrue(world.getTextMapSize() > 0);
-
-        logger.log("Test passed: " + getMethodName());
     }
 
     @Test
@@ -64,7 +52,5 @@ public class LanguageLoaderTest {
         assertEquals("lorem ipsum dolor sit amet", world.getTextMapValue("victoryText"));
         assertEquals("lorem ipsum dolor sit amet", world.getTextMapValue("highscoreText"));
         assertEquals("lorem ipsum dolor sit amet", world.getTextMapValue("scanText"));
-
-        logger.log("Test passed: " + getMethodName());
     }
 }

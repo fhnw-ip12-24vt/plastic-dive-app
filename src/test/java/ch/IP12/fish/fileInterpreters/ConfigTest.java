@@ -1,6 +1,7 @@
 package ch.IP12.fish.fileInterpreters;
 
 import ch.IP12.fish.model.World;
+import ch.IP12.fish.testUtils.WatchTests;
 import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
 import javafx.application.Platform;
@@ -13,14 +14,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static ch.IP12.fish.utils.StackUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+@WatchTests
 public class ConfigTest {
     private static World world;
     private static Context pi4j = null;
     private static String confName;
-    private static Logger logger = Logger.getInstance("testLog");
 
     @BeforeAll
     public static void initJfxRuntime() {
@@ -30,23 +30,26 @@ public class ConfigTest {
             Platform.startup(() -> {});
         }
 
-        logger.start();
-        logger.log("Starting " + getClassName());
-
         testDataInit();
-        logger.log("Test data initialized");
+    }
+
+    @AfterAll
+    public static void cleanuptestFiles() {
+        Path path = Path.of(confName).toAbsolutePath();
+        if (Files.exists(path)) {
+            try {
+                Files.delete(path);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     static void testDataInit() {
         if (pi4j != null) {pi4j.shutdown();}
         pi4j = Pi4J.newAutoContext();
         world = new World(pi4j);
-        confName = "testConfig";
-    }
-
-    @AfterAll
-    static void endLog(){
-        logger.end();
+        confName = "configTestFile";
     }
 
     @Test
@@ -62,8 +65,6 @@ public class ConfigTest {
 
         assertDoesNotThrow(() -> new Config(confName, world));
         assertTrue(Files.exists(path));
-
-        logger.log("Test passed: " + getMethodName());
     }
 
     @Test
@@ -77,8 +78,6 @@ public class ConfigTest {
 
         assertDoesNotThrow(() -> new Config(confName, world));
         assertTrue(Files.exists(path));
-
-        logger.log("Test passed: " + getMethodName());
     }
 
     @Test
@@ -99,7 +98,5 @@ public class ConfigTest {
         assertEquals("Test simple", world.getConfigValue("testVal1"));
         assertEquals("Multiline\ntest", world.getConfigValue("testVal2"));
         assertEquals("test multiline empty\n", world.getConfigValue("testVal3"));
-
-        logger.log("Test passed: " + getMethodName());
     }
 }

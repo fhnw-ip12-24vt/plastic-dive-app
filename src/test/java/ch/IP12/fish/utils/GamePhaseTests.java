@@ -1,17 +1,12 @@
 package ch.IP12.fish.utils;
 
-import ch.IP12.fish.fileInterpreters.Logger;
 import javafx.application.Platform;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static ch.IP12.fish.utils.StackUtils.getClassName;
-import static ch.IP12.fish.utils.StackUtils.getMethodName;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GamePhaseTests {
-    private static Logger logger = Logger.getInstance("testLog");
 
     @BeforeAll
     public static void initJfxRuntime() {
@@ -20,14 +15,6 @@ public class GamePhaseTests {
         } catch (Exception e) {
             Platform.startup(() -> {});
         }
-
-        logger.start();
-        logger.log("Starting " + getClassName());
-    }
-
-    @AfterAll
-    static void endLog(){
-        logger.end();
     }
 
     @Test
@@ -37,7 +24,6 @@ public class GamePhaseTests {
 
         phase = GamePhase.End;
         assertEquals(phase, GamePhase.End);
-        logger.log("Test passed: " + getMethodName());
     }
 
     @Test
@@ -52,6 +38,5 @@ public class GamePhaseTests {
 
         phase = GamePhase.HighScore.next();
         assertEquals(phase, GamePhase.Start);
-        logger.log("Test passed: " + getMethodName());
     }
 }
