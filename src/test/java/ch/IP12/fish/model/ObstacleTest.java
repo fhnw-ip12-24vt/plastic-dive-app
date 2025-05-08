@@ -1,15 +1,18 @@
 package ch.IP12.fish.model;
 
+import static ch.IP12.fish.utils.StackUtils.getClassName;
+import static ch.IP12.fish.utils.StackUtils.getMethodName;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import ch.IP12.fish.fileInterpreters.Logger;
 import org.junit.jupiter.api.*;
 import ch.IP12.fish.model.animations.Spritesheets;
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
 
 public class ObstacleTest {
-
+    private static Logger logger = Logger.getInstance("testLog");
     private static World world;
     private static GraphicsContext graphicsContext;
 
@@ -20,6 +23,16 @@ public class ObstacleTest {
         } catch (Exception e) {
             Platform.startup(() -> {});
         }
+
+        logger.start();
+        logger.log("Starting " + getClassName());
+
+        logger.log("Test data initialized");
+    }
+
+    @AfterAll
+    static void endLog(){
+        logger.end();
     }
 
     @BeforeEach
@@ -35,6 +48,8 @@ public class ObstacleTest {
         assertDoesNotThrow(() -> {
             Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
         });
+
+        logger.log("Test passed: " + getMethodName());
     }
     
     @Test
@@ -43,6 +58,8 @@ public class ObstacleTest {
             Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
             Obstacle obstacleCopy = new Obstacle(obstacle);
         });
+
+        logger.log("Test passed: " + getMethodName());
     }
 
     @Test
@@ -55,6 +72,8 @@ public class ObstacleTest {
             obstacle.update(2);
             obstacle.update(999);
         });
+
+        logger.log("Test passed: " + getMethodName());
     }
 
     @Test
@@ -64,6 +83,8 @@ public class ObstacleTest {
         assertDoesNotThrow(() -> {
             obstacle.drawAnimation(graphicsContext);
         });
+
+        logger.log("Test passed: " + getMethodName());
     }
 
     @Test
@@ -91,5 +112,7 @@ public class ObstacleTest {
         obstacle.setY(-2510);
 
         assertEquals(true, obstacle.isOutsideBounds());
+
+        logger.log("Test passed: " + getMethodName());
     }
 }

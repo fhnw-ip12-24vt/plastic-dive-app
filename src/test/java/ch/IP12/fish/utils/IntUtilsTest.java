@@ -26,8 +26,6 @@ public class IntUtilsTest {
 
         logger.start();
         logger.log("Starting " + getClassName());
-
-        logger.log("Test data initialized");
     }
 
     @AfterAll

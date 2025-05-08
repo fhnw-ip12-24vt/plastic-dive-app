@@ -36,7 +36,6 @@ public class Controller {
      * @param scene The Scene object which will receive the listeners
      */
     void createGameKeyListeners(Scene scene) {
-
         scene.setOnKeyReleased(e -> {
             if (e.getCode() == KeyCode.I) {
                 world.nextPhase();

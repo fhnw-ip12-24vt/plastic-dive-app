@@ -1,8 +1,11 @@
 package ch.IP12.fish.model;
 
+import static ch.IP12.fish.utils.StackUtils.getClassName;
+import static ch.IP12.fish.utils.StackUtils.getMethodName;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import ch.IP12.fish.fileInterpreters.Logger;
 import org.junit.jupiter.api.*;
 
 import ch.IP12.fish.components.JoystickAnalog;
@@ -10,7 +13,7 @@ import ch.IP12.fish.model.animations.Spritesheets;
 import javafx.application.Platform;
 
 public class PlayerTest {
-
+    private static Logger logger = Logger.getInstance("testLog");
     private static JoystickAnalog joystick;
     private static World world;
 
@@ -21,6 +24,14 @@ public class PlayerTest {
         } catch (Exception e) {
             Platform.startup(() -> {});
         }
+
+        logger.start();
+        logger.log("Starting " + getClassName());
+    }
+
+    @AfterAll
+    static void endLog(){
+        logger.end();
     }
 
     @BeforeEach
@@ -34,6 +45,8 @@ public class PlayerTest {
         assertDoesNotThrow(() -> {
             Player player = new Player(0, 0, 0, Spritesheets.Player.getSpriteAnimation(), joystick, world);
         });
+
+        logger.log("Test passed: " + getMethodName());
     }
 
     @Test
@@ -48,6 +61,8 @@ public class PlayerTest {
         assertEquals(2, player.getY());
         assertEquals(3, player.getSpeed());
         assertEquals(4, player.getDirection());
+
+        logger.log("Test passed: " + getMethodName());
     }
 
     @Test
@@ -58,6 +73,8 @@ public class PlayerTest {
         assertEquals(22, player.getY());
         assertEquals(33, player.getSpeed());
         assertEquals(world, player.getWorld());
+
+        logger.log("Test passed: " + getMethodName());
     }
 
     @Test
@@ -77,6 +94,8 @@ public class PlayerTest {
 
         assertEquals(-56, player.getX(), 3);
         assertEquals(4.45, player.getY(), 3);
+
+        logger.log("Test passed: " + getMethodName());
     }
     
 }
