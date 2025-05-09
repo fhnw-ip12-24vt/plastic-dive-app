@@ -30,10 +30,10 @@ public class ForkObstacle extends Obstacle {
         Obstacle base = new Obstacle(this);
         base.color = Color.RED;
         Obstacle obstacle1 = new Obstacle(this);
-        obstacle1.setDirection(this.getDirection() + 0.7);
+        obstacle1.setDirection(this.getDirection() + 0.2);
         world.getObstacles().add(obstacle1);
         Obstacle obstacle2 = new Obstacle(this);
-        obstacle2.setDirection(this.getDirection() - 0.7);
+        obstacle2.setDirection(this.getDirection() - 0.2);
         world.getObstacles().add(obstacle2);
         world.removeObstacle(this);
     }
