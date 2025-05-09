@@ -30,6 +30,8 @@ public class SpriteAnimation extends Transition {
     //last frame used
     private int lastIndex;
 
+    private Duration duration;
+
     /**
      * @param imageView Imageview object containing the spritesheet image
      * @param count amount of frames
@@ -48,8 +50,30 @@ public class SpriteAnimation extends Transition {
         this.offsetY = offsetY;
         this.width = width;
         this.height = height;
+        this.duration = duration;
+        lastIndex = count;
 
         setCycleDuration(duration);
+        setInterpolator(Interpolator.LINEAR);
+
+        imageView.setViewport(new Rectangle2D(offsetX, offsetY, width, height));
+    }
+
+    /**
+     * @param spriteAnimation creates a copy of provided spriteAnimation object in its default state
+     */
+    public SpriteAnimation(SpriteAnimation spriteAnimation) {
+        imageView = spriteAnimation.imageView;
+        count = spriteAnimation.count;
+        columns = spriteAnimation.columns;
+        offsetX = spriteAnimation.offsetX;
+        offsetY = spriteAnimation.offsetY;
+        width = spriteAnimation.width;
+        height = spriteAnimation.height;
+        duration = spriteAnimation.duration;
+        lastIndex = count;
+
+        setCycleDuration(spriteAnimation.duration);
         setInterpolator(Interpolator.LINEAR);
 
         imageView.setViewport(new Rectangle2D(offsetX, offsetY, width, height));

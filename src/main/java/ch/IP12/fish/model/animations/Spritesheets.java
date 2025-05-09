@@ -39,11 +39,11 @@ public enum Spritesheets {
     }
 
     /**
-     * Returns animation object for selected sprite sheet.
+     * Returns new instance of animation object for selected sprite sheet.
      *
      * @return Sprite animation object.
      */
     public SpriteAnimation getSpriteAnimation() {
-        return spriteAnimation;
+        return new SpriteAnimation(spriteAnimation);
     }
 }
