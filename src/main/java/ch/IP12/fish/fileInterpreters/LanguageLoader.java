@@ -9,6 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
+/**
+ * Reads language pack selected in config, and stores values read from file into World's textMap variable
+ */
 public class LanguageLoader {
     private final Logger logger = Logger.getInstance();
     private final World world;
@@ -34,6 +37,7 @@ public class LanguageLoader {
 
         String selectedLanguage = world.getConfigValue("lang");
         try{
+            if (selectedLanguage == null) throw new RuntimeException("No language selected in config");
             readLanguageFile(Path.of(this.getClass().getResource("/languages/" + selectedLanguage).toURI()));
         } catch(RuntimeException e){
             System.out.println("Failed to load selected language pack, attempting to load default language pack");

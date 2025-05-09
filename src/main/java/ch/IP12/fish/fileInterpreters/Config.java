@@ -11,6 +11,9 @@ import java.util.*;
 
 import static java.nio.file.StandardOpenOption.WRITE;
 
+/**
+ * Reads Config values and stores them in World's config variable
+ */
 public class Config {
     private final World world;
     private List<String> configElements;

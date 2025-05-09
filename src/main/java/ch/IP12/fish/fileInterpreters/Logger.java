@@ -33,17 +33,32 @@ public class Logger {
         }
     }
 
+    /**
+     * Retrieves instance of Logger
+     * @param name Name of log file that is written to / generated
+     * @return Instance of Logger
+     * @throws NullPointerException When no name is provided
+     */
     public synchronized static Logger getInstance(String name) {
-        if (name == null) throw new RuntimeException("Logger path cannot be null");
+        if (name == null || name.trim().isEmpty()) throw new NullPointerException("Logger path cannot be null");
         if (instance == null) instance = new Logger(Path.of("logs", name));
         return instance;
     }
 
+    /**
+     * Retrieves instance of Logger
+     * @return Instance of Logger
+     * @throws NullPointerException When no Logger has been instantiated yet
+     */
     public synchronized static Logger getInstance() {
-        if (instance == null) throw new RuntimeException("Logger not initialized");
+        if (instance == null) throw new NullPointerException("Logger not initialized");
         return instance;
     }
 
+    /**
+     * Writes provided message to log file
+     * @param message Message to be written into log file
+     */
     public synchronized void log(String message) {
         String log = "\n[" + (getDateTimeString()) + "] "+(message);
 
@@ -51,6 +66,11 @@ public class Logger {
         sync();
     }
 
+    /**
+     * Writes provided message into log file and marks section as being an error
+     * @param message Message to be written as an error into log file
+     * @param stackTrace Stacktrace of Exception that points to where error originated
+     */
     public synchronized void logError(String message, StackTraceElement[] stackTrace) {
         String log = "\n------Error------\n" + "[" + (getDateTimeString()) + "]\n" + (message);
         if (stackTrace != null) log += "\nStacktrace" + formatStacktraceArray(stackTrace);
@@ -60,10 +80,17 @@ public class Logger {
         sync();
     }
 
+    /**
+     * Writes provided message into log file and marks section as being an error
+     * @param message Message to be written as an error into log file
+     */
     public synchronized void logError(String message) {
         logError(message, null);
     }
 
+    /**
+     * Writes line into log that denotes the beginning of a new log section
+     */
     public synchronized void start(){
         if (started) return;
 
@@ -80,6 +107,9 @@ public class Logger {
         }
     }
 
+    /**
+     * Writes all remaining logs to file and a line into log that denotes the ending of a log section
+     */
     public synchronized void end(){
         if (finished) return;
 
