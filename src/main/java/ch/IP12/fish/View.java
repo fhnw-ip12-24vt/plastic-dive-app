@@ -43,9 +43,6 @@ public class View {
         animationTimer.start();
     }
 
-    /**
-     * Draws the objects on the screen
-     */
     private void render() {
         graphicsContext.setFill(Color.web("#3e79dd"));
         graphicsContext.fillRect(0, 0, world.getWidth(), world.getHeight());
@@ -100,26 +97,6 @@ public class View {
         frontLayerShift -= 7;
         graphicsContext.setFill(Color.BLACK);
         graphicsContext.fillText("Score: " + world.getScore(), 10, 30);
-
-        /*
-        This code can be used for a neat fading effect if we so desired for any transitions
-
-        Current configuration: Fade in
-        (for fade out invert opacity operation and start it at 0)
-
-        for (double opacity = 1.0; opacity > 0.0; opacity -= 0.016) {
-            graphicsContext.setFill(Color.DARKBLUE);
-            graphicsContext.fillRect(0, 0, App.WIDTH, App.HEIGHT);
-
-            graphicsContext.setFill(Color.rgb(0,0,0, opacity));
-            graphicsContext.fillRect(0,0,App.WIDTH, App.HEIGHT);
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        */
 
         world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
 

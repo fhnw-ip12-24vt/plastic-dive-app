@@ -93,6 +93,13 @@ public class World {
     }
 
     /**
+     * Removes all obstacle from the list
+     */
+    public void clearObstacles() {
+        obstacles.clear();
+    }
+
+    /**
      * @return Random player Object from the list of players
      */
     public Player getRandomPlayer() {
