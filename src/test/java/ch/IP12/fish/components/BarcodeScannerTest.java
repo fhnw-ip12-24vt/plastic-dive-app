@@ -7,18 +7,15 @@ import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
 import javafx.application.Platform;
 import javafx.event.Event;
-import javafx.event.EventDispatcher;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
-import javafx.scene.robot.Robot;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @WatchTests
 public class BarcodeScannerTest {
@@ -41,6 +38,11 @@ public class BarcodeScannerTest {
         if (pi4j != null) {pi4j.shutdown();}
         pi4j = Pi4J.newAutoContext();
         world = new World(pi4j);
+    }
+
+    @AfterEach
+    public void clearScene(){
+        scene = null;
     }
 
     private void simulateKeySequence(String charSequence) {
