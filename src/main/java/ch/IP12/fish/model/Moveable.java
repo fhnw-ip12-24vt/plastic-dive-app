@@ -16,6 +16,7 @@ public abstract class Moveable {
     private final double length;
     private final double height;
 
+    //Dircetion object is moving in, in radians
     private double direction;
 
     //Scalar for object size;
@@ -25,6 +26,14 @@ public abstract class Moveable {
     //path to animation images
     private final SpriteAnimation animation;
 
+    /**
+     * @param x x-axis postion to spawn object at
+     * @param y y-axis position to spawn object at
+     * @param speed Speed object moves at
+     * @param spriteAnimation Animation for object to draw, and to inherit size from (width, height)
+     * @param spriteScale scale for animation size to be increased by
+     * @param world DTO (Data Transfer Object)
+     */
     Moveable(double x, double y, double speed, SpriteAnimation spriteAnimation, double spriteScale, World world) {
         this.x = x;
         this.y = y;
@@ -70,62 +79,108 @@ public abstract class Moveable {
         graphicsContext.drawImage(animation.getImageView().getImage(), viewRect.getMinX(), viewRect.getMinY(), viewRect.getWidth(), viewRect.getHeight(), x, y, length, height);
     }
 
+    /**
+     * @return X-axis position of Moveable object
+     */
     public double getX() {
         return x;
     }
 
+    /**
+     * @return Y-axis position of Moveable object
+     */
     public double getY() {
         return y;
     }
 
+    /**
+     * @return Height of object
+     */
     public double getHeight() {
         return height;
     }
 
+    /**
+     * @return Width of Object
+     */
     public double getLength() {
         return length;
     }
 
+    /**
+     * @return This objects SpriteAnimation
+     */
     public SpriteAnimation getAnimation() {
         return animation;
     }
 
+    /**
+     * @return Scalar for the sprite
+     */
     public double getSpriteScale() {
         return spriteScale;
     }
 
+    /**
+     * @return Limit for y-axis before going off-screen
+     */
     public double getMaxY() {
         return world.getHeight();
     }
 
+    /**
+     * @return Limit for x-axis before going off-screen
+     */
     public double getMaxX() {
         return world.getWidth();
     }
 
+    /**
+     * @return Current direction in radians
+     */
     public double getDirection() {
         return direction;
     }
 
+    /**
+     * Sets current direction to provided one
+     * @param direction New direction in radians
+     */
     public void setDirection(double direction) {
         this.direction = direction;
     }
 
+    /**
+     * @return Speed of this object
+     */
     public double getSpeed() {
         return speed;
     }
 
+    /**
+     * @param speed Sets this objects speed to provided value
+     */
     public void setSpeed(double speed) {
         this.speed = speed;
     }
 
+    /**
+     * @param y Set y-axis position to provided one
+     */
     public void setY(double y) {
         this.y = y;
     }
 
+    /**
+     * @param x Set x-axis position to provided one
+     */
     public void setX(double x) {
         this.x = x;
     }
 
+    /**
+     * @return DTO this object uses
+     */
     public World getWorld() {
         return world;
     }

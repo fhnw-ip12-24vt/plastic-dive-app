@@ -7,12 +7,18 @@ public class AtPlayerObstacle extends Obstacle {
     private boolean hasChanged;
     private final Player player;
 
+    /**
+     * @param obstacle Obstacle to inherit values from
+     */
     public AtPlayerObstacle(Obstacle obstacle) {
         super(obstacle);
         this.player = world.getRandomPlayer();
         this.color = Color.RED;
     }
 
+    /**
+     * Adjusts direction to be in direction of a player's position once, after a set amount of time has passed
+     */
     @Override
     protected void adjustDirection() {
         if (creationTime + 2 < world.currentTimeSeconds() && !hasChanged) {

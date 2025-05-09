@@ -1,6 +1,5 @@
 package ch.IP12.fish.model;
 
-import ch.IP12.fish.model.animations.Spritesheets;
 import javafx.scene.paint.Color;
 
 public class SinObstacle extends Obstacle {
@@ -11,11 +10,17 @@ public class SinObstacle extends Obstacle {
     //one degree as radian static to save processing time
     private static final double RADIAN_INCREMENT = Math.toRadians(1);
 
+    /**
+     * @param obstacle Obstacle to inherit values from
+     */
     public SinObstacle(Obstacle obstacle) {
         super(obstacle);
         this.color = Color.YELLOW;
     }
 
+    /**
+     * Adjusts direction of this obstacle in line with a Sin and CoSin wave
+     */
     @Override
     protected void adjustDirection() {
         double direction = getDirection(); // direction is in radians
