@@ -25,6 +25,9 @@ public class Spawner {
     Random rand = new Random();
     List<Class<? extends Obstacle>> classes = new ArrayList<>(this.factories.keySet());
 
+    /**
+     * @param world DTO (Data Transfer Object)
+     */
     public Spawner(World world) {
         this.world = world;
     }
@@ -33,6 +36,13 @@ public class Spawner {
         factories.put(clazz, pattern);
     }
 
+    /**
+     * @param obstacleClass Class of Obstacle type to create
+     * @param speed Obstacle's speed
+     * @param params any other required params for the obstacle to be created
+     * @return New instance of provided Obstacle
+     * @param <T> Class that must extend Obstacle
+     */
     public <T extends Obstacle> T create(Class<T> obstacleClass, double speed, Object... params) {
         factoryPattern factory = factories.get(obstacleClass);
         if (factory == null) {
@@ -43,6 +53,9 @@ public class Spawner {
         return obstacleClass.cast(factory.create(obstacleBase, params));
     }
 
+    /**
+     * Spawns random Obstacle from the list of registered factory functions
+     */
     public void spawnRandom() {
         world.getObstacles().add(create(classes.get(rand.nextInt(classes.size())), 300));
     }
