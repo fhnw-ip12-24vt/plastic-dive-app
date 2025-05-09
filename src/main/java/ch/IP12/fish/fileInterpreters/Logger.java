@@ -26,7 +26,7 @@ public class Logger {
         this.path = path.toAbsolutePath();
         if (!Files.exists(path)) {
             try {
-                Files.createDirectories(path);
+                Files.createDirectories(path.getParent());
                 Files.createFile(path);
             } catch (IOException e) {
                 throw new RuntimeException(e);
