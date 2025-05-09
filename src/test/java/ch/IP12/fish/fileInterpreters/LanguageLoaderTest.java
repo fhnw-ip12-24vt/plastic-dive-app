@@ -33,7 +33,7 @@ public class LanguageLoaderTest {
         testDataInit();
     }
 
-    static void testDataInit() {
+    private static void testDataInit() {
         if (pi4j != null) {pi4j.shutdown();}
         pi4j = Pi4J.newAutoContext();
         world = new World(pi4j);
