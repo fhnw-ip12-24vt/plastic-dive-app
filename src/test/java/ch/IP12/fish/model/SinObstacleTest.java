@@ -46,7 +46,7 @@ public class SinObstacleTest {
         Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
         SinObstacle sinObstacle = new SinObstacle(obstacle);
 
-        assertEquals(0, sinObstacle.getDirection());
+        assertEquals(Math.PI, sinObstacle.getDirection());
 
         sinObstacle.adjustDirection();
 

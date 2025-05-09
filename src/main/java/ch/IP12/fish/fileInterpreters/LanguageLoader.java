@@ -23,8 +23,8 @@ public class LanguageLoader {
 
     {
         try {
-            elementsPath = Path.of(this.getClass().getResource("/languages/.elements").toURI());
-            defaultLanguagePackPath = Path.of(this.getClass().getResource("/languages/en").toURI());
+            elementsPath = Path.of(this.getClass().getResource("/languages/.elements").toURI()).toAbsolutePath();
+            defaultLanguagePackPath = Path.of(this.getClass().getResource("/languages/en").toURI()).toAbsolutePath();
         } catch (URISyntaxException | NullPointerException e) {
             logger.logError("Could not translate internal language pack information location");
             throw new RuntimeException(e);
@@ -38,7 +38,7 @@ public class LanguageLoader {
         String selectedLanguage = world.getConfigValue("lang");
         try{
             if (selectedLanguage == null) throw new RuntimeException("No language selected in config");
-            readLanguageFile(Path.of(this.getClass().getResource("/languages/" + selectedLanguage).toURI()));
+            readLanguageFile(Path.of(this.getClass().getResource("/languages/" + selectedLanguage).toURI()).toAbsolutePath());
         } catch(RuntimeException e){
             System.out.println("Failed to load selected language pack, attempting to load default language pack");
 

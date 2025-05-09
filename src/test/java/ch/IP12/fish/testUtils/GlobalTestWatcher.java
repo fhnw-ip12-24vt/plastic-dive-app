@@ -62,7 +62,7 @@ public class GlobalTestWatcher implements TestWatcher, BeforeAllCallback, AfterA
         }
 
         failedTestsByClass.forEach((cls, failures) -> {
-            System.out.printf("  %s: %d failures%n",
+            System.out.printf("  %s: %d failure" + (failures.size() == 1 ? "\n": "s\n"),
                     cls.getSimpleName(),
                     failures.size());
             if (logToFile)
