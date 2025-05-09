@@ -46,13 +46,13 @@ public class AtPlayerObstacleTest {
         Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
         AtPlayerObstacle atPlayerObstacle = new AtPlayerObstacle(obstacle);
 
-        assertEquals(atPlayerObstacle.getDirection(), 0);
-        assertEquals(atPlayerObstacle.getSpeed(), 0);
+        assertEquals(Math.PI, atPlayerObstacle.getDirection());
+        assertEquals(0, atPlayerObstacle.getSpeed());
 
         atPlayerObstacle.adjustDirection();
 
         assertEquals(atPlayerObstacle.getDirection(), Math.atan2(atPlayerObstacle.getY(), atPlayerObstacle.getX()));
-        assertEquals(atPlayerObstacle.getSpeed(), 0);
+        assertEquals(0, atPlayerObstacle.getSpeed());
 
         Obstacle obstacle2 = new Obstacle(5, 3, Spritesheets.Player.getSpriteAnimation(), world);
         AtPlayerObstacle atPlayerObstacle2 = new AtPlayerObstacle(obstacle2);
