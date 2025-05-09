@@ -9,6 +9,7 @@ import javafx.scene.input.KeyCode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -105,9 +106,7 @@ public class Controller {
     private void running() {
         double deltaTime = (System.currentTimeMillis() - deltaTimeClock) / 1000; // Approx. 60 FPS
         deltaTimeClock = System.currentTimeMillis();
-
         final List<Obstacle> deletionList = Collections.synchronizedList(new ArrayList<>());
-        // Update the model (logic)
         gameTicks.getAndIncrement();
 
         if (gameTicks.get() >= 75 && !(world.getDeltaClock() > 30)) {
@@ -127,7 +126,7 @@ public class Controller {
                 deletionList.add(obstacle);
             }
 
-            //collision stops prototype
+            //collision deletes obstacle from existence
             world.getPlayers().forEach(player -> {
                 if (player.collidesWith(obstacle)) {
                     lastHitTime = world.currentTimeSeconds();
@@ -143,37 +142,35 @@ public class Controller {
         world.removeObstacle(deletionList);
         deletionList.clear();
 
-        if (world.currentTimeSeconds() > lastHitTime + 5) {
-            world.incrementScore((int) (1 * deltaTime * (1 + ((world.currentTimeSeconds()) - lastHitTime) / 15)));
-        }
+        //Score increments after not being hit for 5 seconds and increases up until 25
+        if (world.currentTimeSeconds() > lastHitTime + 5)
+            world.incrementScore(Math.min((int) (1 * deltaTime * (1 + ((world.currentTimeSeconds()) - lastHitTime) / 15)), 25));
 
-        if (world.getDeltaClock() > 30) {
-            if (world.isObstaclesEmpty()) {
-                world.nextPhase();
-                world.getPlayers().forEach(Player::resetJoystick);
-                world.resetClock();
-            }
-        }
+
+        if (world.isObstaclesEmpty())
+            phaseChange(30, () -> world.getPlayers().forEach(Player::resetJoystick));
 
     }
 
     void preEndAnimation() {
-        world.nextPhase();
-        world.resetClock();
+        phaseChange(0, () -> {});
     }
 
     private void end() {
         world.getPlayers().forEach(Player::moveRight);
-        if (world.getDeltaClock() > 10) {
-            reset();
-            world.resetClock();
-        }
+        phaseChange(10, this::reset);
     }
 
     private void highscore() {
-        if (world.getDeltaClock() > 10) {
-            world.nextPhase();
+        phaseChange(10, () -> {});
+    }
+
+    private void phaseChange(int timeInPhase, Runnable action) {
+        if (world.getDeltaClock() >= timeInPhase) {
+            action.run();
+
             world.resetClock();
+            world.nextPhase();
         }
     }
 }

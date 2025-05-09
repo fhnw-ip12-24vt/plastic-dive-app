@@ -48,7 +48,7 @@ public class Obstacle extends Moveable {
     }
 
     @Override
-    public void drawAnimation(GraphicsContext graphicsContext) {
+    public synchronized void drawAnimation(GraphicsContext graphicsContext) {
         // temporary for demo
         graphicsContext.setFill(color);
         graphicsContext.fillRect(this.getX(), this.getY(), this.getLength(), this.getHeight());

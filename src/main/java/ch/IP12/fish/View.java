@@ -1,6 +1,5 @@
 package ch.IP12.fish;
 
-import ch.IP12.fish.model.Obstacle;
 import ch.IP12.fish.model.World;
 import ch.IP12.fish.model.animations.Spritesheets;
 import javafx.animation.AnimationTimer;
@@ -101,9 +100,7 @@ public class View {
         world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
 
         graphicsContext.setFill(Color.SEAGREEN);
-        for (Obstacle obstacle : world.getObstacles()) {
-            obstacle.drawAnimation(graphicsContext);
-        }
+        world.getObstacles().forEach(obstacle -> obstacle.drawAnimation(graphicsContext));
     }
 
     private void end() {

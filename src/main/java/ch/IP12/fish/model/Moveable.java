@@ -73,7 +73,7 @@ public abstract class Moveable {
                 && IntUtils.isRangeInRange(moveable.y, moveable.y + moveable.height, this.y, this.y + this.height);
     }
 
-    public void drawAnimation(GraphicsContext graphicsContext) {
+    public synchronized void drawAnimation(GraphicsContext graphicsContext) {
         animation.play();
         Rectangle2D viewRect = animation.getImageView().getViewport();
         graphicsContext.drawImage(animation.getImageView().getImage(), viewRect.getMinX(), viewRect.getMinY(), viewRect.getWidth(), viewRect.getHeight(), x, y, length, height);
