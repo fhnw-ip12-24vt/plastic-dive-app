@@ -32,6 +32,14 @@ public class Logger {
                 throw new RuntimeException(e);
             }
         }
+        else if (Files.isDirectory(path)) {
+            try {
+                Files.delete(path);
+                Files.createFile(path);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     /**

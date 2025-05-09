@@ -1,5 +1,6 @@
 package ch.IP12.fish.components;
 
+import ch.IP12.fish.fileInterpreters.Logger;
 import ch.IP12.fish.model.World;
 import ch.IP12.fish.utils.Difficulty;
 import ch.IP12.fish.utils.GamePhase;
@@ -35,7 +36,7 @@ public class BarcodeScanner {
                     world.setGamePhase(GamePhase.StartingAnimation);
                     stopListening();
                 } catch (RuntimeException ignore) {
-
+                    Logger.getInstance().log("Invalid barcode detected: " + s.replace("\n", ""));
                 }
                 return;
             }
