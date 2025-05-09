@@ -6,8 +6,11 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
+/**
+ * Creates a 2d animation from Spritesheet image
+ */
 public class SpriteAnimation extends Transition {
-    //main image as an image view
+    //Spritesheet as an image view
     public final ImageView imageView;
 
     //frame count
@@ -27,6 +30,16 @@ public class SpriteAnimation extends Transition {
     //last frame used
     private int lastIndex;
 
+    /**
+     * @param imageView Imageview object containing the spritesheet image
+     * @param count amount of frames
+     * @param columns amount of columns in provided spritesheet
+     * @param offsetX offset on the x-axis between frames (including the first)
+     * @param offsetY offset on the y-axis between frames (including the first)
+     * @param width width of a frame
+     * @param height height of a frame
+     * @param duration duration of animation
+     */
     public SpriteAnimation(ImageView imageView, int count, int columns, int offsetX, int offsetY, int width, int height, Duration duration) {
         this.imageView = imageView;
         this.count = count;
@@ -42,6 +55,9 @@ public class SpriteAnimation extends Transition {
         imageView.setViewport(new Rectangle2D(offsetX, offsetY, width, height));
     }
 
+    /**
+     * Increments position in animation based on column and row count, uses width, height and offsets to determine where frames are
+     */
     @Override
     protected void interpolate(double v) {
         if (count <= 0 || columns <= 0 || width <= 0 || height <= 0) {
@@ -56,14 +72,23 @@ public class SpriteAnimation extends Transition {
         }
     }
 
+    /**
+     * @return current position in view of animation
+     */
     public ImageView getImageView() {
         return imageView;
     }
 
+    /**
+     * @return Height of a frame
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * @return Width of a frame
+     */
     public int getWidth() {
         return width;
     }

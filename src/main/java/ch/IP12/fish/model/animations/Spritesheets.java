@@ -6,6 +6,9 @@ import javafx.util.Duration;
 
 import java.util.Random;
 
+/**
+ * List of available Spritesheets
+ */
 public enum Spritesheets {
     //to add more obstacle variations add an entry to the list bellow.
     Player(new SpriteAnimation(new ImageView(new Image("playerSpritesheets/player.png")), 2, 2, 0, 1, 16, 7, Duration.millis(200))),
