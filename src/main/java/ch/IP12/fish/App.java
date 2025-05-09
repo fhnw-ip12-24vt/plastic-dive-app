@@ -32,6 +32,10 @@ public class App extends Application {
         }
     }
 
+    /**
+     * Starts application
+     * @param stage JavaFX Stage for things to be displayed on
+     */
     public void start(Stage stage) {
         Logger logger = Logger.getInstance("log");
         logger.start();

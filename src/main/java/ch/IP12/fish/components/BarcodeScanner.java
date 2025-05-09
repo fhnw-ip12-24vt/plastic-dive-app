@@ -11,11 +11,18 @@ public class BarcodeScanner {
     private final Scene scene;
     private String s = "\n";
 
+    /**
+     * @param scene JavaFX Scene Object to listen for key presses on
+     * @param world DTO (Data Transfer Object)
+     */
     public BarcodeScanner(Scene scene, World world) {
         this.scene = scene;
         this.world = world;
     }
 
+    /**
+     * Starts listening for keypresses on provided scene until an enter is pressed
+     */
     public void startListening(){
         scene.setOnKeyPressed(event -> {
             if (s.replace("\n", "-").substring(s.length()-1).equals("-")){
@@ -36,6 +43,10 @@ public class BarcodeScanner {
         });
     }
 
+    /**
+     * Stops listening for inputs
+     * **CLEARS ALL KEY LISTENERS PRESENT IN THE SCENE (KEY PRESSED EVENT)**
+     */
     public void stopListening(){
         scene.setOnKeyPressed(event -> {});
     }

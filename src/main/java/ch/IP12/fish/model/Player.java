@@ -10,6 +10,14 @@ public class Player extends Moveable {
 
     private final JoystickAnalog joystick;
 
+    /**
+     * @param x location on x-axis to spawn at
+     * @param y location on y-axis to spawn at
+     * @param speed Top speed that player can move at
+     * @param spriteAnimation Animation that is used to draw player
+     * @param joystick Joystick that inputs come from
+     * @param world DTO (Data Transfer Object)
+     */
     public Player(double x, double y, double speed, SpriteAnimation spriteAnimation, JoystickAnalog joystick, World world) {
         super((x - spriteAnimation.getWidth() * Spritesheets.spriteScaling), y, speed, spriteAnimation, Spritesheets.spriteScaling, world);
         setSpeed(speed);
@@ -18,6 +26,11 @@ public class Player extends Moveable {
         this.joystick = joystick;
     }
 
+    /**
+     * Moves the player a set distance in a direction based on player's speed, the provided Strength value and the direction it is moving in
+     * @param deltaTime Ensures movement amount is consistent regardless of any lag that may be occurring.
+     * @param strength Strength of movement for player  Scale: 0 - 1
+     */
     @Override
     public void move(double deltaTime, double strength) {
         //check for possible exit from bounds of screen before doing movement
@@ -33,6 +46,10 @@ public class Player extends Moveable {
         }
     }
 
+    /**
+     * Updates player Position
+     * @param deltaTime Ensures movement amount is consistent regardless of any lag that may be occurring.
+     */
     @Override
     public void update(double deltaTime){
         if (!hasJoystick()) return;
@@ -42,25 +59,35 @@ public class Player extends Moveable {
         }
     }
 
+    /**
+     * Resets player position to initial values
+     */
     public void resetPosition() {
         setX(initialXValue);
         setY(initialYValue);
     }
 
+    /**
+     * Moves player to the right by 15
+     */
     public void moveRight() {
         setX(getX() + 15);
     }
 
+    /**
+     * Starts player joystick logic
+     */
     public void startJoystick() {
         if (hasJoystick()) {
-            joystick.onMove((double xPos, double yPos) -> {
-
-            }, () -> {});
+            joystick.onMove((double xPos, double yPos) -> {}, () -> {});
         } else {
             System.out.println("No joystick found");
         }
     }
 
+    /**
+     * Resets joystick
+     */
     public void resetJoystick() {
         if (!hasJoystick()) return;
         joystick.reset();

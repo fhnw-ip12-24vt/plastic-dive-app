@@ -24,6 +24,11 @@ public class Controller {
 
     private final BarcodeScanner barcodeScanner;
 
+    /**
+     * General logic controller for the Game
+     * @param world DTO (Data Transfer Object)
+     * @param scene Scene to listen for inputs on
+     */
     Controller(World world, Scene scene) {
         this.world = world;
         this.executor = Executors.newSingleThreadScheduledExecutor();
@@ -60,8 +65,12 @@ public class Controller {
         executor.shutdown();
     }
 
+    /**
+     * Reset game state to same state as just before a round
+     */
     public void reset() {
         world.getPlayers().forEach(Player::resetPosition);
+        world.clearObstacles();
         barcodeScanner.startListening();
     }
 
@@ -150,18 +159,21 @@ public class Controller {
 
     void preEndAnimation() {
         world.nextPhase();
+        world.resetClock();
     }
 
     private void end() {
         world.getPlayers().forEach(Player::moveRight);
         if (world.getDeltaClock() > 10) {
             reset();
+            world.resetClock();
         }
     }
 
     private void highscore() {
         if (world.getDeltaClock() > 10) {
             world.nextPhase();
+            world.resetClock();
         }
     }
 }
