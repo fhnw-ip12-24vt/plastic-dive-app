@@ -102,17 +102,21 @@ public class Controller {
         gameTicks.getAndIncrement();
 
         if (gameTicks.get() >= 75 && !(world.getDeltaClock() > 30)) {
-            world.getSpawner().spawnRandom(world.getRandomPlayer());
+            world.getSpawner().spawnRandom();
             gameTicks.set(0);
         }
 
         world.getPlayers().forEach(player -> player.update(deltaTime));
-        world.getObstacles().parallelStream().forEach(obstacle -> {
+
+        for (int i = world.getObstacles().size() -1; i >= 0; i--) {
+            Obstacle obstacle = world.getObstacles().get(i);
             //Obstacle updates
             obstacle.update(deltaTime);
 
             //adds obstacle to deletion list if it is entirely out of frame for the player
-            if (obstacle.isOutsideBounds()) deletionList.add(obstacle);
+            if (obstacle.isOutsideBounds()) {
+                deletionList.add(obstacle);
+            }
 
             //collision stops prototype
             world.getPlayers().forEach(player -> {
@@ -123,7 +127,7 @@ public class Controller {
                 }
             });
 
-        });
+        }
 
         //removes obstacles from main obstacle array
         //and clears the deletion list.
@@ -131,7 +135,7 @@ public class Controller {
         deletionList.clear();
 
         if (world.currentTimeSeconds() > lastHitTime + 5) {
-            world.incrementScore((int)(1 * deltaTime * (1 + ((world.currentTimeSeconds()) - lastHitTime) / 15)));
+            world.incrementScore((int) (1 * deltaTime * (1 + ((world.currentTimeSeconds()) - lastHitTime) / 15)));
         }
 
         if (world.getDeltaClock() > 30) {

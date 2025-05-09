@@ -19,7 +19,7 @@ public class Spawner {
         registerFactory(AtPlayerObstacle.class, (obstacle, params) -> new AtPlayerObstacle(obstacle));
         registerFactory(BounceObstacle.class, (obstacle, params) -> new BounceObstacle(obstacle));
         registerFactory(SinObstacle.class, (obstacle, params) -> new SinObstacle(obstacle));
-        registerFactory(SplitterObstacle.class, (obstacle, params) -> new SplitterObstacle(obstacle, (Class<? extends Obstacle>) params[0], this));
+        registerFactory(ForkObstacle.class, (obstacle, params) -> new ForkObstacle(obstacle));
     }
 
     Random rand = new Random();
@@ -43,15 +43,7 @@ public class Spawner {
         return obstacleClass.cast(factory.create(obstacleBase, params));
     }
 
-    public void spawnRandom(Player player) {
-        world.getObstacles().add(create(classes.get(rand.nextInt(classes.size())), 300, classes.get(rand.nextInt(classes.size()-1)), player));
+    public void spawnRandom() {
+        world.getObstacles().add(create(classes.get(rand.nextInt(classes.size())), 300));
     }
-
-    public <T extends Obstacle> void spawn(Class<T> obstacleClass, double speed, Object... params) {
-        world.getObstacles().add(create(obstacleClass, speed, classes.get(rand.nextInt(classes.size())), params));
-    }
-
-
-
-
 }

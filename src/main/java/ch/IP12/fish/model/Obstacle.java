@@ -18,6 +18,7 @@ public class Obstacle extends Moveable {
     public Obstacle(Obstacle obstacle) {
         super(obstacle.getX(), obstacle.getY(), obstacle.getSpeed(), obstacle.getAnimation(), obstacle.getSpriteScale(), obstacle.getWorld());
         color = obstacle.color;
+        setDirection(Math.PI);
     }
 
     @Override
