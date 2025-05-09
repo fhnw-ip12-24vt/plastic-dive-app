@@ -46,6 +46,14 @@ public class BounceObstacleTest {
         Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
         BounceObstacle bounceObstacle = new BounceObstacle(obstacle);
 
-        // TODO
+        assertTrue(bounceObstacle.getDirection() >= 0 && bounceObstacle.getDirection() < 6.3);
+
+        bounceObstacle.adjustDirection();
+
+        assertTrue(bounceObstacle.getDirection() <= 0 && bounceObstacle.getDirection() > -6.3);
+
+        bounceObstacle.adjustDirection();
+
+        assertTrue(bounceObstacle.getDirection() >= 0 && bounceObstacle.getDirection() < 6.3);
     }
 }
