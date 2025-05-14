@@ -33,7 +33,7 @@ public abstract class Moveable {
      * @param spriteScale scale for animation size to be increased by
      * @param world DTO (Data Transfer Object)
      */
-    Moveable(double x, double y, double speed, SpriteAnimation spriteAnimation, double spriteScale, World world) {
+    protected Moveable(double x, double y, double speed, SpriteAnimation spriteAnimation, double spriteScale, World world) {
         this.x = x;
         this.y = y;
         this.speed = speed;

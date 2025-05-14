@@ -1,5 +1,6 @@
-package ch.IP12.fish.model;
+package ch.IP12.fish.model.obstacles;
 
+import ch.IP12.fish.model.Player;
 import javafx.scene.paint.Color;
 
 public class AtPlayerObstacle extends Obstacle {

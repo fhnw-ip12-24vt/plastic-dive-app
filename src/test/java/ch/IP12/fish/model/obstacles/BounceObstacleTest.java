@@ -1,16 +1,17 @@
-package ch.IP12.fish.model;
+package ch.IP12.fish.model.obstacles;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import ch.IP12.fish.model.Player;
+import ch.IP12.fish.model.World;
+import ch.IP12.fish.testUtils.WatchTests;
 import org.junit.jupiter.api.*;
 import ch.IP12.fish.model.animations.Spritesheets;
-import ch.IP12.fish.testUtils.WatchTests;
 import javafx.application.Platform;
 
 @WatchTests
-public class SinObstacleTest {
-
+public class BounceObstacleTest {
     private static World world;
     private static Player player;
 
@@ -37,24 +38,23 @@ public class SinObstacleTest {
     public void instanciateObstacle(){
         assertDoesNotThrow(() -> {
             Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
-            SinObstacle sinObstacle = new SinObstacle(obstacle);
+            BounceObstacle bounceObstacle = new BounceObstacle(obstacle);
         });
     }
 
     @Test
     public void adjustDirectionTest(){
         Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
-        SinObstacle sinObstacle = new SinObstacle(obstacle);
+        BounceObstacle bounceObstacle = new BounceObstacle(obstacle);
 
-        assertEquals(Math.PI, sinObstacle.getDirection());
+        assertTrue(bounceObstacle.getDirection() >= 0 && bounceObstacle.getDirection() < 6.3);
 
-        sinObstacle.adjustDirection();
+        bounceObstacle.adjustDirection();
 
-        assertEquals(Math.abs(Math.toRadians(1)), Math.abs(sinObstacle.getDirection()), 4);
+        assertTrue(bounceObstacle.getDirection() <= 0 && bounceObstacle.getDirection() > -6.3);
 
-        sinObstacle.adjustDirection();
-        boolean condition = Math.abs(Math.toRadians(1) * 2) - Math.abs(sinObstacle.getDirection()) <= 0.1 || Math.abs(sinObstacle.getDirection()) <= 0.1;
+        bounceObstacle.adjustDirection();
 
-        assertTrue(condition);
+        assertTrue(bounceObstacle.getDirection() >= 0 && bounceObstacle.getDirection() < 6.3);
     }
 }

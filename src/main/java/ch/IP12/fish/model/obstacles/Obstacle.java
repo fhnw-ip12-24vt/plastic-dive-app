@@ -1,7 +1,8 @@
-package ch.IP12.fish.model;
+package ch.IP12.fish.model.obstacles;
 
+import ch.IP12.fish.model.Moveable;
+import ch.IP12.fish.model.World;
 import ch.IP12.fish.model.animations.SpriteAnimation;
-import ch.IP12.fish.model.animations.Spritesheets;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 

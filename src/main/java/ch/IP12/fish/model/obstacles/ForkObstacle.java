@@ -1,4 +1,4 @@
-package ch.IP12.fish.model;
+package ch.IP12.fish.model.obstacles;
 
 import javafx.scene.paint.Color;
 
