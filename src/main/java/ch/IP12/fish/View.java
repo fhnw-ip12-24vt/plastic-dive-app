@@ -110,7 +110,9 @@ public class View {
 
         //Draw score text in top left corner
         graphicsContext.setFont(scoreFont);
-        graphicsContext.fillText(""+world.getScoreWithoutDecimals(), 15, 30);
+        Text text = new Text(""+world.getScoreWithoutDecimals());
+        text.setFont(scoreFont);
+        graphicsContext.fillText(""+world.getScoreWithoutDecimals(), world.getWidth() -5 -text.getLayoutBounds().getWidth(), 25);
 
         //draw each player
         world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
