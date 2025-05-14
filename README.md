@@ -43,7 +43,7 @@ This well update once most of the code is final well split it up in how the code
 
 ### Model
 Our model is split into a few objects that inherit from movable. Specifically **player** and all children of **obstacle**, including itself.
-All of these are saved in a **world** class that keeps track of them and other data like the **score, map edges, time passed...**. 
+All of these are saved in a **world** class that keeps track of them and other data like the **score, map edges, time passed**... 
 
 #### Spawner
 The **spawner** spawn the individual **obstacles**.
@@ -59,4 +59,5 @@ First we always draw the background and then any other objects or animations.
 ### Controller
 The controller has a main function called gameStep that calls a next function based of the current game phase.
 
+## Config
 
