@@ -25,7 +25,7 @@ public class World {
     private final List<Player> players;
 
     private GamePhase gamePhase = GamePhase.Start;
-    private float score;
+    private float score = 100;
     private Difficulty difficulty;
     private double clock;
     private Font font;
@@ -280,5 +280,13 @@ public class World {
      */
     public int getTextMapSize() {
         return textMap.size();
+    }
+
+    public void reset() {
+        players.forEach(Player::resetPosition);
+        resetClock();
+        clearObstacles();
+        score = 100;
+        GamePhase gamePhase = GamePhase.Start;
     }
 }
