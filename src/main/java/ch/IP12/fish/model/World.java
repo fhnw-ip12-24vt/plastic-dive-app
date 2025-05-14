@@ -25,10 +25,11 @@ public class World {
     private final List<Player> players;
 
     private GamePhase gamePhase = GamePhase.Start;
-    private float score = 100;
+    private long score = 100;
     private Difficulty difficulty;
     private double clock;
     private Font font;
+    private boolean scoreSaved;
 
     private final Spawner spawner;
 
@@ -153,7 +154,7 @@ public class World {
     /**
      * @return Current shared score of all players
      */
-    public float getScore() {
+    public long getScore() {
         return score;
     }
 
@@ -166,14 +167,14 @@ public class World {
     /**
      * @param amount Increases shared score by this amount
      */
-    public void incrementScore(float amount) {
+    public void incrementScore(long amount) {
         score += amount;
     }
 
     /**
      * @param amount Decreases shared score by this amount
      */
-    public void decrementScore(int amount) {
+    public void decrementScore(long amount) {
         score -= amount;
     }
 
@@ -281,6 +282,18 @@ public class World {
     public int getTextMapSize() {
         return textMap.size();
     }
+
+    /**
+     * @param flag Sets flag to save the score only once
+     */
+    public void setScoreSaved(boolean flag) { this.scoreSaved = flag; }
+
+    /**
+     * @return the state of the flag
+     */
+    public boolean getScoreSaved() { return this.scoreSaved; }
+
+
 
     public void reset() {
         players.forEach(Player::resetPosition);

@@ -2,6 +2,8 @@ package ch.IP12.fish;
 
 import ch.IP12.fish.model.World;
 import ch.IP12.fish.model.animations.Spritesheets;
+import ch.IP12.fish.scoreBoard.Scoreboard;
+import ch.IP12.fish.scoreBoard.ScoreboardEnitity;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -14,6 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class View {
     private final GraphicsContext graphicsContext;
     private final Font font = Font.loadFont(getClass().getResourceAsStream("/fonts/MinecraftRegular-Bmg3.otf"), 12);
+    private final Font fontHighscore = Font.loadFont(getClass().getResourceAsStream("/fonts/MinecraftRegular-Bmg3.otf"), 20);
     private final World world;
     private double frontLayerShift = 0.0;
     private double middleLayerShift = 0.0;
@@ -59,7 +62,7 @@ public class View {
             case Running -> running();
             case PreEndAnimation -> running();
             case End -> end();
-            case HighScore -> highscore();
+            case HighScore -> highScore();
         }
     }
 
@@ -111,8 +114,34 @@ public class View {
         world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
     }
 
-    private void highscore() {
+    private void highScore() {
+        graphicsContext.setFill(Color.YELLOW);
+        graphicsContext.setFont(fontHighscore);
 
+        graphicsContext.fillText("Dein erzielter Score: " + world.getScoreWithoutDecimals(),
+            world.getWidth() / 2f,
+            world.getHeight() / 2f - 60); // z. B. über den Highscore-Einträgen
+
+        graphicsContext.setFill(Color.BLACK);
+
+        try {
+            Scoreboard scoreboard = Scoreboard.getInstance();
+            ScoreboardEnitity[] highScores = scoreboard.getList();
+
+            double startX = world.getWidth() / 2f;
+            double startY = world.getHeight() / 2f;
+            float lineSpacing = 30f;
+
+            for (int i = 0; i < highScores.length; i++) {
+                ScoreboardEnitity entry = highScores[i];
+                String text = (i + 1) + ".  " + entry.getName() + ":  " + entry.getScore();
+                graphicsContext.fillText(text, startX, startY + i * lineSpacing);
+            }
+        } catch (Exception e) {
+            graphicsContext.fillText("Fehler beim Laden des Highscores", world.getWidth() / 2f, world.getHeight() / 2f);
+            e.printStackTrace();
+        }
+        graphicsContext.setFont(font);
     }
 
     private void drawBackground(Image image, double layerShift) {

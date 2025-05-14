@@ -13,4 +13,12 @@ public class ScoreboardEnitity {
         this.score = score;
         this.name = name;
     }
+
+    public long getScore() {
+        return score;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

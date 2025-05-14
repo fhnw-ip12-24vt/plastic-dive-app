@@ -9,6 +9,7 @@ public class Scoreboard {
     //scoreboard list of scores and when
     private final Map<String, Long> scoreboard = new TreeMap<>();
     private static Scoreboard instance = null;
+    private static String fileName = "Highscore.json";
 
     private Scoreboard(){
         try{
@@ -51,11 +52,11 @@ public class Scoreboard {
         ArrayList<ScoreboardEnitity> list = new ArrayList<>();
         for (String i : scoreboard.keySet()){
             StringBuilder temp = new StringBuilder(i);
-            while (temp.length() < 10){
+            while (temp.length() < 30){
                 temp.append(" ");
             }
-            if (temp.length() > 10){
-                temp = new StringBuilder(temp.substring(0, 10));
+            if (temp.length() > 30){
+                temp = new StringBuilder(temp.substring(0, 30));
             }
             list.add(new ScoreboardEnitity(scoreboard.get(i), temp.toString()));
         }
@@ -70,7 +71,7 @@ public class Scoreboard {
      * @throws IOException File interaction warrants possible errors.
      */
     public void insertValues() throws IOException {
-        DataDealer d = DataDealer.getInstance("Highscore.json");
+        DataDealer d = DataDealer.getInstance(fileName);
         scoreboard.clear();
         scoreboard.putAll(d.getValues());
     }

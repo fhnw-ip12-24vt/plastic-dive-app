@@ -2,10 +2,14 @@ package ch.IP12.fish;
 
 import ch.IP12.fish.components.BarcodeScanner;
 import ch.IP12.fish.model.*;
+import ch.IP12.fish.scoreBoard.DataDealer;
 import ch.IP12.fish.utils.Difficulty;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -83,7 +87,7 @@ public class Controller {
             case Running -> running();
             case PreEndAnimation -> preEndAnimation();
             case End -> end();
-            case HighScore -> highscore();
+            case HighScore -> highScore();
         }
     }
 
@@ -144,7 +148,7 @@ public class Controller {
 
         //Score increments after not being hit for 5 seconds. This increment increases with more time passed while not hit.
         if (world.currentTimeSeconds() > lastHitTime + 5)
-            world.incrementScore((float) (1 * deltaTime * (1 + ((world.currentTimeSeconds()) - lastHitTime))));
+            world.incrementScore((long) (1 * deltaTime * (1 + ((world.currentTimeSeconds()) - lastHitTime))));
 
 
         if (world.isObstaclesEmpty())
@@ -158,11 +162,29 @@ public class Controller {
     }
 
     private void end() {
+        // Score nur beim ersten Aufruf speichern
+        if (!world.getScoreSaved()) {
+            try {
+                Player player = world.getPlayers().get(0); // oder entsprechende Auswahl
+                DataDealer dealer = DataDealer.getInstance("Highscore.json");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                String timestamp = LocalDateTime.now().format(formatter);
+
+                dealer.dataStore("Datum: " + timestamp, world.getScore());
+                world.setScoreSaved(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         world.getPlayers().forEach(Player::moveRight);
         phaseChange(10, this::reset);
     }
 
-    private void highscore() {
+    private void highScore() {
+        if(world.getScoreSaved()){
+            world.setScoreSaved(false);
+        }
         phaseChange(10, () -> {
         });
     }

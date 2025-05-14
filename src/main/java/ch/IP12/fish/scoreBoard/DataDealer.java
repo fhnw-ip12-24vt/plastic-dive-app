@@ -73,6 +73,12 @@ public class DataDealer {
             //add existing entries to JSON Array and write into file as new JSON object
             jsonA.addAll((JSONArray) JSONFileParser().get("Highscores"));
             jsonA.add(json);
+            //sorts from highest to lowest
+            jsonA.sort((o1, o2) -> {
+                long score1 = (long) ((JSONObject) o1).get("Score");
+                long score2 = (long) ((JSONObject) o2).get("Score");
+                return Long.compare(score2, score1);
+            });
             //shorten the list of objects to be the specified length.
             while (jsonA.size() > sizeLimit){
                 jsonA.removeLast();
