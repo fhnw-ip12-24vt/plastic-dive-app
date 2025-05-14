@@ -47,8 +47,8 @@ public class App extends Application {
         World world = new World(pi4j);
 
         //load config and text (in selected language) into world object
-        //Config ignored1 = new Config("config", world);
-        //LanguageLoader ignored2 = new LanguageLoader(world);
+        Config ignored1 = new Config("config", world);
+        LanguageLoader ignored2 = new LanguageLoader(world);
         logger.log("Loaded configs and language pack");
 
         //base settings for stage applied
