@@ -1,8 +1,10 @@
-package ch.IP12.fish.model;
+package ch.IP12.fish.model.obstacles;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import ch.IP12.fish.model.Player;
+import ch.IP12.fish.model.World;
 import ch.IP12.fish.testUtils.WatchTests;
 import org.junit.jupiter.api.*;
 

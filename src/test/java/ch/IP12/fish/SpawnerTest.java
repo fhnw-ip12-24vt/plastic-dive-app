@@ -1,7 +1,7 @@
 package ch.IP12.fish;
 
-import ch.IP12.fish.model.Obstacle;
-import ch.IP12.fish.model.SinObstacle;
+import ch.IP12.fish.model.obstacles.Obstacle;
+import ch.IP12.fish.model.obstacles.SinObstacle;
 import ch.IP12.fish.model.World;
 import ch.IP12.fish.testUtils.WatchTests;
 import com.pi4j.Pi4J;
@@ -9,7 +9,6 @@ import com.pi4j.context.Context;
 import javafx.application.Platform;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

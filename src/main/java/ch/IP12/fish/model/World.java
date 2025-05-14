@@ -4,6 +4,7 @@ import ch.IP12.fish.Spawner;
 import ch.IP12.fish.components.Ads1115;
 import ch.IP12.fish.components.JoystickAnalog;
 import ch.IP12.fish.model.animations.Spritesheets;
+import ch.IP12.fish.model.obstacles.Obstacle;
 import ch.IP12.fish.utils.Difficulty;
 import ch.IP12.fish.utils.GamePhase;
 import com.pi4j.context.Context;

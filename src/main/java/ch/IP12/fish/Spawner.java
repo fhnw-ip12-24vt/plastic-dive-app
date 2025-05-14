@@ -2,6 +2,7 @@ package ch.IP12.fish;
 
 import ch.IP12.fish.model.*;
 import ch.IP12.fish.model.animations.Spritesheets;
+import ch.IP12.fish.model.obstacles.*;
 
 import java.util.*;
 

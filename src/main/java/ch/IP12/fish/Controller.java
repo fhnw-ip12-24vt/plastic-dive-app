@@ -2,6 +2,7 @@ package ch.IP12.fish;
 
 import ch.IP12.fish.components.BarcodeScanner;
 import ch.IP12.fish.model.*;
+import ch.IP12.fish.model.obstacles.Obstacle;
 import ch.IP12.fish.utils.Difficulty;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -9,7 +10,6 @@ import javafx.scene.input.KeyCode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
