@@ -71,8 +71,7 @@ public class Controller {
      * Reset game state to same state as just before a round
      */
     public void reset() {
-        world.getPlayers().forEach(Player::resetPosition);
-        world.clearObstacles();
+        world.reset();
         barcodeScanner.startListening();
     }
 
