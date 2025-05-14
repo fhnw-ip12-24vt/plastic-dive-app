@@ -9,6 +9,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class View {
     private final GraphicsContext graphicsContext;
     private final Font font = Font.loadFont(getClass().getResourceAsStream("/fonts/MinecraftRegular-Bmg3.otf"), 12);
@@ -95,9 +97,11 @@ public class View {
         middleLayerShift -= 5;
         frontLayerShift -= 7;
         graphicsContext.setFill(Color.BLACK);
-        graphicsContext.fillText("Score: " + world.getScore(), 10, 30);
+        graphicsContext.fillText("Score: " + world.getScoreWithoutDecimals(), 10, 30);
 
-        world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
+        world.getPlayers().forEach(player -> {
+            player.drawAnimation(graphicsContext);
+        });
 
         graphicsContext.setFill(Color.SEAGREEN);
         world.getObstacles().forEach(obstacle -> obstacle.drawAnimation(graphicsContext));

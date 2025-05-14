@@ -49,7 +49,6 @@ public class Spawner {
             throw new IllegalArgumentException("No factory registered for " + obstacleClass.getName());
         }
         Obstacle obstacleBase = new Obstacle(rand.nextDouble((int)world.getWidth()), speed, Spritesheets.getRandomAnimation(), world);
-        System.out.println(obstacleClass.getName());
         return obstacleClass.cast(factory.create(obstacleBase, params));
     }
 

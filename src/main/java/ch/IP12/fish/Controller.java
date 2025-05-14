@@ -27,6 +27,7 @@ public class Controller {
 
     /**
      * General logic controller for the Game
+     *
      * @param world DTO (Data Transfer Object)
      * @param scene Scene to listen for inputs on
      */
@@ -116,7 +117,7 @@ public class Controller {
 
         world.getPlayers().forEach(player -> player.update(deltaTime));
 
-        for (int i = world.getObstacles().size() -1; i >= 0; i--) {
+        for (int i = world.getObstacles().size() - 1; i >= 0; i--) {
             Obstacle obstacle = world.getObstacles().get(i);
             //Obstacle updates
             obstacle.update(deltaTime);
@@ -142,9 +143,9 @@ public class Controller {
         world.removeObstacle(deletionList);
         deletionList.clear();
 
-        //Score increments after not being hit for 5 seconds and increases up until 25
+        //Score increments after not being hit for 5 seconds. This increment increases with more time passed while not hit.
         if (world.currentTimeSeconds() > lastHitTime + 5)
-            world.incrementScore(Math.min((int) (1 * deltaTime * (1 + ((world.currentTimeSeconds()) - lastHitTime) / 15)), 25));
+            world.incrementScore((float) (1 * deltaTime * (1 + ((world.currentTimeSeconds()) - lastHitTime))));
 
 
         if (world.isObstaclesEmpty())
@@ -153,7 +154,8 @@ public class Controller {
     }
 
     void preEndAnimation() {
-        phaseChange(0, () -> {});
+        phaseChange(0, () -> {
+        });
     }
 
     private void end() {
@@ -162,7 +164,8 @@ public class Controller {
     }
 
     private void highscore() {
-        phaseChange(10, () -> {});
+        phaseChange(10, () -> {
+        });
     }
 
     private void phaseChange(int timeInPhase, Runnable action) {

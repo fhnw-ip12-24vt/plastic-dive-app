@@ -25,7 +25,6 @@ public abstract class Moveable {
 
     //path to animation images
     private final SpriteAnimation animation;
-
     /**
      * @param x x-axis postion to spawn object at
      * @param y y-axis position to spawn object at

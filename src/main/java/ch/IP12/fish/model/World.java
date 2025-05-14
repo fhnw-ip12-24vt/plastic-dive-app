@@ -25,7 +25,7 @@ public class World {
     private final List<Player> players;
 
     private GamePhase gamePhase = GamePhase.Start;
-    private int score;
+    private float score;
     private Difficulty difficulty;
     private double clock;
     private Font font;
@@ -44,12 +44,12 @@ public class World {
         Ads1115 ads1115 = new Ads1115(pi4j);
 
         JoystickAnalog joystick1 = new JoystickAnalog(ads1115, Ads1115.Channel.A0, Ads1115.Channel.A1);
-        //JoystickAnalog joystick2 = new JoystickAnalog(ads1115, Ads1115.Channel.A2, Ads1115.Channel.A3);
+        JoystickAnalog joystick2 = new JoystickAnalog(ads1115, Ads1115.Channel.A2, Ads1115.Channel.A3);
 
-        Player player1 = new Player(0, width / 2.0, 3, Spritesheets.Player.getSpriteAnimation(), joystick1, this);
-        // Player player2 = new Player(0, HEIGHT / 1.5, 3, WIDTH, HEIGHT, Spritesheets.Player, joystick2, this);
+        Player player1 = new Player(0, height / 2.0 + 100, 3, Spritesheets.Player.getSpriteAnimation(), joystick1, this);
+        Player player2 = new Player(0, height / 2.0 - 100, 3, Spritesheets.Player.getSpriteAnimation(), joystick2, this);
 
-        players = List.of(player1);
+        players = List.of(player1,player2);
 
         obstacles = Collections.synchronizedList(new ArrayList<>());
 
@@ -153,14 +153,20 @@ public class World {
     /**
      * @return Current shared score of all players
      */
-    public int getScore() {
+    public float getScore() {
         return score;
     }
 
     /**
+     * @return Current shared score of all players without decimals. This is what we need for displaying score;
+     */
+    public int getScoreWithoutDecimals() {
+        return (int)score;
+    }
+    /**
      * @param amount Increases shared score by this amount
      */
-    public void incrementScore(int amount) {
+    public void incrementScore(float amount) {
         score += amount;
     }
 
