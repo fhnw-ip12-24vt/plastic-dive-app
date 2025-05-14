@@ -4,9 +4,9 @@ import ch.IP12.fish.model.World;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
 import java.util.*;
 
 /**
@@ -23,10 +23,22 @@ public class LanguageLoader {
 
     {
         try {
-            elementsPath = Path.of(this.getClass().getResource("/languages/.elements").toURI()).toAbsolutePath();
-            defaultLanguagePackPath = Path.of(this.getClass().getResource("/languages/en").toURI()).toAbsolutePath();
+            //create URI to language packs
+            URI elementsUri = this.getClass().getResource("/languages/.elements").toURI();
+            URI configUri = this.getClass().getResource("/languages/en").toURI();
+
+            if ("jar".equals(elementsUri.getScheme())) {
+                // Use filesystem for interpreting Jar URIs
+                FileSystem fs = FileSystems.getFileSystem(elementsUri);
+                elementsPath = fs.getPath("/defaultConfig/.elements");
+                defaultLanguagePackPath = fs.getPath("/defaultConfig/config");
+            } else {
+                //use default filesystem (necessary for running from IDE)
+                elementsPath = Path.of(elementsUri);
+                defaultLanguagePackPath = Path.of(configUri);
+            }
         } catch (URISyntaxException | NullPointerException e) {
-            logger.logError("Could not translate internal language pack information location");
+            logger.logError("Could not translate default config information location");
             throw new RuntimeException(e);
         }
     }

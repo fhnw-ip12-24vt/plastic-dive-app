@@ -15,6 +15,12 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+
 public class App extends Application {
     Context pi4j;
 
@@ -82,12 +88,25 @@ public class App extends Application {
         stage.setOnCloseRequest(event -> {
             controller.stopGameLogic();
             pi4j.shutdown();
+
+            //Close filesystem for interpreting files stored inside the jar file when program closes
+            try {
+                URI uri = this.getClass().getResource("/fonts/MinecraftRegular-Bmg3.otf").toURI();
+
+                if (uri.getScheme().equals("jar")) {
+                    FileSystem fileSystem = FileSystems.getFileSystem(uri);
+                    fileSystem.close();
+                }
+            } catch (IOException | URISyntaxException ignore) {
+            }
+
             logger.log("Program Shutdown");
             logger.end();
         });
     }
 
     private void setupStage(Stage stage) {
+        //default stage settings
         stage.setResizable(false);
         stage.setFullScreenExitHint("");
         stage.setFullScreen(true);
@@ -95,6 +114,7 @@ public class App extends Application {
     }
 
     private Canvas setupCanvas(World world) {
+        //load Graphics context and canvas
         Canvas canvas = new Canvas(world.getWidth(), world.getHeight());
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
         graphicsContext.setImageSmoothing(false);
@@ -106,6 +126,7 @@ public class App extends Application {
     }
 
     private Scene createScene(Canvas canvas) {
+        //create visible scene that is displayed to user
         StackPane root = new StackPane(canvas);
         Scene scene = new Scene(root);
         scene.setCursor(Cursor.NONE);
