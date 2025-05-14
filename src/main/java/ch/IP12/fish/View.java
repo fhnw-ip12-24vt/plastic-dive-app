@@ -114,9 +114,9 @@ public class View {
 
         //Draw score text in top left corner
         graphicsContext.setFont(scoreFont);
-        Text text = new Text(""+world.getScoreWithoutDecimals());
+        Text text = new Text(""+world.getScore());
         text.setFont(scoreFont);
-        graphicsContext.fillText(""+world.getScoreWithoutDecimals(), world.getWidth() -5 -text.getLayoutBounds().getWidth(), 25);
+        graphicsContext.fillText(""+world.getScore(), world.getWidth() -5 -text.getLayoutBounds().getWidth(), 25);
 
         //draw each player
         world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
@@ -138,14 +138,15 @@ public class View {
         graphicsContext.setFill(Color.YELLOW);
         graphicsContext.setFont(fontHighscore);
 
-        graphicsContext.fillText("Dein erzielter Score: " + world.getScoreWithoutDecimals(),
+        graphicsContext.fillText("Dein erzielter Score: " + world.getScore(),
             world.getWidth() / 2f,
-            world.getHeight() / 2f - 60); // z. B. über den Highscore-Einträgen
+            world.getHeight() / 2f - 60);
 
         graphicsContext.setFill(Color.BLACK);
 
         try {
             Scoreboard scoreboard = Scoreboard.getInstance();
+            scoreboard.insertValues();
             ScoreboardEnitity[] highScores = scoreboard.getList();
 
             double startX = world.getWidth() / 2f;

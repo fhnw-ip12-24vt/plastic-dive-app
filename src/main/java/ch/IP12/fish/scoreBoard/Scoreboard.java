@@ -9,7 +9,6 @@ public class Scoreboard {
     //scoreboard list of scores and when
     private final Map<String, Long> scoreboard = new TreeMap<>();
     private static Scoreboard instance = null;
-    private static String fileName = "Highscore.json";
 
     private Scoreboard(){
         try{
@@ -71,6 +70,7 @@ public class Scoreboard {
      * @throws IOException File interaction warrants possible errors.
      */
     public void insertValues() throws IOException {
+        String fileName = "Highscore.json";
         DataDealer d = DataDealer.getInstance(fileName);
         scoreboard.clear();
         scoreboard.putAll(d.getValues());

@@ -3,6 +3,7 @@ package ch.IP12.fish;
 import ch.IP12.fish.components.BarcodeScanner;
 import ch.IP12.fish.model.*;
 import ch.IP12.fish.scoreBoard.DataDealer;
+import ch.IP12.fish.scoreBoard.Scoreboard;
 import ch.IP12.fish.utils.Difficulty;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -170,7 +171,9 @@ public class Controller {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 String timestamp = LocalDateTime.now().format(formatter);
 
+                //json file updated with new possible entry and sorted
                 dealer.dataStore("Datum: " + timestamp, world.getScore());
+                //Scoreboard.getInstance().insertValues();
                 world.setScoreSaved(true);
             } catch (IOException e) {
                 e.printStackTrace();
