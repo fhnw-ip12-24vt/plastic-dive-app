@@ -11,13 +11,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class View {
     private final GraphicsContext graphicsContext;
     private final Font font = Font.loadFont(getClass().getResourceAsStream("/fonts/MinecraftRegular-Bmg3.otf"), 12);
     private final Font fontHighscore = Font.loadFont(getClass().getResourceAsStream("/fonts/MinecraftRegular-Bmg3.otf"), 20);
     private final World world;
+    private final Font scoreFont;
     private double frontLayerShift = 0.0;
     private double middleLayerShift = 0.0;
     private double backLayerShift = 0.0;
@@ -30,8 +29,9 @@ public class View {
     View(GraphicsContext graphicsContext, World world) {
         this.graphicsContext = graphicsContext;
         this.world = world;
+        scoreFont = new Font(world.getFont().getName(), 32);
 
-        graphicsContext.setFont(font);
+        graphicsContext.setFont(world.getFont());
     }
 
     /**
@@ -69,17 +69,28 @@ public class View {
 
     private void start() {
         graphicsContext.setFill(Color.BLACK);
+
+        //Write starting text
+        graphicsContext.setFont(world.getFont());
         graphicsContext.fillText("Scan one of the Barcodes in front of you", world.getWidth() / 2f, world.getHeight() / 2f);
+
+        //initial scalar values set
         frontLayerShift = middleLayerShift = backLayerShift = 0;
         layerShiftScalar = 0.2;
     }
 
     private void startingAnimation() {
+        //draw player animation in the beginning
         world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
+
         graphicsContext.setFill(Color.BLACK);
+
+        //Write main information text during animation
         Text text = new Text(world.getDifficulty().text);
         text.setFont(world.getFont());
         graphicsContext.fillText(world.getDifficulty().text, ((world.getWidth() - text.getLayoutBounds().getWidth()) / 2f) + frontLayerShift, world.getHeight() / 3f);
+
+        //Timings for start animation
         if (world.getDeltaClock() > 9.9) {
             return;
         } else if (world.getDeltaClock() > 9) {
@@ -93,24 +104,33 @@ public class View {
             middleLayerShift += 5 * layerShiftScalar;
             frontLayerShift += 7 * layerShiftScalar;
         }
-
     }
 
     private void running() {
+        //shift background to left
         middleLayerShift -= 5;
         frontLayerShift -= 7;
         graphicsContext.setFill(Color.BLACK);
-        graphicsContext.fillText("Score: " + world.getScoreWithoutDecimals(), 10, 30);
 
-        world.getPlayers().forEach(player -> {
-            player.drawAnimation(graphicsContext);
-        });
+        //Draw score text in top left corner
+        graphicsContext.setFont(scoreFont);
+        Text text = new Text(""+world.getScoreWithoutDecimals());
+        text.setFont(scoreFont);
+        graphicsContext.fillText(""+world.getScoreWithoutDecimals(), world.getWidth() -5 -text.getLayoutBounds().getWidth(), 25);
 
+        //draw each player
+        world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
+
+        //draw all obstacles
         graphicsContext.setFill(Color.SEAGREEN);
         world.getObstacles().forEach(obstacle -> obstacle.drawAnimation(graphicsContext));
     }
 
     private void end() {
+        //reset font to default
+        graphicsContext.setFont(world.getFont());
+
+        //draw player
         world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
     }
 

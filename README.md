@@ -13,7 +13,7 @@ Well add some pictures of the done game
 For the Project you need java 21 and apache-maven 3.9.9
 
 ````shell
-mvn clean install package
+mvn clean package
 ````
 
 To run on Pi you need to first chose the profile **Run on Pi** and change the ip address on line 34 of the [pom.xml](./pom.xml). and then run the code

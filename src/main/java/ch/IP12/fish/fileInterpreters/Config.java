@@ -4,9 +4,9 @@ import ch.IP12.fish.model.World;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
 import java.util.*;
 
 import static java.nio.file.StandardOpenOption.WRITE;
@@ -25,9 +25,21 @@ public class Config {
 
     {
         try {
-            elementsPath = Path.of(this.getClass().getResource("/defaultConfig/.elements").toURI());
-            defaultConfigPath = Path.of(this.getClass().getResource("/defaultConfig/config").toURI());
-        } catch (URISyntaxException | NullPointerException e) {
+            //Create URI default config
+            URI elementsUri = this.getClass().getResource("/defaultConfig/.elements").toURI();
+            URI configUri = this.getClass().getResource("/defaultConfig/config").toURI();
+
+            if ("jar".equals(elementsUri.getScheme())) {
+                // Open the JAR filesystem if it's not already opened
+                FileSystem fs = FileSystems.newFileSystem(elementsUri, Map.of());
+                elementsPath = fs.getPath("/defaultConfig/.elements");
+                defaultConfigPath = fs.getPath("/defaultConfig/config");
+            } else {
+                // Running from file system (e.g., in IDE or unpacked build)
+                elementsPath = Path.of(elementsUri);
+                defaultConfigPath = Path.of(configUri);
+            }
+        } catch (URISyntaxException | NullPointerException | IOException e) {
             logger.logError("Could not translate default config information location");
             throw new RuntimeException(e);
         }
