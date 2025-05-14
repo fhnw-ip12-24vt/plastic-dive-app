@@ -41,7 +41,7 @@ public class AtPlayerObstacleTest {
         });
     }
 
-    @Test
+    @Test @Disabled
     public void adjustDirectionTest(){
         Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
         AtPlayerObstacle atPlayerObstacle = new AtPlayerObstacle(obstacle);

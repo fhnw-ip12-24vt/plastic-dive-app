@@ -1,0 +1,94 @@
+[INIT] Starting tests
+
+[INIT] Starting Tests from: BarcodeScannerTest
+[SUCCESS] Test Successful: testInstantiation
+[SUCCESS] Test Successful: testInvalidBarcodeScan
+[SUCCESS] Test Successful: testBarcodeScan
+[AFTER] Finishing Tests from: BarcodeScannerTest
+
+[INIT] Starting Tests from: ConfigTest
+[SUCCESS] Test Successful: testInstantiationOfConfigWhenFileDoesNotExists
+[SUCCESS] Test Successful: testCallOfConfigWhenFileExists
+[SUCCESS] Test Successful: testValueStorageOfConfig
+[AFTER] Finishing Tests from: ConfigTest
+
+[INIT] Starting Tests from: LanguageLoaderTest
+[SUCCESS] Test Successful: testInstantiationOfLanguagePack
+[SUCCESS] Test Successful: testValueStorageOfConfig
+[AFTER] Finishing Tests from: LanguageLoaderTest
+
+[INIT] Starting Tests from: SpriteAnimationTest
+[SUCCESS] Test Successful: interpolationInvalidValueTest
+[SUCCESS] Test Successful: interpolationTest
+[SUCCESS] Test Successful: instantiationTest
+[SUCCESS] Test Successful: getWidthTest
+[SUCCESS] Test Successful: getHeightTest
+[SUCCESS] Test Successful: getImageviewTest
+[AFTER] Finishing Tests from: SpriteAnimationTest
+
+[INIT] Starting Tests from: SpritesheetTest
+[SUCCESS] Test Successful: getSpriteAnimationTest
+[SUCCESS] Test Successful: animationUniquenessTest
+[AFTER] Finishing Tests from: SpritesheetTest
+
+[INIT] Starting Tests from: AtPlayerObstacleTest
+[DISABLED] Test Disabled: adjustDirectionTest - Reason: public void ch.IP12.fish.model.AtPlayerObstacleTest.adjustDirectionTest() is @Disabled
+[SUCCESS] Test Successful: instanciateObstacle
+[AFTER] Finishing Tests from: AtPlayerObstacleTest
+
+[INIT] Starting Tests from: BounceObstacleTest
+[SUCCESS] Test Successful: adjustDirectionTest
+[SUCCESS] Test Successful: instanciateObstacle
+[AFTER] Finishing Tests from: BounceObstacleTest
+
+[INIT] Starting Tests from: ForkObstacleTest
+[SUCCESS] Test Successful: adjustDirectionTest
+[SUCCESS] Test Successful: instanciateObstacle
+[AFTER] Finishing Tests from: ForkObstacleTest
+
+[INIT] Starting Tests from: ObstacleTest
+[SUCCESS] Test Successful: instanciateObstacleWithCopyConstructor
+[SUCCESS] Test Successful: drawAnimationTest
+[SUCCESS] Test Successful: checkOutOfBounds
+[SUCCESS] Test Successful: updateTest
+[SUCCESS] Test Successful: instanciateObstacle
+[AFTER] Finishing Tests from: ObstacleTest
+
+[INIT] Starting Tests from: PlayerTest
+[SUCCESS] Test Successful: movePlayer
+[SUCCESS] Test Successful: instanciatePlayer
+[SUCCESS] Test Successful: getterSetterTest
+[SUCCESS] Test Successful: getterReturnsCorrectValueAfterInstantiation
+[AFTER] Finishing Tests from: PlayerTest
+
+[INIT] Starting Tests from: SinObstacleTest
+[SUCCESS] Test Successful: adjustDirectionTest
+[SUCCESS] Test Successful: instanciateObstacle
+[AFTER] Finishing Tests from: SinObstacleTest
+
+[INIT] Starting Tests from: SpawnerTest
+[SUCCESS] Test Successful: spawnRandomObstacleTest
+[SUCCESS] Test Successful: createTest
+[SUCCESS] Test Successful: spawnerInstantiationTest
+[AFTER] Finishing Tests from: SpawnerTest
+
+[INIT] Starting Tests from: DifficultyTest
+[SUCCESS] Test Successful: testGetDifficulty
+[SUCCESS] Test Successful: testDifficulty
+[AFTER] Finishing Tests from: DifficultyTest
+
+[CLOSE] All tests finished
+[CLOSE] Final report:
+  ObstacleTest: 0 failures
+  SpriteAnimationTest: 0 failures
+  SpawnerTest: 0 failures
+  DifficultyTest: 0 failures
+  BarcodeScannerTest: 0 failures
+  ForkObstacleTest: 0 failures
+  LanguageLoaderTest: 0 failures
+  SpritesheetTest: 0 failures
+  AtPlayerObstacleTest: 0 failures
+  BounceObstacleTest: 0 failures
+  ConfigTest: 0 failures
+  PlayerTest: 0 failures
+  SinObstacleTest: 0 failures
