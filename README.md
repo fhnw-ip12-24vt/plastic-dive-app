@@ -1,8 +1,5 @@
 # Überdüngung
 
-
-
-
 ## Description
 This game is a game that if not teach, notify children and young teens about how washing and throwing away clothing ends up putting micro plastics into the water
 
@@ -30,7 +27,16 @@ Careful you have to be on the same internet.
 To make it auto start when the pie boots you have to write a script that start the game on startup or use ours: [startGame.sh](./) and put it in a place that your linux version uses for startup scripts.
 Careful you might need to change the path.
 
-## Future development
+## Libraries
+### JavaFX
+We use JavaFX for our visual mainly canvas and graphics contexts. Please consult the [javaFX documentation](https://www.oracle.com/java/technologies/javase/javafx-docs.html) for more information.
+### JUnit
+We use JUnit for testing. Please consult the [JUnit documentation](https://junit.org/junit5/docs/current/user-guide/) for more information.
+### Pi4J
+Pi4J is the Library we use to interface the pie. Please consult the [Pi4J documentation](https://www.pi4j.com/) for  more information.
+Especially in case of any hardware problems or new implementations. There are example implementation including wiring on their website. Example: [A Simple LED](https://www.pi4j.com/examples/components/simpleled/)
+
+## Code
 I explain some of our classes and design patterns here. For more details and reasoning consult the documentation on the SAD.
 
 This well update once most of the code is final well split it up in how the code works so mvc.
