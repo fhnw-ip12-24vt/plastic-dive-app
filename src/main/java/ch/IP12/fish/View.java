@@ -23,8 +23,10 @@ public class View {
     private final Image frontLayer = new Image("backgroundLayers/frontLayer.png");
     private final Image middleLayer = new Image("backgroundLayers/middleLayer.png");
     private final Image backLayer = new Image("backgroundLayers/middleLayer.png");
+    private final Image scannerImage = new Image("backgroundLayers/barCodeScanner.png");
     private double backgroundScalar = 3.5;
     private double layerShiftScalar = 0.2;
+    private double upAndDownBobing = 0;
 
     View(GraphicsContext graphicsContext, World world) {
         this.graphicsContext = graphicsContext;
@@ -56,6 +58,8 @@ public class View {
 
         resetLayerShift();
 
+        if (upAndDownBobing <= 100) upAndDownBobing = 100;
+
         switch (world.getGamePhase()) {
             case Start -> start();
             case StartingAnimation -> startingAnimation();
@@ -68,12 +72,14 @@ public class View {
 
 
     private void start() {
+        upAndDownBobing += 0.1;
+        //drawing starting image
+        graphicsContext.drawImage(scannerImage, world.getWidth() / 2 - scannerImage.getWidth() * 1.5, world.getHeight() / 2 - scannerImage.getHeight() * 1.5 + Math.sin(upAndDownBobing) * 5 - 100, scannerImage.getWidth() * 3, scannerImage.getHeight() * 3);
+        Text text = new Text("SCANNEN SIE DEN BARCODE AUF EINER KLEIDUNG");
+        text.setFont(scoreFont);
         graphicsContext.setFill(Color.BLACK);
-
-        //Write starting text
-        graphicsContext.setFont(world.getFont());
-        graphicsContext.fillText("Scan one of the Barcodes in front of you", world.getWidth() / 2f, world.getHeight() / 2f);
-
+        graphicsContext.setFont(scoreFont);
+        graphicsContext.fillText(text.getText(), world.getWidth() / 2 - text.getLayoutBounds().getWidth() / 2, world.getHeight() / 2 + scannerImage.getHeight() * 1.5);
         //initial scalar values set
         frontLayerShift = middleLayerShift = backLayerShift = 0;
         layerShiftScalar = 0.2;
@@ -82,13 +88,13 @@ public class View {
     private void startingAnimation() {
         //draw player animation in the beginning
         world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
-
+        Text text = new Text("DAS WASCHEN FÜHRT ZU MIKTOPLASTIK IM WASSER");
+        text.setFont(scoreFont);
         graphicsContext.setFill(Color.BLACK);
+        graphicsContext.setFont(scoreFont);
+        graphicsContext.fillText(text.getText(), world.getWidth() / 2 - text.getLayoutBounds().getWidth() / 2, world.getHeight() / 2 + scannerImage.getHeight() * 1.5);
 
-        //Write main information text during animation
-        Text text = new Text(world.getDifficulty().text);
-        text.setFont(world.getFont());
-        graphicsContext.fillText(world.getDifficulty().text, ((world.getWidth() - text.getLayoutBounds().getWidth()) / 2f) + frontLayerShift, world.getHeight() / 3f);
+        world.getDifficulty().drawAnimation(graphicsContext,world);
 
         //Timings for start animation
         if (world.getDeltaClock() > 9.9) {
@@ -114,9 +120,9 @@ public class View {
 
         //Draw score text in top left corner
         graphicsContext.setFont(scoreFont);
-        Text text = new Text(""+world.getScore());
+        Text text = new Text("" + world.getScoreWithoutDecimals());
         text.setFont(scoreFont);
-        graphicsContext.fillText(""+world.getScore(), world.getWidth() -5 -text.getLayoutBounds().getWidth(), 25);
+        graphicsContext.fillText("" + world.getScoreWithoutDecimals(), world.getWidth() - 5 - text.getLayoutBounds().getWidth(), 25);
 
         //draw each player
         world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));

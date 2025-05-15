@@ -3,7 +3,6 @@ package ch.IP12.fish;
 import ch.IP12.fish.components.BarcodeScanner;
 import ch.IP12.fish.model.*;
 import ch.IP12.fish.scoreBoard.DataDealer;
-import ch.IP12.fish.scoreBoard.Scoreboard;
 import ch.IP12.fish.model.obstacles.Obstacle;
 import ch.IP12.fish.utils.Difficulty;
 import javafx.scene.Scene;
@@ -18,15 +17,15 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Controller {
     private final World world;
     private final ScheduledExecutorService executor;
 
     private double deltaTimeClock = 0;
+    private double deltaTime = 0;
     private double lastHitTime = 0;
-    private final AtomicInteger gameTicks = new AtomicInteger(0);
+    private double gameTicks = 0;
 
     private final BarcodeScanner barcodeScanner;
 
@@ -61,7 +60,7 @@ public class Controller {
      */
     public void startGameLogic() {
         // Run the game logic at a fixed rate
-        executor.scheduleAtFixedRate(this::gameStep, 0, 16666666, TimeUnit.NANOSECONDS); // 16ms ≈ 60 updates per second
+        executor.scheduleAtFixedRate(this::gameStep, 0, 166666, TimeUnit.NANOSECONDS); // 16ms ≈ 60 updates per second
         barcodeScanner.startListening();
     }
 
@@ -82,6 +81,9 @@ public class Controller {
 
 
     private void gameStep() {
+        deltaTime = (System.currentTimeMillis() - deltaTimeClock) / 1000; // Approx. 60 FPS
+        deltaTimeClock = System.currentTimeMillis();
+        gameTicks += deltaTime;
         switch (world.getGamePhase()) {
             case Start -> start();
             case StartingAnimation -> startingAnimation();
@@ -104,19 +106,17 @@ public class Controller {
             world.getPlayers().forEach(Player::startJoystick);
             world.resetClock();
         } else if (world.getDeltaClock() > 9.5) {
-            world.getPlayers().forEach(Player::moveRight);
+            world.getPlayers().forEach(player -> player.moveRight(deltaTime));
         }
     }
 
     private void running() {
-        double deltaTime = (System.currentTimeMillis() - deltaTimeClock) / 1000; // Approx. 60 FPS
-        deltaTimeClock = System.currentTimeMillis();
-        final List<Obstacle> deletionList = Collections.synchronizedList(new ArrayList<>());
-        gameTicks.getAndIncrement();
 
-        if (gameTicks.get() >= 75 && !(world.getDeltaClock() > 30)) {
+        final List<Obstacle> deletionList = Collections.synchronizedList(new ArrayList<>());
+
+        if (gameTicks >= 1 && !(world.getDeltaClock() > 30)) {
             world.getSpawner().spawnRandom();
-            gameTicks.set(0);
+            gameTicks = 0;
         }
 
         world.getPlayers().forEach(player -> player.update(deltaTime));
@@ -166,7 +166,6 @@ public class Controller {
         // Score nur beim ersten Aufruf speichern
         if (!world.getScoreSaved()) {
             try {
-                Player player = world.getPlayers().get(0); // oder entsprechende Auswahl
                 DataDealer dealer = DataDealer.getInstance("Highscore.json");
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 String timestamp = LocalDateTime.now().format(formatter);
@@ -180,7 +179,7 @@ public class Controller {
             }
         }
 
-        world.getPlayers().forEach(Player::moveRight);
+        world.getPlayers().forEach(player -> player.moveRight(deltaTime));
         phaseChange(10, this::reset);
     }
 

@@ -70,8 +70,8 @@ public class Player extends Moveable {
     /**
      * Moves player to the right by 15
      */
-    public void moveRight() {
-        setX(getX() + 15);
+    public void moveRight(double deltaTime) {
+        setX(getX() + (500*deltaTime));
     }
 
     /**
