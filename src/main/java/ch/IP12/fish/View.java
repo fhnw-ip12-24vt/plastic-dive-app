@@ -14,10 +14,8 @@ import javafx.scene.text.Text;
 
 public class View {
     private final GraphicsContext graphicsContext;
-    private final Font font = Font.loadFont(getClass().getResourceAsStream("/fonts/MinecraftRegular-Bmg3.otf"), 12);
-    private final Font fontHighscore = Font.loadFont(getClass().getResourceAsStream("/fonts/MinecraftRegular-Bmg3.otf"), 20);
+    private final Font fontHighscore;
     private final World world;
-    private final Font scoreFont;
     private double frontLayerShift = 0.0;
     private double middleLayerShift = 0.0;
     private double backLayerShift = 0.0;
@@ -32,9 +30,9 @@ public class View {
     View(GraphicsContext graphicsContext, World world) {
         this.graphicsContext = graphicsContext;
         this.world = world;
-        scoreFont = new Font(world.getFont().getName(), 32);
 
         graphicsContext.setFont(world.getFont());
+        fontHighscore = Font.loadFont(world.getFont().getName(), 20);
     }
 
     /**
@@ -77,9 +75,9 @@ public class View {
         //drawing starting image
         graphicsContext.drawImage(scannerImage, world.getWidth() / 2 - scannerImage.getWidth() * 1.5, world.getHeight() / 2 - scannerImage.getHeight() * 1.5 + Math.sin(upAndDownBobing) * 5 - 100, scannerImage.getWidth() * 3, scannerImage.getHeight() * 3);
         Text text = new Text(world.getTextMapValue("scanText"));
-        text.setFont(scoreFont);
+        text.setFont(world.getFont());
         graphicsContext.setFill(Color.BLACK);
-        graphicsContext.setFont(scoreFont);
+        graphicsContext.setFont(world.getFont());
         graphicsContext.fillText(text.getText(), world.getWidth() / 2 - text.getLayoutBounds().getWidth() / 2, world.getHeight() / 2 + scannerImage.getHeight() * 1.5);
         //initial scalar values set
         frontLayerShift = middleLayerShift = backLayerShift = 0;
@@ -90,9 +88,9 @@ public class View {
         //draw player animation in the beginning
         world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
         Text text = new Text(world.getTextMapValue("shirtInfoText"));
-        text.setFont(scoreFont);
+        text.setFont(world.getFont());
         graphicsContext.setFill(Color.BLACK);
-        graphicsContext.setFont(scoreFont);
+        graphicsContext.setFont(world.getFont());
         graphicsContext.fillText(text.getText(), world.getWidth() / 2 - text.getLayoutBounds().getWidth() / 2, world.getHeight() / 2 + scannerImage.getHeight() * 1.5);
 
         world.getDifficulty().drawAnimation(graphicsContext,world);
@@ -120,9 +118,9 @@ public class View {
         graphicsContext.setFill(Color.BLACK);
 
         //Draw score text in top left corner
-        graphicsContext.setFont(scoreFont);
+        graphicsContext.setFont(world.getFont());
         Text text = new Text("" + world.getScoreWithoutDecimals());
-        text.setFont(scoreFont);
+        text.setFont(world.getFont());
         graphicsContext.fillText("" + world.getScoreWithoutDecimals(), world.getWidth() - 5 - text.getLayoutBounds().getWidth(), 25);
 
         //draw each player
@@ -169,7 +167,7 @@ public class View {
             graphicsContext.fillText(world.getTextMapValue("highscoreLoadingErrorText"), world.getWidth() / 2f, world.getHeight() / 2f);
             Logger.getInstance().logError(e.getMessage(), world.getConfigValue("log").equals("detailed") ? e.getStackTrace(): null);
         }
-        graphicsContext.setFont(font);
+        graphicsContext.setFont(world.getFont());
     }
 
     private void drawBackground(Image image, double layerShift) {
