@@ -1,6 +1,7 @@
 package ch.IP12.fish;
 
 import ch.IP12.fish.components.BarcodeScanner;
+import ch.IP12.fish.fileInterpreters.Logger;
 import ch.IP12.fish.model.*;
 import ch.IP12.fish.scoreBoard.DataDealer;
 import ch.IP12.fish.model.obstacles.Obstacle;
@@ -22,6 +23,8 @@ public class Controller {
     private final World world;
     private final ScheduledExecutorService executor;
 
+    private final Logger logger = Logger.getInstance();
+
     private double deltaTimeClock = 0;
     private double deltaTime = 0;
     private double lastHitTime = 0;
@@ -42,8 +45,8 @@ public class Controller {
     }
 
     /**
-     * Creates Key listeners for movement logic.
-     *
+     * Creates Key listeners for debugging to skip phases.
+     * **MAY CREATE UNEXPECTED BEHAVIOUR**
      * @param scene The Scene object which will receive the listeners
      */
     void createGameKeyListeners(Scene scene) {
@@ -60,7 +63,7 @@ public class Controller {
      */
     public void startGameLogic() {
         // Run the game logic at a fixed rate
-        executor.scheduleAtFixedRate(this::gameStep, 0, 166666, TimeUnit.NANOSECONDS); // 16ms ≈ 60 updates per second
+        executor.scheduleAtFixedRate(this::gameStep, 0, 16666666, TimeUnit.NANOSECONDS); // 16ms ≈ 60 updates per second
         barcodeScanner.startListening();
     }
 
@@ -100,14 +103,14 @@ public class Controller {
     }
 
     private void startingAnimation() {
-        if (world.getDeltaClock() > 10) {
-            lastHitTime = world.currentTimeSeconds();
-            world.nextPhase();
-            world.getPlayers().forEach(Player::startJoystick);
-            world.resetClock();
-        } else if (world.getDeltaClock() > 9.5) {
+        if (world.getDeltaClock() > 9.5) {
             world.getPlayers().forEach(player -> player.moveRight(deltaTime));
         }
+
+        phaseChange(10, () -> {
+            lastHitTime = world.currentTimeSeconds();
+            world.getPlayers().forEach(Player::startJoystick);
+        });
     }
 
     private void running() {
@@ -158,8 +161,7 @@ public class Controller {
     }
 
     void preEndAnimation() {
-        phaseChange(0, () -> {
-        });
+        phaseChange(0);
     }
 
     private void end() {
@@ -171,23 +173,27 @@ public class Controller {
                 String timestamp = LocalDateTime.now().format(formatter);
 
                 //json file updated with new possible entry and sorted
-                dealer.dataStore("Datum: " + timestamp, world.getScore());
+                dealer.dataStore("Datum: " + timestamp, world.getScoreWithoutDecimals());
                 //Scoreboard.getInstance().insertValues();
                 world.setScoreSaved(true);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.logError(e.getMessage(), world.getConfigValue("log").equals("detailed") ? e.getStackTrace(): null);
+                System.out.println(e.getMessage());
             }
         }
 
         world.getPlayers().forEach(player -> player.moveRight(deltaTime));
-        phaseChange(10, this::reset);
+        phaseChange(10);
     }
 
     private void highScore() {
         if(world.getScoreSaved()){
             world.setScoreSaved(false);
         }
+
         phaseChange(10, () -> {
+            logger.log("Round finished, final score: " + world.getScoreWithoutDecimals());
+            reset();
         });
     }
 
@@ -198,5 +204,9 @@ public class Controller {
             world.resetClock();
             world.nextPhase();
         }
+    }
+
+    private void phaseChange(int timeInPhase) {
+        phaseChange(timeInPhase, () -> {});
     }
 }

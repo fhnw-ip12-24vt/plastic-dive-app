@@ -24,18 +24,21 @@ public class LanguageLoader {
     {
         try {
             //create URI to language packs
-            URI elementsUri = this.getClass().getResource("/languages/.elements").toURI();
-            URI configUri = this.getClass().getResource("/languages/en").toURI();
+            String elemPathString = "/languages/.elements";
+            String defaultLangPathString = "/languages/en";
+
+            URI elementsUri = this.getClass().getResource(elemPathString).toURI();
+            URI langUri = this.getClass().getResource(defaultLangPathString).toURI();
 
             if ("jar".equals(elementsUri.getScheme())) {
                 // Use filesystem for interpreting Jar URIs
                 FileSystem fs = FileSystems.getFileSystem(elementsUri);
-                elementsPath = fs.getPath("/defaultConfig/.elements");
-                defaultLanguagePackPath = fs.getPath("/defaultConfig/config");
+                elementsPath = fs.getPath(elemPathString);
+                defaultLanguagePackPath = fs.getPath(defaultLangPathString);
             } else {
                 //use default filesystem (necessary for running from IDE)
                 elementsPath = Path.of(elementsUri);
-                defaultLanguagePackPath = Path.of(configUri);
+                defaultLanguagePackPath = Path.of(langUri);
             }
         } catch (URISyntaxException | NullPointerException e) {
             logger.logError("Could not translate default config information location");
@@ -52,24 +55,22 @@ public class LanguageLoader {
             if (selectedLanguage == null) throw new RuntimeException("No language selected in config");
             readLanguageFile(Path.of(this.getClass().getResource("/languages/" + selectedLanguage).toURI()).toAbsolutePath());
         } catch(RuntimeException e){
-            System.out.println("Failed to load selected language pack, attempting to load default language pack");
+            String errorText = "Failed to load selected language pack, attempting to load default language pack. Reason: " + e.getMessage();
+            System.out.println(errorText);
 
-            if (world.getConfigValue("log").equals("detailed"))
-                logger.logError("Failed to load selected language pack, attempting to load default language pack", e.getStackTrace());
-            else logger.logError("Failed to load selected language pack, attempting to load default language pack");
+            logger.logError(errorText, world.getConfigValue("log").equals("detailed") ? e.getStackTrace(): null);
 
             try {
                 readLanguageFile(defaultLanguagePackPath);
             } catch(RuntimeException e1){
-                if (world.getConfigValue("log").equals("detailed"))
-                    logger.logError("Failed to load default language Pack", e1.getStackTrace());
-                else logger.logError("Failed to load default language Pack");
+                errorText = "Failed to load default language Pack. Reason: " + e1.getMessage();
+
+                System.out.println(errorText);
+                logger.logError(errorText, world.getConfigValue("log").equals("detailed") ? e1.getStackTrace(): null);
                 throw new RuntimeException(e1);
             }
         } catch (URISyntaxException e) {
-            if (world.getConfigValue("log").equals("detailed"))
-                logger.logError("Failed to translate language pack location", e.getStackTrace());
-            else logger.logError("Failed to translate language pack location");
+            logger.logError("Failed to translate language pack location", world.getConfigValue("log").equals("detailed") ? e.getStackTrace(): null);
             throw new RuntimeException(e);
         }
     }
@@ -95,17 +96,16 @@ public class LanguageLoader {
 
                     if (line.endsWith(";")) {
                         line = line.substring(0, line.length() - 1);
-                        langElements.add(line.trim());
+                        langElements.add(line.trim().toLowerCase());
                         line = "";
                     }
                 }
             }
         } catch (IOException e){
-            if (world.getConfigValue("log").equals("detailed"))
-                logger.logError("Could not read config Elements definition file", e.getStackTrace());
-            else logger.logError("Could not read config Elements definition file");
+            String errorText = "Could not read language Elements definition file";
 
-            throw new RuntimeException("Could not read config Elements definition file");
+            logger.logError(errorText, world.getConfigValue("log").equals("detailed") ? e.getStackTrace(): null);
+            throw new RuntimeException(errorText, e.getCause());
         }
     }
 
@@ -146,9 +146,7 @@ public class LanguageLoader {
 
             interpretLanguageFile(lines);
         } catch (IOException e) {
-            if (world.getConfigValue("log").equals("detailed"))
-                logger.logError(e.getMessage(), e.getStackTrace());
-            else logger.logError(e.getMessage());
+            logger.logError(e.getMessage(), world.getConfigValue("log").equals("detailed") ? e.getStackTrace(): null);
 
             throw new RuntimeException(e);
         }
@@ -165,7 +163,7 @@ public class LanguageLoader {
             if (sections.length < 2) return;
 
             //
-            String key = sections[0].trim();
+            String key = sections[0].trim().toLowerCase();
             String value = "";
 
             //readd extra colons

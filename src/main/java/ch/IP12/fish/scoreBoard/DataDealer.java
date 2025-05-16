@@ -1,5 +1,6 @@
 package ch.IP12.fish.scoreBoard;
 
+import ch.IP12.fish.fileInterpreters.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -16,6 +17,7 @@ public class DataDealer {
     //variable for easy access to file
     private final String fileName;
     private final int sizeLimit;
+    private final Logger logger = Logger.getInstance();
 
     private static DataDealer instance = null;
 
@@ -89,7 +91,7 @@ public class DataDealer {
             file.flush();
         } catch (IOException | ParseException e) {
             //If no entries exist, go into if Statement
-            e.printStackTrace();
+            logger.logError(e.getMessage());
             b = true;
         }
         if (b){
@@ -101,7 +103,7 @@ public class DataDealer {
                 file.write(finalO.toJSONString());
                 file.flush();
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.logError(e.getMessage());
             }
         }
     }
@@ -122,7 +124,7 @@ public class DataDealer {
             file.write("");
             file.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.logError(e.getMessage());
         }
     }
 
@@ -143,7 +145,7 @@ public class DataDealer {
                 highscores.put((String) json.get("Name"), (Long)json.get("Score"));
             }
         } catch (IOException | ParseException e) {
-            e.printStackTrace();
+            logger.logError(e.getMessage());
         }
         return highscores;
     }

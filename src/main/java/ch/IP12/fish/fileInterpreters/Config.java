@@ -9,7 +9,7 @@ import java.net.URISyntaxException;
 import java.nio.file.*;
 import java.util.*;
 
-import static java.nio.file.StandardOpenOption.WRITE;
+import static java.nio.file.StandardOpenOption.*;
 
 /**
  * Reads Config values and stores them in World's config variable
@@ -73,7 +73,7 @@ public class Config {
 
                     if (line.endsWith(";")) {
                         line = line.substring(0, line.length() - 1);
-                        configElements.add(line.trim());
+                        configElements.add(line.trim().toLowerCase());
                         line = "";
                     }
                 }
@@ -92,6 +92,11 @@ public class Config {
             }
 
             fillDefaultConfig(path);
+
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException ignored) {}
+
         } else if (!Files.exists(path)) {
             throw new RuntimeException("Invalid config file location");
         }
@@ -172,7 +177,7 @@ public class Config {
                 text = text + tempLine;
             }
 
-            Files.write(path, text.getBytes(), WRITE);
+            Files.write(path, text.getBytes(), WRITE, SYNC);
         }catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -189,13 +194,13 @@ public class Config {
             if (sections.length < 2) return;
 
             //
-            String key = sections[0].trim();
+            String key = sections[0].trim().toLowerCase();
             String value = "";
 
             //readd extra colons
             for (int i = 1; i < sections.length; i++) {
                 if(i > 1) value = value + (":" + sections[i]);
-                else value = sections[i];
+                else value = sections[i].trim().toLowerCase();
             }
 
             //if .elements contains found key, insert it into stored configs

@@ -3,6 +3,7 @@ package ch.IP12.fish.model;
 import ch.IP12.fish.Spawner;
 import ch.IP12.fish.components.Ads1115;
 import ch.IP12.fish.components.JoystickAnalog;
+import ch.IP12.fish.fileInterpreters.Logger;
 import ch.IP12.fish.model.animations.Spritesheets;
 import ch.IP12.fish.model.obstacles.Obstacle;
 import ch.IP12.fish.utils.Difficulty;
@@ -16,6 +17,8 @@ import java.util.List;
 import java.util.Random;
 
 public class World {
+    private final Logger logger = Logger.getInstance();
+
     private final double width;
     private final double height;
 
@@ -106,6 +109,7 @@ public class World {
      */
     public Player getRandomPlayer() {
         if (players == null || players.isEmpty()) {
+            logger.logError("Player list is empty");
             throw new IllegalArgumentException("List cannot be null or empty");
         }
         Random random = new Random();
@@ -251,7 +255,14 @@ public class World {
      * @return Value at provided key (Type: String)
      */
     public String getConfigValue(String key) {
-        return config.get(key);
+        String value = config.get(key.toLowerCase());
+
+        if(value == null) {
+            logger.logError("No config value found for key: " + key.toLowerCase());
+            throw new IllegalArgumentException("No config value found for key: " + key.toLowerCase());
+        }
+
+        return config.get(key.toLowerCase());
     }
 
     /**
@@ -274,7 +285,14 @@ public class World {
      * @return Text stored with provided key
      */
     public String getTextMapValue(String key) {
-        return textMap.get(key);
+        String value = textMap.get(key.toLowerCase());
+
+        if(value == null) {
+            logger.logError("No text found for key: " + key.toLowerCase());
+            throw new IllegalArgumentException("No text found for key: " + key.toLowerCase());
+        }
+
+        return textMap.get(key.toLowerCase());
     }
 
     /**

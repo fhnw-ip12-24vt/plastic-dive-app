@@ -1,5 +1,6 @@
 package ch.IP12.fish;
 
+import ch.IP12.fish.fileInterpreters.Logger;
 import ch.IP12.fish.model.World;
 import ch.IP12.fish.model.animations.Spritesheets;
 import ch.IP12.fish.scoreBoard.Scoreboard;
@@ -20,10 +21,10 @@ public class View {
     private double frontLayerShift = 0.0;
     private double middleLayerShift = 0.0;
     private double backLayerShift = 0.0;
-    private final Image frontLayer = new Image("backgroundLayers/frontLayer.png");
-    private final Image middleLayer = new Image("backgroundLayers/middleLayer.png");
-    private final Image backLayer = new Image("backgroundLayers/middleLayer.png");
-    private final Image scannerImage = new Image("backgroundLayers/barCodeScanner.png");
+    private final Image frontLayer = new Image("/assets/frontLayer.png");
+    private final Image middleLayer = new Image("/assets/middleLayer.png");
+    private final Image backLayer = new Image("/assets/middleLayer.png");
+    private final Image scannerImage = new Image("/assets/barcodeScanner.png");
     private double backgroundScalar = 3.5;
     private double layerShiftScalar = 0.2;
     private double upAndDownBobing = 0;
@@ -75,7 +76,7 @@ public class View {
         upAndDownBobing += 0.1;
         //drawing starting image
         graphicsContext.drawImage(scannerImage, world.getWidth() / 2 - scannerImage.getWidth() * 1.5, world.getHeight() / 2 - scannerImage.getHeight() * 1.5 + Math.sin(upAndDownBobing) * 5 - 100, scannerImage.getWidth() * 3, scannerImage.getHeight() * 3);
-        Text text = new Text("SCANNEN SIE DEN BARCODE AUF EINER KLEIDUNG");
+        Text text = new Text(world.getTextMapValue("scanText"));
         text.setFont(scoreFont);
         graphicsContext.setFill(Color.BLACK);
         graphicsContext.setFont(scoreFont);
@@ -88,7 +89,7 @@ public class View {
     private void startingAnimation() {
         //draw player animation in the beginning
         world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
-        Text text = new Text("DAS WASCHEN FÜHRT ZU MIKTOPLASTIK IM WASSER");
+        Text text = new Text(world.getTextMapValue("shirtInfoText"));
         text.setFont(scoreFont);
         graphicsContext.setFill(Color.BLACK);
         graphicsContext.setFont(scoreFont);
@@ -144,7 +145,7 @@ public class View {
         graphicsContext.setFill(Color.YELLOW);
         graphicsContext.setFont(fontHighscore);
 
-        graphicsContext.fillText("Dein erzielter Score: " + world.getScore(),
+        graphicsContext.fillText(world.getTextMapValue("highscoreText") + world.getScoreWithoutDecimals(),
             world.getWidth() / 2f,
             world.getHeight() / 2f - 60);
 
@@ -165,8 +166,8 @@ public class View {
                 graphicsContext.fillText(text, startX, startY + i * lineSpacing);
             }
         } catch (Exception e) {
-            graphicsContext.fillText("Fehler beim Laden des Highscores", world.getWidth() / 2f, world.getHeight() / 2f);
-            e.printStackTrace();
+            graphicsContext.fillText(world.getTextMapValue("highscoreLoadingErrorText"), world.getWidth() / 2f, world.getHeight() / 2f);
+            Logger.getInstance().logError(e.getMessage(), world.getConfigValue("log").equals("detailed") ? e.getStackTrace(): null);
         }
         graphicsContext.setFont(font);
     }
@@ -175,7 +176,6 @@ public class View {
         graphicsContext.drawImage(image, layerShift - image.getWidth() * Spritesheets.spriteScaling, world.getHeight() - image.getHeight() * Spritesheets.spriteScaling, image.getWidth() * Spritesheets.spriteScaling, image.getHeight() * Spritesheets.spriteScaling);
         graphicsContext.drawImage(image, layerShift, world.getHeight() - image.getHeight() * Spritesheets.spriteScaling, image.getWidth() * Spritesheets.spriteScaling, image.getHeight() * Spritesheets.spriteScaling);
         graphicsContext.drawImage(image, layerShift + image.getWidth() * Spritesheets.spriteScaling, world.getHeight() - image.getHeight() * Spritesheets.spriteScaling, image.getWidth() * Spritesheets.spriteScaling, image.getHeight() * Spritesheets.spriteScaling);
-
     }
 
     private void resetLayerShift() {
