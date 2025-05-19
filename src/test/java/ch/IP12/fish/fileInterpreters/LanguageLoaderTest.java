@@ -67,8 +67,8 @@ public class LanguageLoaderTest {
 
         assertEquals(6, world.getConfigSize());
 
-        assertEquals("lorem ipsum dolor sit amet", world.getTextMapValue("victoryText"));
-        assertEquals("lorem ipsum dolor sit amet", world.getTextMapValue("highscoreText"));
-        assertEquals("lorem ipsum dolor sit amet", world.getTextMapValue("scanText"));
+        assertEquals("lorem ipsum dolor sit amet", world.getTextMapValue("victorytext"));
+        assertEquals("lorem ipsum dolor sit amet", world.getTextMapValue("highscoretext"));
+        assertEquals("lorem ipsum dolor sit amet", world.getTextMapValue("scantext"));
     }
 }

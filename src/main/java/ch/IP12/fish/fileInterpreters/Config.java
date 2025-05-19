@@ -79,8 +79,8 @@ public class Config {
                 }
             }
         } catch (IOException e){
-            logger.logError("Could not read config Elements definition file");
-            throw new RuntimeException("Could not read config Elements definition file");
+            logger.logError("Could not read config elements definition file");
+            throw new RuntimeException("Could not read config elements definition file");
         }
     }
 
@@ -92,14 +92,12 @@ public class Config {
             }
 
             fillDefaultConfig(path);
-
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException ignored) {}
-
         } else if (!Files.exists(path)) {
             throw new RuntimeException("Invalid config file location");
         }
+
+        if (!Files.exists(path))
+            throw new RuntimeException("Config not generated at specified location");
 
         try (BufferedReader reader = Files.newBufferedReader(path)) {
             List<String> lines = new ArrayList<>();
@@ -148,6 +146,11 @@ public class Config {
 
         try{
             Files.createFile(path);
+
+            //ensure file exists before moving forward
+            //noinspection StatementWithEmptyBody
+            while(!Files.exists(path)){}
+
             fillDefaultConfig(path);
         } catch (IOException e) {
             logger.logError(e.getMessage());
