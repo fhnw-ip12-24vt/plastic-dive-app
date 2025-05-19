@@ -52,8 +52,7 @@ public class Controller {
     void createGameKeyListeners(Scene scene) {
         scene.setOnKeyReleased(e -> {
             if (e.getCode() == KeyCode.I) {
-                world.nextPhase();
-                world.setDifficulty(Difficulty.Easy);
+                phaseChange(0);
             }
         });
     }
@@ -64,7 +63,7 @@ public class Controller {
     public void startGameLogic() {
         // Run the game logic at a fixed rate
         executor.scheduleAtFixedRate(this::gameStep, 0, 16666666, TimeUnit.NANOSECONDS); // 16ms ≈ 60 updates per second
-        barcodeScanner.startListening();
+        world.setDifficulty(Difficulty.Easy);
     }
 
     /**
@@ -79,6 +78,7 @@ public class Controller {
      */
     public void reset() {
         world.reset();
+        world.clearObstacles();
         barcodeScanner.startListening();
     }
 
@@ -100,6 +100,7 @@ public class Controller {
     private void start() {
         deltaTimeClock = System.currentTimeMillis();
         world.resetClock();
+        reset();
     }
 
     private void startingAnimation() {
@@ -193,7 +194,6 @@ public class Controller {
 
         phaseChange(10, () -> {
             logger.log("Round finished, final score: " + world.getScoreWithoutDecimals());
-            reset();
         });
     }
 
