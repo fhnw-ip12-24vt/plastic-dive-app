@@ -78,8 +78,8 @@ public class ConfigTest {
 
         assertEquals(6, world.getConfigSize());
 
-        assertEquals("Test simple", world.getConfigValue("testVal1"));
-        assertEquals("Multiline\ntest", world.getConfigValue("testVal2"));
-        assertEquals("test multiline empty\n", world.getConfigValue("testVal3"));
+        assertEquals("test simple", world.getConfigValue("testval1"));
+        assertEquals("multiline\ntest", world.getConfigValue("testval2"));
+        assertEquals("test multiline empty", world.getConfigValue("testval3"));
     }
 }

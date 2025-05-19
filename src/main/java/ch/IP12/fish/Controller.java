@@ -195,6 +195,7 @@ public class Controller {
         phaseChange(10, () -> logger.log("Round finished, final score: " + world.getScoreWithoutDecimals()));
     }
 
+    //Shift phase to th next one and execute an action after n amount of seconds have passed
     private void phaseChange(int timeInPhase, Runnable action) {
         if (world.getDeltaClock() >= timeInPhase) {
             action.run();
