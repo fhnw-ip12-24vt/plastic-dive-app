@@ -11,19 +11,20 @@ import java.util.Random;
  */
 public enum Spritesheets {
     //to add more obstacle variations add an entry to the list bellow.
-    Player(new SpriteAnimation(new ImageView(new Image("assets/player.png")), 2, 2, 0, 1, 16, 7, Duration.millis(200))),
-    SmallCluster(new SpriteAnimation(new ImageView(new Image("https://upload.wikimedia.org/wikipedia/commons/7/73/The_Horse_in_Motion.jpg")), 0, 0, 0, 0, 20, 20, Duration.millis(200))),
-    MediumCluster(new SpriteAnimation(new ImageView(new Image("https://upload.wikimedia.org/wikipedia/commons/7/73/The_Horse_in_Motion.jpg")), 0, 0, 0, 0, 35, 35, Duration.millis(200))),
-    LargeCluster(new SpriteAnimation(new ImageView(new Image("https://upload.wikimedia.org/wikipedia/commons/7/73/The_Horse_in_Motion.jpg")), 0, 0, 0, 0, 50, 50, Duration.millis(200))),
-    easyDifficultyAnimation(new SpriteAnimation(new ImageView(new Image("https://upload.wikimedia.org/wikipedia/commons/7/73/The_Horse_in_Motion.jpg")), 3, 3, 0, 0, 100, 100, Duration.millis(200))),
-    mediumDifficultyAnimation(new SpriteAnimation(new ImageView(new Image("https://upload.wikimedia.org/wikipedia/commons/7/73/The_Horse_in_Motion.jpg")), 0, 0, 0, 0, 50, 50, Duration.millis(200))),
-    hardDifficultyAnimation(new SpriteAnimation(new ImageView(new Image("https://upload.wikimedia.org/wikipedia/commons/7/73/The_Horse_in_Motion.jpg")), 0, 0, 0, 0, 50, 50, Duration.millis(200))),
+    Player(1,new SpriteAnimation(new ImageView(new Image("assets/player.png")), 1, 1, 0, 0, 100, 45, Duration.millis(200))),
+    SmallCluster(1,new SpriteAnimation(new ImageView(new Image("https://upload.wikimedia.org/wikipedia/commons/7/73/The_Horse_in_Motion.jpg")), 0, 0, 0, 0, 20, 20, Duration.millis(200))),
+    MediumCluster(2,new SpriteAnimation(new ImageView(new Image("https://upload.wikimedia.org/wikipedia/commons/7/73/The_Horse_in_Motion.jpg")), 0, 0, 0, 0, 35, 35, Duration.millis(200))),
+    LargeCluster(3,new SpriteAnimation(new ImageView(new Image("https://upload.wikimedia.org/wikipedia/commons/7/73/The_Horse_in_Motion.jpg")), 0, 0, 0, 0, 50, 50, Duration.millis(200))),
+    easyDifficultyAnimation(3.5,new SpriteAnimation(new ImageView(new Image("assets/washingMachineEasy.png")), 9, 9, 0, 0, 100, 100, Duration.millis(400))),
+    mediumDifficultyAnimation(3.5,new SpriteAnimation(new ImageView(new Image("https://upload.wikimedia.org/wikipedia/commons/7/73/The_Horse_in_Motion.jpg")), 0, 0, 0, 0, 50, 50, Duration.millis(200))),
+    hardDifficultyAnimation(3.5,new SpriteAnimation(new ImageView(new Image("https://upload.wikimedia.org/wikipedia/commons/7/73/The_Horse_in_Motion.jpg")), 0, 0, 0, 0, 50, 50, Duration.millis(200))),
     ;
 
-    public static final double spriteScaling = 3.5;
+    public final double spriteScaling;
     private final SpriteAnimation spriteAnimation;
 
-    Spritesheets(SpriteAnimation spriteAnimation) {
+    Spritesheets(double spriteScaling, SpriteAnimation spriteAnimation) {
+        this.spriteScaling = spriteScaling;
         this.spriteAnimation = spriteAnimation;
     }
 

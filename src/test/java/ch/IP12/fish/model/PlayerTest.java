@@ -55,7 +55,7 @@ public class PlayerTest {
     public void getterReturnsCorrectValueAfterInstantiation(){
         Player player = new Player(11, 22, 33, Spritesheets.Player.getSpriteAnimation(), joystick, world);
 
-        assertEquals(11 - Spritesheets.Player.getSpriteAnimation().getWidth() * Spritesheets.spriteScaling, player.getX());
+        assertEquals(11 - Spritesheets.Player.getSpriteAnimation().getWidth(), player.getX());
         assertEquals(22, player.getY());
         assertEquals(33, player.getSpeed());
         assertEquals(world, player.getWorld());

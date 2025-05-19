@@ -19,9 +19,9 @@ public class Player extends Moveable {
      * @param world DTO (Data Transfer Object)
      */
     public Player(double x, double y, double speed, SpriteAnimation spriteAnimation, JoystickAnalog joystick, World world) {
-        super((x - spriteAnimation.getWidth() * Spritesheets.spriteScaling), y, speed, spriteAnimation, Spritesheets.spriteScaling, world);
+        super((x - spriteAnimation.getWidth()), y, speed, spriteAnimation, 1, world);
         setSpeed(speed);
-        this.initialXValue = (x - spriteAnimation.getWidth() * Spritesheets.spriteScaling);
+        this.initialXValue = (x - spriteAnimation.getWidth());
         this.initialYValue = y;
         this.joystick = joystick;
     }

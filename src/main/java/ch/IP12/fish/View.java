@@ -171,19 +171,21 @@ public class View {
     }
 
     private void drawBackground(Image image, double layerShift) {
-        graphicsContext.drawImage(image, layerShift - image.getWidth() * Spritesheets.spriteScaling, world.getHeight() - image.getHeight() * Spritesheets.spriteScaling, image.getWidth() * Spritesheets.spriteScaling, image.getHeight() * Spritesheets.spriteScaling);
-        graphicsContext.drawImage(image, layerShift, world.getHeight() - image.getHeight() * Spritesheets.spriteScaling, image.getWidth() * Spritesheets.spriteScaling, image.getHeight() * Spritesheets.spriteScaling);
-        graphicsContext.drawImage(image, layerShift + image.getWidth() * Spritesheets.spriteScaling, world.getHeight() - image.getHeight() * Spritesheets.spriteScaling, image.getWidth() * Spritesheets.spriteScaling, image.getHeight() * Spritesheets.spriteScaling);
+        double backgroundScaling = 3.5;
+        graphicsContext.drawImage(image, layerShift - image.getWidth() * backgroundScaling, world.getHeight() - image.getHeight() * backgroundScaling, image.getWidth() * backgroundScaling, image.getHeight() * backgroundScaling);
+        graphicsContext.drawImage(image, layerShift, world.getHeight() - image.getHeight() * backgroundScaling, image.getWidth() * backgroundScaling, image.getHeight() * backgroundScaling);
+        graphicsContext.drawImage(image, layerShift + image.getWidth() * backgroundScaling, world.getHeight() - image.getHeight() * backgroundScaling, image.getWidth() * backgroundScaling, image.getHeight() * backgroundScaling);
     }
 
     private void resetLayerShift() {
-        if (Math.abs(frontLayerShift) > frontLayer.getWidth() * Spritesheets.spriteScaling) {
+        double backgroundScaling = 3.5;
+        if (Math.abs(frontLayerShift) > frontLayer.getWidth() * backgroundScaling) {
             frontLayerShift = 0.0;
         }
-        if (Math.abs(middleLayerShift) > middleLayer.getWidth() * Spritesheets.spriteScaling) {
+        if (Math.abs(middleLayerShift) > middleLayer.getWidth() * backgroundScaling) {
             middleLayerShift = 0.0;
         }
-        if (Math.abs(backLayerShift) > backLayer.getWidth() * Spritesheets.spriteScaling) {
+        if (Math.abs(backLayerShift) > backLayer.getWidth() * backgroundScaling) {
             backLayerShift = 0.0;
         }
     }
