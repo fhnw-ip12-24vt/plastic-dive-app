@@ -171,14 +171,14 @@ public class View {
     }
 
     private void drawBackground(Image image, double layerShift) {
-        double backgroundScaling = 3.5;
+        double backgroundScaling = 4;
         graphicsContext.drawImage(image, layerShift - image.getWidth() * backgroundScaling, world.getHeight() - image.getHeight() * backgroundScaling, image.getWidth() * backgroundScaling, image.getHeight() * backgroundScaling);
         graphicsContext.drawImage(image, layerShift, world.getHeight() - image.getHeight() * backgroundScaling, image.getWidth() * backgroundScaling, image.getHeight() * backgroundScaling);
         graphicsContext.drawImage(image, layerShift + image.getWidth() * backgroundScaling, world.getHeight() - image.getHeight() * backgroundScaling, image.getWidth() * backgroundScaling, image.getHeight() * backgroundScaling);
     }
 
     private void resetLayerShift() {
-        double backgroundScaling = 3.5;
+        double backgroundScaling = 4;
         if (Math.abs(frontLayerShift) > frontLayer.getWidth() * backgroundScaling) {
             frontLayerShift = 0.0;
         }

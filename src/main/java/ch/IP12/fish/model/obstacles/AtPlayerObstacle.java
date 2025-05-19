@@ -15,6 +15,7 @@ public class AtPlayerObstacle extends Obstacle {
         super(obstacle);
         this.player = world.getRandomPlayer();
         this.color = Color.RED;
+        this.setSpeed(this.getSpeed()/2);
     }
 
     /**

@@ -51,8 +51,8 @@ public class World {
         JoystickAnalog joystick1 = new JoystickAnalog(ads1115, Ads1115.Channel.A0, Ads1115.Channel.A1);
         JoystickAnalog joystick2 = new JoystickAnalog(ads1115, Ads1115.Channel.A2, Ads1115.Channel.A3);
 
-        Player player1 = new Player(0, height / 2.0 + 100, 3, Spritesheets.Player.getSpriteAnimation(), joystick1, this);
-        Player player2 = new Player(0, height / 2.0 - 100, 3, Spritesheets.Player.getSpriteAnimation(), joystick2, this);
+        Player player1 = new Player(0, height / 2.0 + 100, 300, Spritesheets.Player.getSpriteAnimation(), joystick1, this);
+        Player player2 = new Player(0, height / 2.0 - 100, 300, Spritesheets.Player.getSpriteAnimation(), joystick2, this);
 
         players = List.of(player1,player2);
 

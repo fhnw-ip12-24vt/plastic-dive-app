@@ -34,8 +34,8 @@ public class Player extends Moveable {
     @Override
     public void move(double deltaTime, double strength) {
         //check for possible exit from bounds of screen before doing movement
-        double xChange = (Math.cos(getDirection()) * (getSpeed() * strength));
-        double yChange = (Math.sin(getDirection()) * (getSpeed() * strength));
+        double xChange = (Math.cos(getDirection()) * (getSpeed() * strength)) * deltaTime;
+        double yChange = (Math.sin(getDirection()) * (getSpeed() * strength)) * deltaTime;
 
         if (!(getY() + yChange > getMaxY() - getHeight()) && !(getY() + yChange < 0)) {
             setY(getY() + yChange);

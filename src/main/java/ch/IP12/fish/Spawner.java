@@ -58,6 +58,6 @@ public class Spawner {
      * Spawns random Obstacle from the list of registered factory functions
      */
     public void spawnRandom() {
-        world.getObstacles().add(create(classes.get(rand.nextInt(classes.size())), 300));
+        world.getObstacles().add(create(classes.get(rand.nextInt(classes.size())), rand.nextDouble(), rand.nextDouble(), rand.nextDouble(200,300)));
     }
 }
