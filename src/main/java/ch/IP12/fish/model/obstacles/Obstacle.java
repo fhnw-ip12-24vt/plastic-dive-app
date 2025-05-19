@@ -53,7 +53,7 @@ public class Obstacle extends Moveable {
     public synchronized void drawAnimation(GraphicsContext graphicsContext) {
         // temporary for demo
         graphicsContext.setFill(color);
-        graphicsContext.fillRect(this.getX(), this.getY(), this.getLength(), this.getHeight());
+        graphicsContext.fillOval(this.getX(), this.getY(), this.getSize(), this.getSize());
     }
 
     /**
@@ -61,6 +61,6 @@ public class Obstacle extends Moveable {
      */
     public boolean isOutsideBounds(){
         //check if any of the values exceed the 250 buffer in
-        return getX() < -250 || getY()+getHeight() < -250 || getX()+getLength() > getMaxX()+250 || getY()+getHeight() > getMaxY()+250;
+        return getX() < -250 || getY()+getSize() < -250 || getX()+getSize() > getMaxX()+250 || getY()+getSize() > getMaxY()+250;
     }
 }

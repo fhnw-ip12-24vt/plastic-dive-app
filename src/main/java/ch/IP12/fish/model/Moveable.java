@@ -1,10 +1,10 @@
 package ch.IP12.fish.model;
 
 import ch.IP12.fish.model.animations.SpriteAnimation;
-import ch.IP12.fish.model.animations.Spritesheets;
 import ch.IP12.fish.utils.IntUtils;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public abstract class Moveable {
     protected World world;
@@ -13,8 +13,7 @@ public abstract class Moveable {
     private double y;
 
     private double speed;
-    private final double length;
-    private final double height;
+    private final double size;
 
     //Dircetion object is moving in, in radians
     private double direction;
@@ -40,8 +39,7 @@ public abstract class Moveable {
         this.animation = spriteAnimation;
         this.spriteScale = spriteScale;
 
-        this.length = animation.getWidth() * spriteScale - 5;
-        this.height = animation.getHeight() * spriteScale - 5;
+        this.size = animation.getHeight() * spriteScale;
 
         this.world = world;
     }
@@ -61,21 +59,12 @@ public abstract class Moveable {
         y += (Math.sin(direction) * (speed * strength)) * deltaTime;
     }
 
-    /**
-     * Checks if the current instance collides with another object.
-     *
-     * @param moveable Object to be checked for overlap.
-     * @return Boolean value of the check
-     */
-    public boolean collidesWith(Moveable moveable) {
-        return IntUtils.isRangeInRange(moveable.x, moveable.x + moveable.length, this.x, this.x + this.length)
-                && IntUtils.isRangeInRange(moveable.y, moveable.y + moveable.height, this.y, this.y + this.height);
-    }
+
 
     public void drawAnimation(GraphicsContext graphicsContext) {
         animation.play();
         Rectangle2D viewRect = animation.getImageView().getViewport();
-        graphicsContext.drawImage(animation.getImageView().getImage(), viewRect.getMinX(), viewRect.getMinY(), viewRect.getWidth(), viewRect.getHeight(), x, y, length, height);
+        graphicsContext.drawImage(animation.getImageView().getImage(), viewRect.getMinX(), viewRect.getMinY(), viewRect.getWidth(), viewRect.getHeight(), x, y, animation.getWidth(), animation.getHeight());
     }
 
     /**
@@ -93,17 +82,10 @@ public abstract class Moveable {
     }
 
     /**
-     * @return Height of object
+     * @return Size of object
      */
-    public double getHeight() {
-        return height;
-    }
-
-    /**
-     * @return Width of Object
-     */
-    public double getLength() {
-        return length;
+    public double getSize() {
+        return size;
     }
 
     /**

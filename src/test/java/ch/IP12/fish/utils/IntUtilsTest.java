@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static ch.IP12.fish.utils.IntUtils.isInRange;
-import static ch.IP12.fish.utils.IntUtils.isRangeInRange;
+import static ch.IP12.fish.utils.IntUtils.collidesWith;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -52,9 +52,9 @@ public class IntUtilsTest {
         int min = 0;
         int max = 100;
 
-        assertTrue(isRangeInRange(min, max, 100, 200));
-        assertTrue(isRangeInRange(min, max, 0, 100));
-        assertTrue(isRangeInRange(min, max, -100, 0));
+        assertTrue(collidesWith(min, max, 100, 200));
+        assertTrue(collidesWith(min, max, 0, 100));
+        assertTrue(collidesWith(min, max, -100, 0));
     }
 
     @Test
@@ -62,7 +62,7 @@ public class IntUtilsTest {
         int min = 0;
         int max = 100;
 
-        assertFalse(isRangeInRange(min, max, 101, 201));
-        assertFalse(isRangeInRange(min, max, -101, -1));
+        assertFalse(collidesWith(min, max, 101, 201));
+        assertFalse(collidesWith(min, max, -101, -1));
     }
 }

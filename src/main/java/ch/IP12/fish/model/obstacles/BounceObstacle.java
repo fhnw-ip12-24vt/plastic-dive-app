@@ -16,7 +16,7 @@ public class BounceObstacle extends Obstacle {
      * Obstacle will bounce if it is at or over the edge
      */
     protected void adjustDirection() {
-        if ((getY() + getHeight()) >= getMaxY() || getY() <= 0) {
+        if ((getY() + getSize()) >= getMaxY() || getY() <= 0) {
             setDirection(-(getDirection()));
         }
     }

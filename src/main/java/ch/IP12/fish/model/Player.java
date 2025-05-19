@@ -3,6 +3,8 @@ package ch.IP12.fish.model;
 import ch.IP12.fish.components.JoystickAnalog;
 import ch.IP12.fish.model.animations.SpriteAnimation;
 import ch.IP12.fish.model.animations.Spritesheets;
+import ch.IP12.fish.model.obstacles.Obstacle;
+import ch.IP12.fish.utils.IntUtils;
 
 public class Player extends Moveable {
     private final double initialXValue;
@@ -37,11 +39,11 @@ public class Player extends Moveable {
         double xChange = (Math.cos(getDirection()) * (getSpeed() * strength)) * deltaTime;
         double yChange = (Math.sin(getDirection()) * (getSpeed() * strength)) * deltaTime;
 
-        if (!(getY() + yChange > getMaxY() - getHeight()) && !(getY() + yChange < 0)) {
+        if (!(getY() + yChange > getMaxY() - getSize()) && !(getY() + yChange < 0)) {
             setY(getY() + yChange);
         }
 
-        if (!(getX() + xChange > getMaxX() - getLength()) && !(getX() + xChange < 0)) {
+        if (!(getX() + xChange > getMaxX() - getSize()) && !(getX() + xChange < 0)) {
             setX(getX() + xChange);
         }
     }
@@ -91,6 +93,15 @@ public class Player extends Moveable {
     public void resetJoystick() {
         if (!hasJoystick()) return;
         joystick.reset();
+    }
+    /**
+     * Checks if the current instance collides with another object.
+     *
+     * @param obstacle Object to be checked for overlap.
+     * @return Boolean value of the check
+     */
+    public boolean collidesWith(Obstacle obstacle) {
+        return IntUtils.collidesWith(this, obstacle);
     }
 
     private boolean hasJoystick() {
