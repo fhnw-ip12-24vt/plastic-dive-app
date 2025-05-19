@@ -192,9 +192,7 @@ public class Controller {
             world.setScoreSaved(false);
         }
 
-        phaseChange(10, () -> {
-            logger.log("Round finished, final score: " + world.getScoreWithoutDecimals());
-        });
+        phaseChange(10, () -> logger.log("Round finished, final score: " + world.getScoreWithoutDecimals()));
     }
 
     private void phaseChange(int timeInPhase, Runnable action) {
