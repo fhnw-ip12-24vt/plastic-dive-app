@@ -14,7 +14,7 @@ import javafx.scene.text.Text;
 
 public class View {
     private final GraphicsContext graphicsContext;
-    private final Font fontHighscore;
+
     private final World world;
     private double frontLayerShift = 0.0;
     private double middleLayerShift = 0.0;
@@ -26,13 +26,14 @@ public class View {
     private double backgroundScalar = 3.5;
     private double layerShiftScalar = 0.2;
     private double upAndDownBobing = 0;
+    private final Font fontHighscore;
 
     View(GraphicsContext graphicsContext, World world) {
         this.graphicsContext = graphicsContext;
         this.world = world;
 
+        this.fontHighscore = Font.loadFont(world.getFont().getName(), 20);
         graphicsContext.setFont(world.getFont());
-        fontHighscore = Font.loadFont(world.getFont().getName(), 20);
     }
 
     /**
@@ -143,26 +144,9 @@ public class View {
         graphicsContext.setFill(Color.YELLOW);
         graphicsContext.setFont(fontHighscore);
 
-        graphicsContext.fillText(world.getTextMapValue("highscoreText") + world.getScoreWithoutDecimals(),
-            world.getWidth() / 2f,
-            world.getHeight() / 2f - 60);
-
-        graphicsContext.setFill(Color.BLACK);
-
         try {
-            Scoreboard scoreboard = Scoreboard.getInstance();
-            scoreboard.insertValues();
-            ScoreboardEnitity[] highScores = scoreboard.getList();
-
-            double startX = world.getWidth() / 2f;
-            double startY = world.getHeight() / 2f;
-            float lineSpacing = 30f;
-
-            for (int i = 0; i < highScores.length; i++) {
-                ScoreboardEnitity entry = highScores[i];
-                String text = (i + 1) + ".  " + entry.getName() + ":  " + entry.getScore();
-                graphicsContext.fillText(text, startX, startY + i * lineSpacing);
-            }
+            Scoreboard scoreboard = Scoreboard.getInstance(world);
+            scoreboard.draw(graphicsContext);
         } catch (Exception e) {
             graphicsContext.fillText(world.getTextMapValue("highscoreLoadingErrorText"), world.getWidth() / 2f, world.getHeight() / 2f);
             Logger.getInstance().logError(e.getMessage(), world.getConfigValue("log").equals("detailed") ? e.getStackTrace(): null);
