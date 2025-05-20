@@ -93,6 +93,10 @@ public class Scoreboard {
         scoreboard.putAll(d.getValues());
     }
 
+    /**
+     * Draws scoreboard onto provided graphicsContext.
+     * @param gc Graphics context that is drawn to.
+     */
     public void draw(GraphicsContext gc){
         try {
             this.insertValues();
