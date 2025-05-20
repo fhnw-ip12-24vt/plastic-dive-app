@@ -15,12 +15,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class GlobalTestWatcher implements TestWatcher, BeforeAllCallback, AfterAllCallback, ExtensionContext.Store.CloseableResource {
     private final Logger logger = Logger.getInstance("testLog");
-    private final Path exportPath = Path.of("testExport.txt");
+    private final Path exportPath = Path.of("UnitTestResults.txt");
     private boolean exportFirstLine;
 
     private Class<?> currentTestClass;
     private static final Set<Class<?>> initializedClasses = ConcurrentHashMap.newKeySet();
     private static final Map<Class<?>, List<String>> failedTestsByClass = new ConcurrentHashMap<>();
+    private static final Map<Class<?>, List<String>> passedTestsByClass = new ConcurrentHashMap<>();
+    private static final Map<Class<?>, List<String>> skippedTestsByClass = new ConcurrentHashMap<>();
+    private static final Map<Class<?>, List<String>> abortedTestsByClass = new ConcurrentHashMap<>();
 
     private final boolean logToFile;
     private final boolean logStackTraces;
@@ -54,6 +57,10 @@ public class GlobalTestWatcher implements TestWatcher, BeforeAllCallback, AfterA
             // One-time class initialization
             if (initializedClasses.add(testClass)) {
                 failedTestsByClass.putIfAbsent(testClass, new ArrayList<>());
+                passedTestsByClass.putIfAbsent(testClass, new ArrayList<>());
+                skippedTestsByClass.putIfAbsent(testClass, new ArrayList<>());
+                abortedTestsByClass.putIfAbsent(testClass, new ArrayList<>());
+
                 this.currentTestClass = testClass;
 
                 String text = "[INIT] Starting Tests from: " + testClass.getSimpleName();
@@ -80,8 +87,23 @@ public class GlobalTestWatcher implements TestWatcher, BeforeAllCallback, AfterA
             logger.log("[CLOSE] Final report:");
         }
 
-        failedTestsByClass.forEach((cls, failures) -> {
-            String text = "  " + cls.getSimpleName() + ": " + failures.size() + " failure" + (failures.size() == 1 ? "" : "s");
+        failedTestsByClass.keySet().forEach(className -> {
+            String text = "  " + className.getSimpleName() + ": ";
+
+            List<String> passed = passedTestsByClass.get(className);
+            String testPassedText = passed.size() + " passed, ";
+
+            List<String> failed = failedTestsByClass.get(className);
+            String testFailedText = failed.size() + " failed, ";
+
+            List<String> skipped = skippedTestsByClass.get(className);
+            String testSkippedText = skipped.size() + " skipped, ";
+
+            List<String> aborted = abortedTestsByClass.get(className);
+            String testAbortedText = aborted.size() + " aborted, ";
+
+            text = text + testPassedText + testFailedText + testSkippedText + testAbortedText;
+
             System.out.println(text);
             if (logToFile)
                 logger.log(text);
@@ -116,6 +138,8 @@ public class GlobalTestWatcher implements TestWatcher, BeforeAllCallback, AfterA
         if (logToFile)
             logger.log(text);
 
+        skippedTestsByClass.get(currentTestClass).add(testName);
+
         writeToExport(text);
     }
 
@@ -128,6 +152,8 @@ public class GlobalTestWatcher implements TestWatcher, BeforeAllCallback, AfterA
         if (logToFile)
             logger.log(text);
 
+        passedTestsByClass.get(currentTestClass).add(testName);
+
         writeToExport(text);
     }
 
@@ -139,6 +165,8 @@ public class GlobalTestWatcher implements TestWatcher, BeforeAllCallback, AfterA
         System.out.println(text);
         if (logToFile)
             logger.log(text);
+
+        abortedTestsByClass.get(currentTestClass).add(testName);
 
         writeToExport(text);
     }
@@ -177,7 +205,7 @@ public class GlobalTestWatcher implements TestWatcher, BeforeAllCallback, AfterA
             }
             Files.createFile(exportPath);
         } catch (IOException e) {
-            logger.logError("Could not create testExport.txt", e.getStackTrace());
+            logger.logError("Could not create UnitTestResults.txt", e.getStackTrace());
             throw new RuntimeException(e);
         }
     }

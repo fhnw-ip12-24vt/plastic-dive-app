@@ -13,6 +13,8 @@
 [AFTER] Finishing Tests from: ConfigTest
 
 [INIT] Starting Tests from: LanguageLoaderTest
+[SUCCESS] Test Successful: testInstantiationOfLanguagePack
+[SUCCESS] Test Successful: testValueStorageOfConfig
 [AFTER] Finishing Tests from: LanguageLoaderTest
 
 [INIT] Starting Tests from: SpriteAnimationTest
@@ -81,17 +83,17 @@
 
 [CLOSE] All tests finished
 [CLOSE] Final report:
-  SinObstacleTest: 0 failures
-  ConfigTest: 0 failures
-  SpawnerTest: 0 failures
-  DifficultyTest: 0 failures
-  LanguageLoaderTest: 0 failures
-  BounceObstacleTest: 0 failures
-  ForkObstacleTest: 0 failures
-  IntUtilsTest: 0 failures
-  AtPlayerObstacleTest: 0 failures
-  PlayerTest: 0 failures
-  SpriteAnimationTest: 0 failures
-  BarcodeScannerTest: 0 failures
-  ObstacleTest: 0 failures
-  SpritesheetTest: 0 failures
+  ObstacleTest: 5 passed, 0 failed, 0 skipped, 0 aborted, 
+  SpriteAnimationTest: 6 passed, 0 failed, 0 skipped, 0 aborted, 
+  SpawnerTest: 3 passed, 0 failed, 0 skipped, 0 aborted, 
+  DifficultyTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 
+  BarcodeScannerTest: 3 passed, 0 failed, 0 skipped, 0 aborted, 
+  PlayerTest: 4 passed, 0 failed, 0 skipped, 0 aborted, 
+  ForkObstacleTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 
+  LanguageLoaderTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 
+  SpritesheetTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 
+  AtPlayerObstacleTest: 1 passed, 0 failed, 1 skipped, 0 aborted, 
+  BounceObstacleTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 
+  ConfigTest: 3 passed, 0 failed, 0 skipped, 0 aborted, 
+  SinObstacleTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 
+  IntUtilsTest: 1 passed, 0 failed, 0 skipped, 0 aborted, 
