@@ -6,16 +6,20 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DataDealer {
     //variable for easy access to file
     private final String fileName;
+    private final Path filePath;
+
     private final int sizeLimit;
     private final Logger logger = Logger.getInstance();
 
@@ -23,20 +27,40 @@ public class DataDealer {
 
     private DataDealer(String fileName, int boardSizeLimit) throws IOException {
         //check for file existence and creation if it doesn't
-        boolean b;
         sizeLimit = boardSizeLimit;
         fileName += ".json";
         this.fileName = fileName;
-        File f = new File(fileName);
-        if(!f.exists()){
-            b = f.createNewFile();
-            assert b;
+
+        filePath = Path.of(fileName);
+        if (!Files.exists(filePath)) {
+            Files.createFile(filePath);
         }
-        assert f.isFile();
+
+        //noinspection StatementWithEmptyBody
+        while (!Files.exists(filePath)) {}
     }
 
+    /**
+     * Create an instance of the DataDealer object or returns it if one already exists.
+     * **Notice: BoardSizeLimit is set to 10**
+     * @param fileName The name of the file that will be written to.
+     * @return DataDealer instance
+     * @throws IOException File interaction can throw an error, cannot be avoided.
+     */
     public static DataDealer getInstance(String fileName) throws IOException {
         return getInstance(fileName, 10);
+    }
+
+    /**
+     * Create an instance of the DataDealer object or returns it if one already exists.
+     * @return DataDealer instance
+     * @throws NullPointerException If not instantiated before this method is called
+     */
+    public static DataDealer getInstance() {
+        if (instance == null) {
+            throw new NullPointerException("DataDealer not initialized with valid values yet");
+        }
+        return instance;
     }
 
     /**
@@ -84,14 +108,12 @@ public class DataDealer {
             });
 
             //shorten the list of objects to be the specified length.
-            while (jsonA.size() >= sizeLimit){
+            while (jsonA.size() > sizeLimit){
                 jsonA.removeLast();
             }
 
-            FileWriter file = new FileWriter(fileName);
             finalO.put("Highscores", jsonA);
-            file.write(finalO.toJSONString());
-            file.flush();
+            writeJSONToFile(finalO.toJSONString());
         } catch (IOException | ParseException e) {
             //If no entries exist, go into if Statement
             logger.logError(e.getMessage());
@@ -101,22 +123,28 @@ public class DataDealer {
         if (b){
             try {
                 //write JSONObject into file as new JSON object
-                FileWriter file = new FileWriter(fileName);
                 jsonA.add(json);
                 finalO.put("Highscores", jsonA);
-                file.write(finalO.toJSONString());
-                file.flush();
+                writeJSONToFile(finalO.toJSONString());
             } catch (IOException e) {
                 logger.logError(e.getMessage());
+                throw new RuntimeException(e);
             }
         }
+    }
+
+    private void writeJSONToFile(String JSONString) throws IOException {
+        Files.write(filePath, JSONString.getBytes(), StandardOpenOption.WRITE, StandardOpenOption.DSYNC);
     }
 
     //Parse JSON file provided for a JSON object
     private JSONObject JSONFileParser() throws IOException, ParseException {
         FileReader reader = new FileReader(fileName);
         JSONParser parser = new JSONParser();
-        return (JSONObject)parser.parse(reader);
+
+        JSONObject json = (JSONObject) parser.parse(reader);
+        reader.close();
+        return json;
     }
 
     /**

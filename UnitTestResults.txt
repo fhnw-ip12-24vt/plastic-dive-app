@@ -14,7 +14,7 @@
 
 [INIT] Starting Tests from: LanguageLoaderTest
 [SUCCESS] Test Successful: testInstantiationOfLanguagePack
-[SUCCESS] Test Successful: testValueStorageOfConfig
+[SUCCESS] Test Successful: testValueStorageOfTextMapSize
 [AFTER] Finishing Tests from: LanguageLoaderTest
 
 [INIT] Starting Tests from: SpriteAnimationTest
@@ -66,6 +66,19 @@
 [SUCCESS] Test Successful: getterReturnsCorrectValueAfterInstantiation
 [AFTER] Finishing Tests from: PlayerTest
 
+[INIT] Starting Tests from: ScoreboardComparerTest
+[SUCCESS] Test Successful: testCompareLessThan
+[SUCCESS] Test Successful: testSortUtility
+[SUCCESS] Test Successful: testCompareMoreThan
+[SUCCESS] Test Successful: testCompareEqual
+[AFTER] Finishing Tests from: ScoreboardComparerTest
+
+[INIT] Starting Tests from: ScoreboardEntityTests
+[SUCCESS] Test Successful: testGetScore
+[SUCCESS] Test Successful: testGetName
+[SUCCESS] Test Successful: testScoreboardEntityCreation
+[AFTER] Finishing Tests from: ScoreboardEntityTests
+
 [INIT] Starting Tests from: SpawnerTest
 [SUCCESS] Test Successful: spawnRandomObstacleTest
 [SUCCESS] Test Successful: createTest
@@ -84,16 +97,18 @@
 [CLOSE] All tests finished
 [CLOSE] Final report:
   SinObstacleTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 
-  ConfigTest: 3 passed, 0 failed, 0 skipped, 0 aborted, 
-  SpawnerTest: 3 passed, 0 failed, 0 skipped, 0 aborted, 
-  DifficultyTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 
+  IntUtilsTest: 1 passed, 0 failed, 0 skipped, 0 aborted, 
+  BarcodeScannerTest: 3 passed, 0 failed, 0 skipped, 0 aborted, 
   LanguageLoaderTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 
+  DifficultyTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 
+  ConfigTest: 3 passed, 0 failed, 0 skipped, 0 aborted, 
   BounceObstacleTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 
   ForkObstacleTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 
-  IntUtilsTest: 1 passed, 0 failed, 0 skipped, 0 aborted, 
+  ScoreboardEntityTests: 3 passed, 0 failed, 0 skipped, 0 aborted, 
+  SpawnerTest: 3 passed, 0 failed, 0 skipped, 0 aborted, 
   AtPlayerObstacleTest: 1 passed, 0 failed, 1 skipped, 0 aborted, 
   PlayerTest: 4 passed, 0 failed, 0 skipped, 0 aborted, 
+  ScoreboardComparerTest: 4 passed, 0 failed, 0 skipped, 0 aborted, 
   SpriteAnimationTest: 6 passed, 0 failed, 0 skipped, 0 aborted, 
-  BarcodeScannerTest: 3 passed, 0 failed, 0 skipped, 0 aborted, 
   ObstacleTest: 5 passed, 0 failed, 0 skipped, 0 aborted, 
   SpritesheetTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 

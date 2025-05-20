@@ -8,7 +8,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 public enum Difficulty {
     Easy(
-            7624841656535L, Spritesheets.easyDifficultyAnimation),
+            5181539527921L, Spritesheets.easyDifficultyAnimation),
     Medium(
             6211734858498L, Spritesheets.mediumDifficultyAnimation),
     Hard(

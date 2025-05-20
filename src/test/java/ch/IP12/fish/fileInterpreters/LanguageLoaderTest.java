@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LanguageLoaderTest {
     private static World world;
     private static Context pi4j = null;
-    private static String confName = "configTestFile";
+    private static final String confName = "configTestFile";
 
     @BeforeAll
     public static void initJfxRuntime() {
@@ -59,13 +59,13 @@ public class LanguageLoaderTest {
     }
 
     @Test
-    public void testValueStorageOfConfig(){
+    public void testValueStorageOfTextMapSize(){
         if (world.getTextMapSize() == 0) {
             assertDoesNotThrow(() -> new LanguageLoader(world));
             assertTrue(world.getTextMapSize() > 0);
         }
 
-        assertEquals(6, world.getConfigSize());
+        assertEquals(6, world.getTextMapSize());
 
         assertEquals("lorem ipsum dolor sit amet", world.getTextMapValue("victorytext"));
         assertEquals("lorem ipsum dolor sit amet", world.getTextMapValue("highscoretext"));

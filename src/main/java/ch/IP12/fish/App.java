@@ -39,7 +39,7 @@ public class App extends Application {
     }
 
     /**
-     * Starts application
+     * Starts the application
      * @param stage JavaFX Stage for things to be displayed on
      */
     public void start(Stage stage) {
@@ -52,7 +52,7 @@ public class App extends Application {
 
         World world = new World(pi4j);
 
-        //load config and text (in selected language) into world object
+        //load config and text (in selected language) into the world object
         Config ignored1 = new Config("config", world);
         LanguageLoader ignored2 = new LanguageLoader(world);
         logger.log("Loaded configs and language pack");
@@ -89,7 +89,7 @@ public class App extends Application {
             controller.stopGameLogic();
             pi4j.shutdown();
 
-            //Close filesystem for interpreting files stored inside the jar file when program closes
+            //Close filesystem for interpreting files stored inside the jar file when the program closes
             try {
                 URI uri = this.getClass().getResource("/fonts/MinecraftRegular-Bmg3.otf").toURI();
 
@@ -126,7 +126,7 @@ public class App extends Application {
     }
 
     private Scene createScene(Canvas canvas) {
-        //create visible scene that is displayed to user
+        //create a visible scene that is to be displayed to the user
         StackPane root = new StackPane(canvas);
         Scene scene = new Scene(root);
         scene.setCursor(Cursor.NONE);

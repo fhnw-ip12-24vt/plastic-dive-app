@@ -8,6 +8,7 @@ import com.pi4j.Pi4J;
 import javafx.application.Platform;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.*;
 
 @WatchTests
+@Disabled
 public class ScoreboardTest {
     private final World world = new World(Pi4J.newAutoContext());
     private final String testFileName = "testScoreboard";

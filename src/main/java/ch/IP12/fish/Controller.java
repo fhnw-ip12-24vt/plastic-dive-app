@@ -179,7 +179,7 @@ public class Controller {
         }
 
         world.getPlayers().forEach(player -> player.moveRight(deltaTime));
-        phaseChange(10);
+        phaseChange(6);
     }
 
     private void highScore() {

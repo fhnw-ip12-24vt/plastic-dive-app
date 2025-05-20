@@ -4,15 +4,11 @@ import ch.IP12.fish.fileInterpreters.Logger;
 import ch.IP12.fish.model.World;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.WeakHashMap;
 
 public class Scoreboard {
     //scoreboard list of scores and when
