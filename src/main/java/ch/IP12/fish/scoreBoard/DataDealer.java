@@ -165,7 +165,12 @@ public class DataDealer {
             }
         } catch (IOException | ParseException e) {
             logger.logError(e.getMessage());
+            throw new RuntimeException(e);
         }
         return highscores;
+    }
+
+    void clearInstance(){
+        instance = null;
     }
 }

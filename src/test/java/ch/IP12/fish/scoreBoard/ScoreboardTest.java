@@ -1,15 +1,11 @@
-package ch.IP12.fish.scoreboard;
+package ch.IP12.fish.scoreBoard;
 
 import ch.IP12.fish.fileInterpreters.Logger;
 import ch.IP12.fish.model.World;
-import ch.IP12.fish.scoreBoard.Scoreboard;
 import ch.IP12.fish.testUtils.WatchTests;
 import com.pi4j.Pi4J;
 import javafx.application.Platform;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -43,6 +39,14 @@ public class ScoreboardTest {
                 Logger.getInstance().logError(e.getMessage(), e.getStackTrace());
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    @BeforeEach
+    public void init() {
+        try{
+            (DataDealer.getInstance()).clearInstance();
+        } catch (RuntimeException ignored) {
         }
     }
 

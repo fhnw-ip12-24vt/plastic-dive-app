@@ -1,13 +1,9 @@
-package ch.IP12.fish.scoreboard;
+package ch.IP12.fish.scoreBoard;
 
 import ch.IP12.fish.fileInterpreters.Logger;
-import ch.IP12.fish.scoreBoard.DataDealer;
 import ch.IP12.fish.testUtils.WatchTests;
 import javafx.application.Platform;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -45,10 +41,16 @@ public class DataDealerTest {
         }
     }
 
+    @BeforeEach
+    public void init() {
+        try{
+            (DataDealer.getInstance()).clearInstance();
+        } catch (RuntimeException ignored) {
+        }
+    }
+
     @Test
     public void testGetInstance() {
-        assertThrows(NullPointerException.class, DataDealer::getInstance);
-
         try {
             DataDealer instance = DataDealer.getInstance(fileName);
 

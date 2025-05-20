@@ -1,7 +1,5 @@
-package ch.IP12.fish.scoreboard;
+package ch.IP12.fish.scoreBoard;
 
-import ch.IP12.fish.scoreBoard.ScoreboardComparer;
-import ch.IP12.fish.scoreBoard.ScoreboardEnitity;
 import ch.IP12.fish.testUtils.WatchTests;
 import javafx.application.Platform;
 import org.junit.jupiter.api.BeforeAll;
