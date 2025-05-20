@@ -91,7 +91,6 @@ public class Controller {
             case Start -> start();
             case StartingAnimation -> startingAnimation();
             case Running -> running();
-            case PreEndAnimation -> preEndAnimation();
             case End -> end();
             case HighScore -> highScore();
         }
@@ -161,15 +160,11 @@ public class Controller {
 
     }
 
-    void preEndAnimation() {
-        phaseChange(0);
-    }
-
     private void end() {
         // Score nur beim ersten Aufruf speichern
         if (!world.getScoreSaved()) {
             try {
-                DataDealer dealer = DataDealer.getInstance("Highscore.json");
+                DataDealer dealer = DataDealer.getInstance("Highscore");
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 String timestamp = LocalDateTime.now().format(formatter);
 

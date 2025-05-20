@@ -15,7 +15,6 @@ public enum GamePhase {
     Start,
     StartingAnimation,
     Running,
-    PreEndAnimation,
     End,
     HighScore;
 

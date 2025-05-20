@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -72,9 +71,11 @@ public class ScoreboardComparerTest {
         entities.sort(comparer);
 
         highestVal = 0;
+        int i = 1;
         for (ScoreboardEnitity entity : entities) {
             if (highestVal < entity.getScore())
                 highestVal = entity.getScore();
+            System.out.println(i+". "+entity.getName()+": "+entity.getScore());
         }
 
         assertEquals(highestVal, entities.getFirst().getScore());

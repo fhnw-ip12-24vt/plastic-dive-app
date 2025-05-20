@@ -25,6 +25,7 @@ public class DataDealer {
         //check for file existence and creation if it doesn't
         boolean b;
         sizeLimit = boardSizeLimit;
+        fileName += ".json";
         this.fileName = fileName;
         File f = new File(fileName);
         if(!f.exists()){
@@ -81,10 +82,12 @@ public class DataDealer {
                 long score2 = (long) ((JSONObject) o2).get("Score");
                 return Long.compare(score2, score1);
             });
+
             //shorten the list of objects to be the specified length.
-            while (jsonA.size() > sizeLimit){
+            while (jsonA.size() >= sizeLimit){
                 jsonA.removeLast();
             }
+
             FileWriter file = new FileWriter(fileName);
             finalO.put("Highscores", jsonA);
             file.write(finalO.toJSONString());
@@ -94,6 +97,7 @@ public class DataDealer {
             logger.logError(e.getMessage());
             b = true;
         }
+
         if (b){
             try {
                 //write JSONObject into file as new JSON object
@@ -109,23 +113,10 @@ public class DataDealer {
     }
 
     //Parse JSON file provided for a JSON object
-    public JSONObject JSONFileParser() throws IOException, ParseException {
+    private JSONObject JSONFileParser() throws IOException, ParseException {
         FileReader reader = new FileReader(fileName);
         JSONParser parser = new JSONParser();
         return (JSONObject)parser.parse(reader);
-    }
-
-    /**
-     * Clears the entire Json file that is currently being used.
-     */
-    public void JSONFileClear(){
-        try {
-            FileWriter file = new FileWriter(fileName);
-            file.write("");
-            file.flush();
-        } catch (IOException e) {
-            logger.logError(e.getMessage());
-        }
     }
 
     /**
@@ -148,12 +139,5 @@ public class DataDealer {
             logger.logError(e.getMessage());
         }
         return highscores;
-    }
-
-    /**
-     * @return Get the name of the file in use.
-     */
-    public String getFileName() {
-        return fileName;
     }
 }

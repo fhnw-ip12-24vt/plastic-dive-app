@@ -6,6 +6,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -15,56 +17,60 @@ import java.util.WeakHashMap;
 public class Scoreboard {
     //scoreboard list of scores and when
     private final Map<String, Long> scoreboard = new TreeMap<>();
+
     private static Scoreboard instance = null;
     private final Logger logger = Logger.getInstance();
 
+    private final String filename;
     private final World world;
 
+    private final ScoreboardComparer comparator = new ScoreboardComparer();
 
-    private Scoreboard(World world) {
+    private Scoreboard(World world, String fileName) {
         this.world = world;
 
+        this.filename = fileName;
         try{
-            insertValues();
+            insertValues(fileName);
         } catch (IOException e){
             logger.logError(e.getMessage(), world.getConfigValue("log").equals("detailed") ? e.getStackTrace(): null);
         }
     }
 
+    /**
+     * **Note: Name is set to Highscores with this method**
+     * @param world World DTO to interact with for drawing the table.
+     * @return Instance of active Scoreboard.
+     */
     public static Scoreboard getInstance(World world){
-        return instance == null ? instance = new Scoreboard(world) : instance;
-    }
-
-    public static Scoreboard getInstance(){
-        if (instance == null){
-            throw new NullPointerException("Scoreboard not initialized");
-        }
-        return instance;
+        return getInstance(world, "Highscores");
     }
 
     /**
-     * @return Highest score value on the leaderboard
+     * @param world World DTO to interact with for drawing the table.
+     * @param fileName Name of file values are stored in.
+     * @return Instance of active Scoreboard.
      */
-    public ScoreboardEnitity getHighscore(){
-        Long t = 0L;
-        String prevKey = "";
-        for (String i : scoreboard.keySet()){
-            if (prevKey.isEmpty()){
-                t = scoreboard.get(i);
-                prevKey = i;
-            } else if (scoreboard.get(i) > scoreboard.get(prevKey)){
-                t = scoreboard.get(i);
-                prevKey = i;
-            }
+    public static Scoreboard getInstance(World world, String fileName) {
+        return instance == null ? instance = new Scoreboard(world, fileName) : instance;
+    }
+
+    /**
+     * @return Instance of active Scoreboard.
+     * @throws NullPointerException if not instanced yet.
+     */
+    public static Scoreboard getInstance() throws NullPointerException{
+        if (instance == null){
+            throw new NullPointerException("Scoreboard not initialized with valid values yet");
         }
-        return new ScoreboardEnitity(t, prevKey);
+        return instance;
     }
 
     /**
      * Returns entire scoreboard.
      * @return All the entries in the Scoreboard.
      */
-    public ScoreboardEnitity[] getList(){
+    private ScoreboardEnitity[] getList(){
         ArrayList<ScoreboardEnitity> list = new ArrayList<>();
         for (String i : scoreboard.keySet()){
             StringBuilder temp = new StringBuilder(i);
@@ -76,8 +82,7 @@ public class Scoreboard {
             }
             list.add(new ScoreboardEnitity(scoreboard.get(i), temp.toString()));
         }
-        ScoreboardComparer comparator = new ScoreboardComparer();
-        //noinspection unchecked
+
         list.sort(comparator);
         return list.toArray(new ScoreboardEnitity[0]);
     }
@@ -86,8 +91,7 @@ public class Scoreboard {
      * Update values in the scoreboard
      * @throws IOException File interaction warrants possible errors.
      */
-    public void insertValues() throws IOException {
-        String fileName = "Highscore.json";
+    private void insertValues(String fileName) throws IOException {
         DataDealer d = DataDealer.getInstance(fileName);
         scoreboard.clear();
         scoreboard.putAll(d.getValues());
@@ -99,7 +103,7 @@ public class Scoreboard {
      */
     public void draw(GraphicsContext gc){
         try {
-            this.insertValues();
+            this.insertValues(filename);
             ScoreboardEnitity[] highScores = getList();
 
             String temp = "1.  " + highScores[0].getName() + ":  " + highScores[0].getScore();

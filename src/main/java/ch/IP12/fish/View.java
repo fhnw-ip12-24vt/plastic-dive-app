@@ -2,9 +2,7 @@ package ch.IP12.fish;
 
 import ch.IP12.fish.fileInterpreters.Logger;
 import ch.IP12.fish.model.World;
-import ch.IP12.fish.model.animations.Spritesheets;
 import ch.IP12.fish.scoreBoard.Scoreboard;
-import ch.IP12.fish.scoreBoard.ScoreboardEnitity;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -16,15 +14,19 @@ public class View {
     private final GraphicsContext graphicsContext;
 
     private final World world;
+
     private double frontLayerShift = 0.0;
     private double middleLayerShift = 0.0;
     private double backLayerShift = 0.0;
+    private double layerShiftScalar = 0.2;
+
+    private final double backgroundScalar = 3.5;
+
     private final Image frontLayer = new Image("/assets/frontLayer.png");
     private final Image middleLayer = new Image("/assets/middleLayer.png");
     private final Image backLayer = new Image("/assets/middleLayer.png");
     private final Image scannerImage = new Image("/assets/barcodeScanner.png");
-    private double backgroundScalar = 3.5;
-    private double layerShiftScalar = 0.2;
+
     private double upAndDownBobing = 0;
     private final Font fontHighscore;
 
@@ -64,7 +66,6 @@ public class View {
             case Start -> start();
             case StartingAnimation -> startingAnimation();
             case Running -> running();
-            case PreEndAnimation -> running();
             case End -> end();
             case HighScore -> highScore();
         }
@@ -76,10 +77,13 @@ public class View {
         //drawing starting image
         graphicsContext.drawImage(scannerImage, world.getWidth() / 2 - scannerImage.getWidth() * 1.5, world.getHeight() / 2 - scannerImage.getHeight() * 1.5 + Math.sin(upAndDownBobing) * 5 - 100, scannerImage.getWidth() * 3, scannerImage.getHeight() * 3);
         Text text = new Text(world.getTextMapValue("scanText"));
+
         text.setFont(world.getFont());
+
         graphicsContext.setFill(Color.BLACK);
         graphicsContext.setFont(world.getFont());
         graphicsContext.fillText(text.getText(), world.getWidth() / 2 - text.getLayoutBounds().getWidth() / 2, world.getHeight() / 2 + scannerImage.getHeight() * 1.5);
+
         //initial scalar values set
         frontLayerShift = middleLayerShift = backLayerShift = 0;
         layerShiftScalar = 0.2;
@@ -88,8 +92,10 @@ public class View {
     private void startingAnimation() {
         //draw player animation in the beginning
         world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
+
         Text text = new Text(world.getTextMapValue("shirtInfoText"));
         text.setFont(world.getFont());
+
         graphicsContext.setFill(Color.BLACK);
         graphicsContext.setFont(world.getFont());
         graphicsContext.fillText(text.getText(), world.getWidth() / 2 - text.getLayoutBounds().getWidth() / 2, world.getHeight() / 2 + scannerImage.getHeight() * 1.5);
@@ -155,21 +161,19 @@ public class View {
     }
 
     private void drawBackground(Image image, double layerShift) {
-        double backgroundScaling = 4;
-        graphicsContext.drawImage(image, layerShift - image.getWidth() * backgroundScaling, world.getHeight() - image.getHeight() * backgroundScaling, image.getWidth() * backgroundScaling, image.getHeight() * backgroundScaling);
-        graphicsContext.drawImage(image, layerShift, world.getHeight() - image.getHeight() * backgroundScaling, image.getWidth() * backgroundScaling, image.getHeight() * backgroundScaling);
-        graphicsContext.drawImage(image, layerShift + image.getWidth() * backgroundScaling, world.getHeight() - image.getHeight() * backgroundScaling, image.getWidth() * backgroundScaling, image.getHeight() * backgroundScaling);
+        graphicsContext.drawImage(image, layerShift - image.getWidth() * backgroundScalar, world.getHeight() - image.getHeight() * backgroundScalar, image.getWidth() * backgroundScalar, image.getHeight() * backgroundScalar);
+        graphicsContext.drawImage(image, layerShift, world.getHeight() - image.getHeight() * backgroundScalar, image.getWidth() * backgroundScalar, image.getHeight() * backgroundScalar);
+        graphicsContext.drawImage(image, layerShift + image.getWidth() * backgroundScalar, world.getHeight() - image.getHeight() * backgroundScalar, image.getWidth() * backgroundScalar, image.getHeight() * backgroundScalar);
     }
 
     private void resetLayerShift() {
-        double backgroundScaling = 4;
-        if (Math.abs(frontLayerShift) > frontLayer.getWidth() * backgroundScaling) {
+        if (Math.abs(frontLayerShift) > frontLayer.getWidth() * backgroundScalar) {
             frontLayerShift = 0.0;
         }
-        if (Math.abs(middleLayerShift) > middleLayer.getWidth() * backgroundScaling) {
+        if (Math.abs(middleLayerShift) > middleLayer.getWidth() * backgroundScalar) {
             middleLayerShift = 0.0;
         }
-        if (Math.abs(backLayerShift) > backLayer.getWidth() * backgroundScaling) {
+        if (Math.abs(backLayerShift) > backLayer.getWidth() * backgroundScalar) {
             backLayerShift = 0.0;
         }
     }
