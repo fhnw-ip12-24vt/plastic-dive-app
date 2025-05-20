@@ -1,11 +1,99 @@
 [INIT] Starting tests
 
-[INIT] Starting Tests from: ScoreboardComparerTest
-[SUCCESS] Test Successful: testCompareLessThan
-[SUCCESS] Test Successful: testCompareMoreThan
-[SUCCESS] Test Successful: testCompareEqual
-[AFTER] Finishing Tests from: ScoreboardComparerTest
+[INIT] Starting Tests from: BarcodeScannerTest
+[SUCCESS] Test Successful: testInstantiation
+[SUCCESS] Test Successful: testInvalidBarcodeScan
+[SUCCESS] Test Successful: testBarcodeScan
+[AFTER] Finishing Tests from: BarcodeScannerTest
+
+[INIT] Starting Tests from: ConfigTest
+[SUCCESS] Test Successful: testInstantiationOfConfigWhenFileDoesNotExists
+[SUCCESS] Test Successful: testCallOfConfigWhenFileExists
+[SUCCESS] Test Successful: testValueStorageOfConfig
+[AFTER] Finishing Tests from: ConfigTest
+
+[INIT] Starting Tests from: LanguageLoaderTest
+[SUCCESS] Test Successful: testInstantiationOfLanguagePack
+[SUCCESS] Test Successful: testValueStorageOfConfig
+[AFTER] Finishing Tests from: LanguageLoaderTest
+
+[INIT] Starting Tests from: SpriteAnimationTest
+[SUCCESS] Test Successful: interpolationInvalidValueTest
+[SUCCESS] Test Successful: interpolationTest
+[SUCCESS] Test Successful: instantiationTest
+[SUCCESS] Test Successful: getWidthTest
+[SUCCESS] Test Successful: getHeightTest
+[SUCCESS] Test Successful: getImageviewTest
+[AFTER] Finishing Tests from: SpriteAnimationTest
+
+[INIT] Starting Tests from: SpritesheetTest
+[SUCCESS] Test Successful: getSpriteAnimationTest
+[SUCCESS] Test Successful: animationUniquenessTest
+[AFTER] Finishing Tests from: SpritesheetTest
+
+[INIT] Starting Tests from: AtPlayerObstacleTest
+[DISABLED] Test Disabled: adjustDirectionTest - Reason: public void ch.IP12.fish.model.obstacles.AtPlayerObstacleTest.adjustDirectionTest() is @Disabled
+[SUCCESS] Test Successful: instanciateObstacle
+[AFTER] Finishing Tests from: AtPlayerObstacleTest
+
+[INIT] Starting Tests from: BounceObstacleTest
+[SUCCESS] Test Successful: adjustDirectionTest
+[SUCCESS] Test Successful: instanciateObstacle
+[AFTER] Finishing Tests from: BounceObstacleTest
+
+[INIT] Starting Tests from: ForkObstacleTest
+[SUCCESS] Test Successful: adjustDirectionTest
+[SUCCESS] Test Successful: instanciateObstacle
+[AFTER] Finishing Tests from: ForkObstacleTest
+
+[INIT] Starting Tests from: ObstacleTest
+[SUCCESS] Test Successful: instanciateObstacleWithCopyConstructor
+[SUCCESS] Test Successful: drawAnimationTest
+[SUCCESS] Test Successful: checkOutOfBounds
+[SUCCESS] Test Successful: updateTest
+[SUCCESS] Test Successful: instanciateObstacle
+[AFTER] Finishing Tests from: ObstacleTest
+
+[INIT] Starting Tests from: SinObstacleTest
+[SUCCESS] Test Successful: adjustDirectionTest
+[SUCCESS] Test Successful: instanciateObstacle
+[AFTER] Finishing Tests from: SinObstacleTest
+
+[INIT] Starting Tests from: PlayerTest
+[SUCCESS] Test Successful: movePlayer
+[SUCCESS] Test Successful: instanciatePlayer
+[SUCCESS] Test Successful: getterSetterTest
+[SUCCESS] Test Successful: getterReturnsCorrectValueAfterInstantiation
+[AFTER] Finishing Tests from: PlayerTest
+
+[INIT] Starting Tests from: SpawnerTest
+[SUCCESS] Test Successful: spawnRandomObstacleTest
+[SUCCESS] Test Successful: createTest
+[SUCCESS] Test Successful: spawnerInstantiationTest
+[AFTER] Finishing Tests from: SpawnerTest
+
+[INIT] Starting Tests from: DifficultyTest
+[SUCCESS] Test Successful: testGetDifficulty
+[SUCCESS] Test Successful: testDifficulty
+[AFTER] Finishing Tests from: DifficultyTest
+
+[INIT] Starting Tests from: IntUtilsTest
+[SUCCESS] Test Successful: testCollidesWith
+[AFTER] Finishing Tests from: IntUtilsTest
 
 [CLOSE] All tests finished
 [CLOSE] Final report:
-  ScoreboardComparerTest: 3 passed, 0 failed, 0 skipped, 0 aborted, 
+  SinObstacleTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 
+  ConfigTest: 3 passed, 0 failed, 0 skipped, 0 aborted, 
+  SpawnerTest: 3 passed, 0 failed, 0 skipped, 0 aborted, 
+  DifficultyTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 
+  LanguageLoaderTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 
+  BounceObstacleTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 
+  ForkObstacleTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 
+  IntUtilsTest: 1 passed, 0 failed, 0 skipped, 0 aborted, 
+  AtPlayerObstacleTest: 1 passed, 0 failed, 1 skipped, 0 aborted, 
+  PlayerTest: 4 passed, 0 failed, 0 skipped, 0 aborted, 
+  SpriteAnimationTest: 6 passed, 0 failed, 0 skipped, 0 aborted, 
+  BarcodeScannerTest: 3 passed, 0 failed, 0 skipped, 0 aborted, 
+  ObstacleTest: 5 passed, 0 failed, 0 skipped, 0 aborted, 
+  SpritesheetTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 
