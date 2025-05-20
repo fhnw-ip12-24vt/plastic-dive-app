@@ -71,7 +71,7 @@ public class ObstacleTest {
     @Test
     public void checkOutOfBounds(){
         Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
-
+        System.out.println(obstacle.getSize());
         assertEquals(false, obstacle.isOutsideBounds());
 
         obstacle.setX(-250);

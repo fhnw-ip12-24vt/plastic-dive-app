@@ -17,7 +17,7 @@ public class Obstacle extends Moveable {
      * @param world DTO (Data Transfer Object)
      */
     public Obstacle(double y, double speed, SpriteAnimation spriteAnimation, World world) {
-        super(world.getWidth(), Math.abs(y-200), speed, spriteAnimation, ((Math.random() + 0.5) * 2), world);
+        super(world.getWidth(), y, speed, spriteAnimation, ((Math.random() + 0.5) * 2), world);
         //-200 because we dont want anything to be on the very bottom of the screen since it depicts the bottom of the ocean
         //forces the Obstacle to move to the left side of the screen.
         setDirection(Math.PI);
