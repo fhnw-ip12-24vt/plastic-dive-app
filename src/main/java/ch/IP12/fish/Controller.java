@@ -151,8 +151,8 @@ public class Controller {
         deletionList.clear();
 
         //Score increments after not being hit for 5 seconds. This increment increases with more time passed while not hit.
-        if (world.currentTimeSeconds() > lastHitTime + 5)
-            world.incrementScore((long) (1 * deltaTime * (1 + ((world.currentTimeSeconds()) - lastHitTime))));
+        if (world.currentTimeSeconds() > lastHitTime + 2)
+            world.incrementScore((1 * deltaTime * (1 + ((world.currentTimeSeconds()) - lastHitTime))));
 
 
         if (world.isObstaclesEmpty())

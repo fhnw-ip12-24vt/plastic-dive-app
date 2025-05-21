@@ -81,7 +81,7 @@ public class DataDealer {
      */
     //IDE doesn't show warnings for "put" or "add" methods
     @SuppressWarnings("unchecked")
-    public void dataStore(String name, long score){
+    public void dataStore(String name, double score){
         //create variables for JSON and content writing functionality
         boolean b = false;
         JSONObject json = new JSONObject();
@@ -99,9 +99,9 @@ public class DataDealer {
             jsonA.add(json);
             //sorts from highest to lowest
             jsonA.sort((o1, o2) -> {
-                long score1 = (long) ((JSONObject) o1).get("Score");
-                long score2 = (long) ((JSONObject) o2).get("Score");
-                return Long.compare(score2, score1);
+                double score1 = (double) ((JSONObject) o1).get("Score");
+                double score2 = (double) ((JSONObject) o2).get("Score");
+                return Double.compare(score2, score1);
             });
 
             //shorten the list of objects to be the specified length.
@@ -162,16 +162,16 @@ public class DataDealer {
      */
     //IDE doesn't show warnings for "put" or "add" methods
     @SuppressWarnings("unchecked")
-    public HashMap<String, Long> getValues(){
+    public HashMap<String, Double> getValues(){
         //create return variable
-        HashMap<String, Long> highscores = new HashMap<>();
+        HashMap<String, Double> highscores = new HashMap<>();
         try {
             //try parsing file and putting all values into return variable;
             ArrayList<JSONObject> jsonA = new ArrayList<>();
             JSONArray jsonA1 = JSONFileParser();
             jsonA1.forEach(i -> jsonA.add((JSONObject) i));
             for (JSONObject json : jsonA){
-                highscores.put((String) json.get("Name"), (Long)json.get("Score"));
+                highscores.put((String) json.get("Name"), (Double) json.get("Score"));
             }
         } catch (IOException | ParseException e) {
             logger.logError(e.getMessage());

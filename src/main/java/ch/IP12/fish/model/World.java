@@ -29,7 +29,7 @@ public class World {
     private final List<Player> players;
 
     private GamePhase gamePhase = GamePhase.Start;
-    private long score = 100;
+    private double score = 100;
     private Difficulty difficulty;
     private double clock;
     private Font font;
@@ -159,7 +159,7 @@ public class World {
     /**
      * @return Current shared score of all players
      */
-    public long getScore() {
+    public double getScore() {
         return score;
     }
 
@@ -172,7 +172,7 @@ public class World {
     /**
      * @param amount Increases shared score by this amount
      */
-    public void incrementScore(long amount) {
+    public void incrementScore(double amount) {
         score += amount;
     }
 

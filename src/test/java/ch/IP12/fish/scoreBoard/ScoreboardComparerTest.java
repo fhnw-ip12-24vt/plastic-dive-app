@@ -58,7 +58,7 @@ public class ScoreboardComparerTest {
     public void testSortUtility() {
         List<ScoreboardEnitity> entities = new ArrayList<>(List.of(new ScoreboardEnitity(600, "1"), new ScoreboardEnitity(200, "2"), new ScoreboardEnitity(700, "3"), new ScoreboardEnitity(100, "4")));
 
-        long highestVal = 0;
+        double highestVal = 0;
         for (ScoreboardEnitity entity : entities) {
             if (highestVal < entity.getScore())
                 highestVal = entity.getScore();

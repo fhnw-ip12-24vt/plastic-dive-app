@@ -1,7 +1,7 @@
 package ch.IP12.fish.scoreBoard;
 
 public class ScoreboardEnitity {
-    final long score;
+    final double score;
     final String name;
 
     /**
@@ -9,12 +9,12 @@ public class ScoreboardEnitity {
      * @param score The score the entity will hold.
      * @param name The name that is associated with the entity.
      */
-    public ScoreboardEnitity(long score, String name) {
+    public ScoreboardEnitity(double score, String name) {
         this.score = score;
         this.name = name;
     }
 
-    public long getScore() {
+    public double getScore() {
         return score;
     }
 

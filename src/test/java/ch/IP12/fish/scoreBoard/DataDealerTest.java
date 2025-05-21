@@ -70,10 +70,10 @@ public class DataDealerTest {
 
             for (int i = 0; i < 10; i++){
                 int finalI = i;
-                assertDoesNotThrow(() -> instance.dataStore(finalI+"", 500L*finalI));
+                assertDoesNotThrow(() -> instance.dataStore(finalI+"", 500.0*finalI));
             }
 
-            assertDoesNotThrow(() -> instance.dataStore("11", 500));
+            assertDoesNotThrow(() -> instance.dataStore("11", 500.0));
 
             assertEquals(10, instance.getValues().size());
 
@@ -88,15 +88,15 @@ public class DataDealerTest {
         try{
             DataDealer instance = DataDealer.getInstance(fileName);
 
-            Map<String, Long> expectedValues = new HashMap<>();
+            Map<String, Double> expectedValues = new HashMap<>();
 
             for (int i = 0; i < 10; i++){
                 int finalI = i;
-                expectedValues.merge(finalI+"",500L*finalI , (a, b) -> b);
-                assertDoesNotThrow(() -> instance.dataStore(finalI+"", 500L*finalI));
+                expectedValues.merge(finalI+"",500.0*finalI , (a, b) -> b);
+                assertDoesNotThrow(() -> instance.dataStore(finalI+"", 500.0*finalI));
             }
 
-            Map<String, Long> comparisonValues = instance.getValues();
+            Map<String, Double> comparisonValues = instance.getValues();
 
             assertEquals(expectedValues.size(), comparisonValues.size());
             assertEquals(expectedValues, comparisonValues);

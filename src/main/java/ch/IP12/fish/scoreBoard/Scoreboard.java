@@ -12,7 +12,7 @@ import java.util.TreeMap;
 
 public class Scoreboard {
     //scoreboard list of scores and when
-    private final Map<String, Long> scoreboard = new TreeMap<>();
+    private final Map<String, Double> scoreboard = new TreeMap<>();
 
     private static Scoreboard instance = null;
     private final Logger logger = Logger.getInstance();
@@ -115,7 +115,7 @@ public class Scoreboard {
 
             for (int i = 0; i < highScores.length; i++) {
                 ScoreboardEnitity entry = highScores[i];
-                String text = (i + 1) + ".  " + entry.getName() + ":  " + entry.getScore();
+                String text = (i + 1) + ".  " + entry.getName() + ":  " + (int) entry.getScore();
                 gc.fillText(text, startX, startY + i * lineSpacing);
             }
         } catch (Exception e) {

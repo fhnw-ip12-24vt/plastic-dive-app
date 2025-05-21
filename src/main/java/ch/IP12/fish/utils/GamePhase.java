@@ -6,7 +6,6 @@ package ch.IP12.fish.utils;
  *     <li>Start</li>
  *     <li>StartingAnimation</li>
  *     <li>Running</li>
- *     <li>PreEndAnimation</li>
  *     <li>End</li>
  *     <li>Highscore</li>
  * </ul>
