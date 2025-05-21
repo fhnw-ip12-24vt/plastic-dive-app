@@ -54,7 +54,7 @@ public class World {
         Player player1 = new Player(0, height / 2.0 + 100, 300, Spritesheets.Player.getSpriteAnimation(), joystick1, this);
         Player player2 = new Player(0, height / 2.0 - 100, 300, Spritesheets.Player.getSpriteAnimation(), joystick2, this);
 
-        players = List.of(player1,player2);
+        players = new ArrayList<Player>(List.of(player1,player2));
 
         obstacles = new ArrayList<>();
 
@@ -248,6 +248,9 @@ public class World {
      */
     public void setConfigData(Map<String, String> config) {
         this.config = config;
+        while (players.size() > Integer.parseInt(getConfigValue("maxPlayerCount"))) {
+            players.removeLast();
+        }
     }
 
     /**
