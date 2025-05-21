@@ -14,7 +14,6 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 @WatchTests
-@Disabled
 public class DataDealerTest {
     private final String fileName = "testScores";
 

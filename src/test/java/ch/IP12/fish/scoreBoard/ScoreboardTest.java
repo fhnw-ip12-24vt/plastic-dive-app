@@ -14,7 +14,6 @@ import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.*;
 
 @WatchTests
-@Disabled
 public class ScoreboardTest {
     private final World world = new World(Pi4J.newAutoContext());
     private final String testFileName = "testScoreboard";

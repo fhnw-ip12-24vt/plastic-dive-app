@@ -6,18 +6,16 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class DataDealer {
     //variable for easy access to file
-    private final String fileName;
     private final Path filePath;
 
     private final int sizeLimit;
@@ -29,7 +27,6 @@ public class DataDealer {
         //check for file existence and creation if it doesn't
         sizeLimit = boardSizeLimit;
         fileName += ".json";
-        this.fileName = fileName;
 
         filePath = Path.of(fileName);
         if (!Files.exists(filePath)) {
@@ -98,7 +95,7 @@ public class DataDealer {
         //write to file if it has entries already
         try {
             //add existing entries to JSON Array and write into file as new JSON object
-            jsonA.addAll((JSONArray) JSONFileParser().get("Highscores"));
+            jsonA.addAll(JSONFileParser());
             jsonA.add(json);
             //sorts from highest to lowest
             jsonA.sort((o1, o2) -> {
@@ -138,13 +135,26 @@ public class DataDealer {
     }
 
     //Parse JSON file provided for a JSON object
-    private JSONObject JSONFileParser() throws IOException, ParseException {
-        FileReader reader = new FileReader(fileName);
+    private JSONArray JSONFileParser() throws IOException, ParseException {
+        Files.readAllLines(filePath);
+        List<String> stringList = Files.readAllLines(filePath);
+
+        String jsonFile = "";
+        for (String string : stringList) {
+            jsonFile += string.replace("\r", "").replace("\n", "").trim();
+        }
+
+
+
+        if (stringList.isEmpty()) {
+            return new JSONArray();
+        }
+
         JSONParser parser = new JSONParser();
 
-        JSONObject json = (JSONObject) parser.parse(reader);
-        reader.close();
-        return json;
+        JSONObject json = (JSONObject) parser.parse(jsonFile);
+
+        return (JSONArray) json.get("Highscores");
     }
 
     /**
@@ -158,7 +168,7 @@ public class DataDealer {
         try {
             //try parsing file and putting all values into return variable;
             ArrayList<JSONObject> jsonA = new ArrayList<>();
-            JSONArray jsonA1 = (JSONArray) JSONFileParser().get("Highscores");
+            JSONArray jsonA1 = JSONFileParser();
             jsonA1.forEach(i -> jsonA.add((JSONObject) i));
             for (JSONObject json : jsonA){
                 highscores.put((String) json.get("Name"), (Long)json.get("Score"));
