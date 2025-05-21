@@ -8,11 +8,11 @@ import javafx.scene.canvas.GraphicsContext;
 
 public enum Difficulty {
     Easy(
-            5181539527921L, Spritesheets.easyDifficultyAnimation),
+            5181539527925L, Spritesheets.easyDifficultyAnimation),
     Medium(
-            6211734858498L, Spritesheets.mediumDifficultyAnimation),
+            6211734858490L, Spritesheets.mediumDifficultyAnimation),
     Hard(
-            7751064387955L, Spritesheets.hardDifficultyAnimation),
+            7751064387950L, Spritesheets.hardDifficultyAnimation),
     ;
 
     public final long barcode;
