@@ -43,6 +43,9 @@ public class App extends Application {
      * @param stage JavaFX Stage for things to be displayed on
      */
     public void start(Stage stage) {
+        System.setProperty("sun.java2d.opengl", "True");
+        System.setProperty("prism.order", "es2");
+
         Logger logger = Logger.getInstance("log");
         logger.start();
         logger.log("Start sequence started");
