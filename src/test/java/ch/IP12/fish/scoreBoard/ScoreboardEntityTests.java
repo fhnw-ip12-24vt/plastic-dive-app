@@ -27,18 +27,18 @@ public class ScoreboardEntityTests {
     @Test
     public void testGetScore() {
         ScoreboardEnitity se = new ScoreboardEnitity(4000, "hello");
-        assertEquals(4000, se.getScore());
+        assertEquals(4000, se.score());
 
         se = new ScoreboardEnitity(5000, "world");
-        assertEquals(5000, se.getScore());
+        assertEquals(5000, se.score());
     }
 
     @Test
     public void testGetName() {
         ScoreboardEnitity se = new ScoreboardEnitity(4000, "hello");
-        assertEquals("hello", se.getName());
+        assertEquals("hello", se.name());
 
         se = new ScoreboardEnitity(5000, "world");
-        assertEquals("world", se.getName());
+        assertEquals("world", se.name());
     }
 }

@@ -30,10 +30,10 @@ public class DifficultyTest {
 
     @Test
     public void testGetDifficulty() {
-        Difficulty phase = Difficulty.getDifficulty(5181539527921L);
+        Difficulty phase = Difficulty.getDifficulty(5181539527925L);
         assertEquals(Difficulty.Easy, phase);
 
-        phase = Difficulty.getDifficulty(7751064387955L);
+        phase = Difficulty.getDifficulty(7751064387950L);
         assertEquals(Difficulty.Hard, phase);
     }
 }

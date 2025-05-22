@@ -77,15 +77,15 @@ public class BarcodeScannerTest {
         BarcodeScanner scanner = new BarcodeScanner(scene, world);
 
         scanner.startListening();
-        simulateKeySequence("5181539527921");
+        simulateKeySequence("5181539527925");
         assertEquals(Difficulty.Easy, world.getDifficulty());
 
         scanner.startListening();
-        simulateKeySequence("6211734858498");
+        simulateKeySequence("6211734858490");
         assertEquals(Difficulty.Medium, world.getDifficulty());
 
         scanner.startListening();
-        simulateKeySequence("7751064387955");
+        simulateKeySequence("7751064387950");
         assertEquals(Difficulty.Hard, world.getDifficulty());
     }
 

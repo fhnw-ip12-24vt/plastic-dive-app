@@ -15,7 +15,6 @@ public class Scoreboard {
     private final Map<String, Double> scoreboard = new TreeMap<>();
 
     private static Scoreboard instance = null;
-    private final Logger logger = Logger.getInstance();
 
     private final String filename;
     private final World world;
@@ -29,7 +28,7 @@ public class Scoreboard {
         try{
             insertValues(fileName);
         } catch (IOException e){
-            logger.logError(e.getMessage(), world.getConfigValue("log").equals("detailed") ? e.getStackTrace(): null);
+            Logger.getInstance().logError(e.getMessage(), world.getConfigValue("log").equals("detailed") ? e.getStackTrace(): null);
         }
     }
 
@@ -102,7 +101,7 @@ public class Scoreboard {
             this.insertValues(filename);
             ScoreboardEnitity[] highScores = getList();
 
-            String temp = "1.  " + highScores[0].getName() + ":  " + highScores[0].getScore();
+            String temp = "1.  " + highScores[0].name() + ":  " + highScores[0].score();
             double startX = world.getWidth() / 2f - (temp.length()*15)/2f;
             double startY = world.getHeight() / 2f - ((highScores.length)*30)/2f;
             float lineSpacing = 30f;
@@ -115,7 +114,7 @@ public class Scoreboard {
 
             for (int i = 0; i < highScores.length; i++) {
                 ScoreboardEnitity entry = highScores[i];
-                String text = (i + 1) + ".  " + entry.getName() + ":  " + (int) entry.getScore();
+                String text = (i + 1) + ".  " + entry.name() + ":  " + (int) entry.score();
                 gc.fillText(text, startX, startY + i * lineSpacing);
             }
         } catch (Exception e) {

@@ -60,22 +60,22 @@ public class ScoreboardComparerTest {
 
         double highestVal = 0;
         for (ScoreboardEnitity entity : entities) {
-            if (highestVal < entity.getScore())
-                highestVal = entity.getScore();
+            if (highestVal < entity.score())
+                highestVal = entity.score();
         }
 
-        assertNotEquals(highestVal, entities.getFirst().getScore());
+        assertNotEquals(highestVal, entities.getFirst().score());
 
         entities.sort(comparer);
 
         highestVal = 0;
         int i = 1;
         for (ScoreboardEnitity entity : entities) {
-            if (highestVal < entity.getScore())
-                highestVal = entity.getScore();
-            System.out.println(i+". "+entity.getName()+": "+entity.getScore());
+            if (highestVal < entity.score())
+                highestVal = entity.score();
+            System.out.println(i+". "+entity.name()+": "+entity.score());
         }
 
-        assertEquals(highestVal, entities.getFirst().getScore());
+        assertEquals(highestVal, entities.getFirst().score());
     }
 }
