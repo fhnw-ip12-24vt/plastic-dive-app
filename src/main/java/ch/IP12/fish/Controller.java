@@ -63,7 +63,7 @@ public class Controller {
     public void startGameLogic() {
         // Run the game logic at a fixed rate
         executor.scheduleAtFixedRate(this::gameStep, 0, 16666666, TimeUnit.NANOSECONDS); // 16ms ≈ 60 updates per second
-        world.setDifficulty(Difficulty.Easy);
+        world.setDifficulty(Difficulty.Hard);
     }
 
     /**
@@ -117,7 +117,7 @@ public class Controller {
 
         final List<Obstacle> deletionList = Collections.synchronizedList(new ArrayList<>());
 
-        if (gameTicks >= 1 && !(world.getDeltaClock() > 30)) {
+        if (gameTicks >= world.getDifficulty().timeBetweenSpawns && !(world.getDeltaClock() > 30)) {
             world.getSpawner().spawnRandom();
             gameTicks = 0;
         }
@@ -152,7 +152,7 @@ public class Controller {
 
         //Score increments after not being hit for 5 seconds. This increment increases with more time passed while not hit.
         if (world.currentTimeSeconds() > lastHitTime + 2)
-            world.incrementScore((1 * deltaTime * (1 + ((world.currentTimeSeconds()) - lastHitTime))));
+            world.incrementScore((1 * deltaTime * (1 + ((world.currentTimeSeconds()) - lastHitTime)))*world.getDifficulty().pointScaling);
 
 
         if (world.isObstaclesEmpty())

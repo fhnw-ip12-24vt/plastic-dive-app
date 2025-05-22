@@ -8,19 +8,23 @@ import javafx.scene.canvas.GraphicsContext;
 
 public enum Difficulty {
     Easy(
-            5181539527925L, Spritesheets.easyDifficultyAnimation),
+            5181539527925L, Spritesheets.easyDifficultyAnimation, 1.0, 1),
     Medium(
-            6211734858490L, Spritesheets.mediumDifficultyAnimation),
+            6211734858490L, Spritesheets.mediumDifficultyAnimation, 0.75, 1.25),
     Hard(
-            7751064387950L, Spritesheets.hardDifficultyAnimation),
+            7751064387950L, Spritesheets.hardDifficultyAnimation, 0.5, 1.5),
     ;
 
     public final long barcode;
     public final SpriteAnimation animation;
+    public final double timeBetweenSpawns;
+    public final double pointScaling;
 
-    Difficulty(long barcode, Spritesheets spritesheet) {
+    Difficulty(long barcode, Spritesheets spritesheet, double timeBetweenSpawns, double pointScaling) {
         this.barcode = barcode;
         this.animation = spritesheet.getSpriteAnimation();
+        this.timeBetweenSpawns = timeBetweenSpawns;
+        this.pointScaling = pointScaling;
     }
 
 
