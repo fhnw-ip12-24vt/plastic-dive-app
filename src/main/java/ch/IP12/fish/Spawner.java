@@ -23,8 +23,8 @@ public class Spawner {
         registerFactory(ForkObstacle.class, (obstacle, params) -> new ForkObstacle(obstacle));
     }
 
-    Random rand = new Random();
-    List<Class<? extends Obstacle>> classes = new ArrayList<>(this.factories.keySet());
+    private final Random rand = new Random();
+    private final List<Class<? extends Obstacle>> classes = new ArrayList<>(this.factories.keySet());
 
     /**
      * @param world DTO (Data Transfer Object)

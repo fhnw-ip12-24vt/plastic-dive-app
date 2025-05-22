@@ -14,7 +14,6 @@ import javafx.scene.text.Font;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 public class World {
     private final Logger logger = Logger.getInstance();
@@ -54,7 +53,7 @@ public class World {
         Player player1 = new Player(0, height / 2.0 + 100, 300, Spritesheets.Player.getSpriteAnimation(), joystick1, this);
         Player player2 = new Player(0, height / 2.0 - 100, 300, Spritesheets.Player.getSpriteAnimation(), joystick2, this);
 
-        players = new ArrayList<Player>(List.of(player1,player2));
+        players = new ArrayList<>(List.of(player1,player2));
 
         obstacles = new ArrayList<>();
 
@@ -322,6 +321,5 @@ public class World {
         resetClock();
         clearObstacles();
         score = 100;
-        GamePhase gamePhase = GamePhase.Start;
     }
 }

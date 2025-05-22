@@ -34,16 +34,14 @@ public class ObstacleTest {
 
     @Test
     public void instanciateObstacle(){
-        assertDoesNotThrow(() -> {
-            Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
-        });
+        assertDoesNotThrow(() -> new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world));
     }
     
     @Test
     public void instanciateObstacleWithCopyConstructor(){
         assertDoesNotThrow(() -> {
             Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
-            Obstacle obstacleCopy = new Obstacle(obstacle);
+            new Obstacle(obstacle);
         });
     }
 
@@ -63,35 +61,33 @@ public class ObstacleTest {
     public void drawAnimationTest(){
         Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
         
-        assertDoesNotThrow(() -> {
-            obstacle.drawAnimation(graphicsContext);
-        });
+        assertDoesNotThrow(() -> obstacle.drawAnimation(graphicsContext));
     }
 
     @Test
     public void checkOutOfBounds(){
         Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
         System.out.println(obstacle.getSize());
-        assertEquals(false, obstacle.isOutsideBounds());
+        assertFalse(obstacle.isOutsideBounds());
 
         obstacle.setX(-250);
         obstacle.setY(0);
 
-        assertEquals(false, obstacle.isOutsideBounds());
+        assertFalse(obstacle.isOutsideBounds());
 
         obstacle.setX(-251);
         obstacle.setY(0);
 
-        assertEquals(true, obstacle.isOutsideBounds());
+        assertTrue(obstacle.isOutsideBounds());
 
         obstacle.setX(0);
         obstacle.setY(-250);
 
-        assertEquals(false, obstacle.isOutsideBounds());
+        assertFalse(obstacle.isOutsideBounds());
 
         obstacle.setX(0);
         obstacle.setY(-2510);
 
-        assertEquals(true, obstacle.isOutsideBounds());
+        assertTrue(obstacle.isOutsideBounds());
     }
 }

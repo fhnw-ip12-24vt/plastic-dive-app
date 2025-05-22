@@ -30,7 +30,7 @@ public class SpriteAnimation extends Transition {
     //last frame used
     private int lastIndex;
 
-    private Duration duration;
+    private final Duration duration;
 
     /**
      * @param imageView Imageview object containing the spritesheet image

@@ -27,8 +27,8 @@ public class LanguageLoader {
             String elemPathString = "/languages/.elements";
             String defaultLangPathString = "/languages/en";
 
-            URI elementsUri = this.getClass().getResource(elemPathString).toURI();
-            URI langUri = this.getClass().getResource(defaultLangPathString).toURI();
+            URI elementsUri = Objects.requireNonNull(this.getClass().getResource(elemPathString)).toURI();
+            URI langUri = Objects.requireNonNull(this.getClass().getResource(defaultLangPathString)).toURI();
 
             if ("jar".equals(elementsUri.getScheme())) {
                 // Use filesystem for interpreting Jar URIs
@@ -53,7 +53,8 @@ public class LanguageLoader {
         String selectedLanguage = world.getConfigValue("lang");
         try{
             if (selectedLanguage == null) throw new RuntimeException("No language selected in config");
-            readLanguageFile(Path.of(this.getClass().getResource("/languages/" + selectedLanguage).toURI()).toAbsolutePath());
+            readLanguageFile(Path.of(Objects.requireNonNull(this.getClass().getResource("/languages/" + selectedLanguage))
+                    .toURI()).toAbsolutePath());
         } catch(RuntimeException e){
             String errorText = "Failed to load selected language pack, attempting to load default language pack. Reason: " + e.getMessage();
             System.out.println(errorText);

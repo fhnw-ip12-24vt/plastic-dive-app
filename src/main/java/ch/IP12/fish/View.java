@@ -27,7 +27,7 @@ public class View {
     private final Image backLayer = new Image("/assets/middleLayer.png");
     private final Image scannerImage = new Image("/assets/barcodeScanner.png");
 
-    private double upAndDownBobing = 0;
+    private double upAndDownBobbing = 0;
     private final Font fontHighscore;
 
     View(GraphicsContext graphicsContext, World world) {
@@ -60,7 +60,7 @@ public class View {
 
         resetLayerShift();
 
-        if (upAndDownBobing <= 100) upAndDownBobing = 100;
+        if (upAndDownBobbing <= 100) upAndDownBobbing = 100;
 
         switch (world.getGamePhase()) {
             case Start -> start();
@@ -73,32 +73,23 @@ public class View {
 
 
     private void start() {
-        upAndDownBobing += 0.1;
+        upAndDownBobbing += 0.1;
         //drawing starting image
-        graphicsContext.drawImage(scannerImage, world.getWidth() / 2 - scannerImage.getWidth() * 1.5, world.getHeight() / 2 - scannerImage.getHeight() * 1.5 + Math.sin(upAndDownBobing) * 5 - 100, scannerImage.getWidth() * 3, scannerImage.getHeight() * 3);
-        Text text = new Text(world.getTextMapValue("scanText"));
+        graphicsContext.drawImage(scannerImage, world.getWidth() / 2 - scannerImage.getWidth() * 1.5, world.getHeight() / 2 - scannerImage.getHeight() * 1.5 + Math.sin(upAndDownBobbing) * 5 - 100, scannerImage.getWidth() * 3, scannerImage.getHeight() * 3);
 
-        text.setFont(world.getFont());
-
-        graphicsContext.setFill(Color.BLACK);
-        graphicsContext.setFont(world.getFont());
-        graphicsContext.fillText(text.getText(), world.getWidth() / 2 - text.getLayoutBounds().getWidth() / 2, world.getHeight() / 2 + scannerImage.getHeight() * 1.5);
+        writeText(world.getTextMapValue("scanText"));
 
         //initial scalar values set
         frontLayerShift = middleLayerShift = backLayerShift = 0;
         layerShiftScalar = 0.2;
     }
 
+    @SuppressWarnings("UnnecessaryReturnStatement")
     private void startingAnimation() {
         //draw player animation in the beginning
         world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
 
-        Text text = new Text(world.getTextMapValue("shirtInfoText"));
-        text.setFont(world.getFont());
-
-        graphicsContext.setFill(Color.BLACK);
-        graphicsContext.setFont(world.getFont());
-        graphicsContext.fillText(text.getText(), world.getWidth() / 2 - text.getLayoutBounds().getWidth() / 2, world.getHeight() / 2 + scannerImage.getHeight() * 1.5);
+        writeText(world.getTextMapValue("shirtInfoText"));
 
         world.getDifficulty().drawAnimation(graphicsContext,world);
 
@@ -176,5 +167,15 @@ public class View {
         if (Math.abs(backLayerShift) > backLayer.getWidth() * backgroundScalar) {
             backLayerShift = 0.0;
         }
+    }
+
+    private void writeText(String string) {
+        Text text = new Text(string);
+        text.setFont(world.getFont());
+
+        graphicsContext.setFill(Color.BLACK);
+        graphicsContext.setFont(world.getFont());
+        graphicsContext.fillText(text.getText(), world.getWidth() / 2 - text.getLayoutBounds().getWidth() / 2, world.getHeight() / 2 + scannerImage.getHeight() * 1.5);
+
     }
 }

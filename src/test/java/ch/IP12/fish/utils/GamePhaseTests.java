@@ -31,12 +31,12 @@ public class GamePhaseTests {
         GamePhase phase = GamePhase.Start;
         phase = phase.next();
 
-        assertEquals(phase, GamePhase.StartingAnimation);
+        assertEquals(GamePhase.StartingAnimation, phase);
 
         phase = phase.next();
-        assertEquals(phase, GamePhase.Running);
+        assertEquals(GamePhase.Running, phase);
 
         phase = GamePhase.HighScore.next();
-        assertEquals(phase, GamePhase.Start);
+        assertEquals(GamePhase.Start, phase);
     }
 }

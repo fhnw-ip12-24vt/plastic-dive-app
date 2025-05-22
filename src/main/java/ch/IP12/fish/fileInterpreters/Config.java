@@ -26,8 +26,8 @@ public class Config {
     {
         try {
             //Create URI default config
-            URI elementsUri = this.getClass().getResource("/defaultConfig/.elements").toURI();
-            URI configUri = this.getClass().getResource("/defaultConfig/config").toURI();
+            URI elementsUri = Objects.requireNonNull(this.getClass().getResource("/defaultConfig/.elements")).toURI();
+            URI configUri = Objects.requireNonNull(this.getClass().getResource("/defaultConfig/config")).toURI();
 
             if ("jar".equals(elementsUri.getScheme())) {
                 // Open the JAR filesystem if it's not already opened

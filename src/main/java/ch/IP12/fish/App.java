@@ -20,6 +20,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
+import java.util.Objects;
 
 public class App extends Application {
     Context pi4j;
@@ -94,14 +95,13 @@ public class App extends Application {
 
             //Close filesystem for interpreting files stored inside the jar file when the program closes
             try {
-                URI uri = this.getClass().getResource("/fonts/MinecraftRegular-Bmg3.otf").toURI();
+                URI uri = Objects.requireNonNull(this.getClass().getResource("/fonts/MinecraftRegular-Bmg3.otf")).toURI();
 
                 if (uri.getScheme().equals("jar")) {
                     FileSystem fileSystem = FileSystems.getFileSystem(uri);
                     fileSystem.close();
                 }
-            } catch (IOException | URISyntaxException ignore) {
-            }
+            } catch (IOException | URISyntaxException | NullPointerException ignore) {}
 
             logger.log("Program Shutdown");
             logger.end();

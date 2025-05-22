@@ -16,8 +16,4 @@ open module com.pi4j.mvc {
     requires java.desktop;
 
     requires json.simple;
-
-    // Module Exports
-
-
 }

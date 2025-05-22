@@ -1,6 +1,5 @@
 package ch.IP12.fish.utils;
 
-import ch.IP12.fish.model.Moveable;
 import ch.IP12.fish.model.Player;
 import ch.IP12.fish.model.obstacles.Obstacle;
 

@@ -63,8 +63,6 @@ public class SpawnerTest {
 
         assertEquals(2, world.getObstacles().size());
 
-        world.getObstacles().forEach(obstacle -> {
-           assertInstanceOf(Obstacle.class, obstacle);
-        });
+        world.getObstacles().forEach(obstacle -> assertInstanceOf(Obstacle.class, obstacle));
     }
 }

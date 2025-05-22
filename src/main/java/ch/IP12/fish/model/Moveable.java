@@ -1,13 +1,11 @@
 package ch.IP12.fish.model;
 
 import ch.IP12.fish.model.animations.SpriteAnimation;
-import ch.IP12.fish.utils.IntUtils;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 public abstract class Moveable {
-    protected World world;
+    protected final World world;
 
     private double x;
     private double y;

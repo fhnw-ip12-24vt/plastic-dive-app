@@ -14,7 +14,6 @@ import javafx.application.Platform;
 public class ForkObstacleTest {
 
     private static World world;
-    private static Player player;
 
     @BeforeAll
     static void initJfxRuntime() {
@@ -28,7 +27,7 @@ public class ForkObstacleTest {
     @BeforeEach
     public void initMocks(){
         world = mock(World.class);
-        player = mock(Player.class);
+        Player player = mock(Player.class);
 
         when(player.getX()).thenReturn(100.0);
         when(player.getY()).thenReturn(100.0);
@@ -40,7 +39,7 @@ public class ForkObstacleTest {
     public void instanciateObstacle(){
         assertDoesNotThrow(() -> {
             Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
-            ForkObstacle forkObstacle = new ForkObstacle(obstacle);
+            new ForkObstacle(obstacle);
         });
     }
 
@@ -49,8 +48,6 @@ public class ForkObstacleTest {
         Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
         ForkObstacle splitterObstacle = new ForkObstacle(obstacle);
 
-        assertDoesNotThrow(() -> {
-            splitterObstacle.adjustDirection();
-        });
+        assertDoesNotThrow(splitterObstacle::adjustDirection);
     }
 }
