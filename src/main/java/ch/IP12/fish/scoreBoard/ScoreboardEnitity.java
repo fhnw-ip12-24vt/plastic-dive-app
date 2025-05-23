@@ -7,6 +7,9 @@ public record ScoreboardEnitity(double score, String name) {
      * @param score The score the entity will hold.
      * @param name  The name that is associated with the entity.
      */
-    public ScoreboardEnitity {
+    public ScoreboardEnitity {}
+
+    public String name(){
+        return name.trim();
     }
 }

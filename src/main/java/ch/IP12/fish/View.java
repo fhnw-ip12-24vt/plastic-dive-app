@@ -74,6 +74,7 @@ public class View {
 
     private void start() {
         upAndDownBobbing += 0.1;
+
         //drawing starting image
         graphicsContext.drawImage(scannerImage, world.getWidth() / 2 - scannerImage.getWidth() * 1.5, world.getHeight() / 2 - scannerImage.getHeight() * 1.5 + Math.sin(upAndDownBobbing) * 5 - 100, scannerImage.getWidth() * 3, scannerImage.getHeight() * 3);
 
@@ -138,6 +139,7 @@ public class View {
     }
 
     private void highScore() {
+        //set font and colour for highscore table
         graphicsContext.setFill(Color.YELLOW);
         graphicsContext.setFont(fontHighscore);
 

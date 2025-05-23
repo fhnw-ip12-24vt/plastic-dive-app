@@ -1,5 +1,5 @@
 //all text has to be filled out for the pack to be accepted, new lines are supported inside quote symbols ("")
 scanText:"SCANNEN SIE DEN BARCODE AUF EINER KLEIDUNG";
-shirtInfoText:"DAS WASCHEN FÜHRT ZU MIKTOPLASTIK IM WASSER";
+shirtInfoText:"DAS WASCHEN FÜHRT ZU MIKROPLASTIK IM WASSER";
 highscoreText:"DEIN ERZIELTER SCORE: ";
 highscoreLoadingErrorText: "FEHLER BEIM LADEN DES HIGHSCORES";

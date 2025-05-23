@@ -13,6 +13,7 @@ import java.util.TreeMap;
 public class Scoreboard {
     //scoreboard list of scores and when
     private final Map<String, Double> scoreboard = new TreeMap<>();
+    DataDealer dataDealer;
 
     private static Scoreboard instance = null;
 
@@ -25,7 +26,9 @@ public class Scoreboard {
         this.world = world;
 
         this.filename = fileName;
+
         try{
+            dataDealer = DataDealer.getInstance(fileName);
             insertValues(fileName);
         } catch (IOException e){
             Logger.getInstance().logError(e.getMessage(), world.getConfigValue("log").equals("detailed") ? e.getStackTrace(): null);
@@ -65,7 +68,13 @@ public class Scoreboard {
      * Returns entire scoreboard.
      * @return All the entries in the Scoreboard.
      */
-    private ScoreboardEnitity[] getList(){
+    ScoreboardEnitity[] getList(){
+        try {
+            this.insertValues(filename);
+        } catch (IOException e) {
+            Logger.getInstance().logError(e.getMessage(), e.getStackTrace());
+        }
+
         ArrayList<ScoreboardEnitity> list = new ArrayList<>();
         for (String i : scoreboard.keySet()){
             StringBuilder temp = new StringBuilder(i);
@@ -87,9 +96,8 @@ public class Scoreboard {
      * @throws IOException File interaction warrants possible errors.
      */
     private void insertValues(String fileName) throws IOException {
-        DataDealer d = DataDealer.getInstance(fileName);
         scoreboard.clear();
-        scoreboard.putAll(d.getValues());
+        scoreboard.putAll(dataDealer.getValues());
     }
 
     /**
@@ -98,7 +106,6 @@ public class Scoreboard {
      */
     public void draw(GraphicsContext gc){
         try {
-            this.insertValues(filename);
             ScoreboardEnitity[] highScores = getList();
 
             String temp = "1.  " + highScores[0].name() + ":  " + highScores[0].score();

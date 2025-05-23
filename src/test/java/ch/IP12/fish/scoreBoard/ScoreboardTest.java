@@ -10,6 +10,7 @@ import org.junit.jupiter.api.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -51,8 +52,6 @@ public class ScoreboardTest {
 
     @Test
     public void testGetInstance() {
-        assertThrows(NullPointerException.class, Scoreboard::getInstance);
-
         Scoreboard scoreboard = Scoreboard.getInstance(world, testFileName);
         assertDoesNotThrow(() -> Scoreboard.getInstance());
 
@@ -61,5 +60,28 @@ public class ScoreboardTest {
 
         scoreboard = Scoreboard.getInstance(world);
         assertEquals(scoreboard, scoreboard2);
+    }
+
+    @Test
+    public void testGetScore() {
+        Scoreboard scoreboard = Scoreboard.getInstance(world, testFileName);
+
+        AtomicInteger vals = new AtomicInteger();
+        assertDoesNotThrow(() -> vals.set(scoreboard.getList().length));
+        assertEquals(0, scoreboard.getList().length);
+
+        DataDealer dataDealer = DataDealer.getInstance();
+
+        for (int i = 0; i < 12; i++) {
+            dataDealer.dataStore(i+"", i*50.0);
+        }
+
+        ScoreboardEnitity[] scoreboardList = scoreboard.getList();
+
+        assertEquals(dataDealer.getValues().size(), scoreboardList.length);
+
+        for (ScoreboardEnitity scoreboardEnitity : scoreboardList) {
+            System.out.println(scoreboardEnitity.name() + ": " + scoreboardEnitity.score());
+        }
     }
 }

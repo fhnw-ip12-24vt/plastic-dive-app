@@ -52,7 +52,9 @@ public class Controller {
     void createGameKeyListeners(Scene scene) {
         scene.setOnKeyReleased(e -> {
             if (e.getCode() == KeyCode.I) {
-                phaseChange(0);
+                phaseChange(0, () -> {
+                    lastHitTime = world.currentTimeSeconds();
+                });
             }
         });
     }
@@ -103,7 +105,7 @@ public class Controller {
     }
 
     private void startingAnimation() {
-        if (world.getDeltaClock() > 9.5) {
+        if (world.getDeltaClock() > 9.4) {
             world.getPlayers().forEach(player -> player.moveRight(deltaTime));
         }
 
@@ -114,7 +116,6 @@ public class Controller {
     }
 
     private void running() {
-
         final List<Obstacle> deletionList = Collections.synchronizedList(new ArrayList<>());
 
         if (gameTicks >= world.getDifficulty().timeBetweenSpawns && !(world.getDeltaClock() > 30)) {
@@ -129,7 +130,7 @@ public class Controller {
             //Obstacle updates
             obstacle.update(deltaTime);
 
-            //adds obstacle to deletion list if it is entirely out of frame for the player
+            //adds an obstacle to a deletion list if it is entirely out of frame for the player
             if (obstacle.isOutsideBounds()) {
                 deletionList.add(obstacle);
             }
@@ -190,7 +191,7 @@ public class Controller {
         phaseChange(10, () -> logger.log("Round finished, final score: " + world.getScoreWithoutDecimals()));
     }
 
-    //Shift phase to th next one and execute an action after n amount of seconds have passed
+    //Shift the phase to the next one and execute an action after n number of seconds have passed
     private void phaseChange(int timeInPhase, Runnable action) {
         if (world.getDeltaClock() >= timeInPhase) {
             action.run();

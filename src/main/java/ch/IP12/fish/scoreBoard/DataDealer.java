@@ -130,7 +130,12 @@ public class DataDealer {
         }
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     private void writeJSONToFile(String JSONString) throws IOException {
+        if (!Files.exists(filePath)) {
+            Files.createFile(filePath);
+            while (!Files.exists(filePath)) {}
+        }
         Files.write(filePath, JSONString.getBytes(), StandardOpenOption.WRITE, StandardOpenOption.DSYNC);
     }
 
@@ -165,11 +170,13 @@ public class DataDealer {
     public HashMap<String, Double> getValues(){
         //create return variable
         HashMap<String, Double> highscores = new HashMap<>();
+
         try {
             //try parsing file and putting all values into return variable;
             ArrayList<JSONObject> jsonA = new ArrayList<>();
             JSONArray jsonA1 = JSONFileParser();
             jsonA1.forEach(i -> jsonA.add((JSONObject) i));
+
             for (JSONObject json : jsonA){
                 highscores.put((String) json.get("Name"), (Double) json.get("Score"));
             }
