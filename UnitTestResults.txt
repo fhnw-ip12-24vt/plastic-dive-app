@@ -1,10 +1,10 @@
 [INIT] Starting tests
 
-[INIT] Starting Tests from: ScoreboardTest
-[SUCCESS] Test Successful: testGetScore
-[SUCCESS] Test Successful: testGetInstance
-[AFTER] Finishing Tests from: ScoreboardTest
+[INIT] Starting Tests from: LanguageLoaderTest
+[SUCCESS] Test Successful: testInstantiationOfLanguagePack
+[SUCCESS] Test Successful: testValueStorageOfTextMapSize
+[AFTER] Finishing Tests from: LanguageLoaderTest
 
 [CLOSE] All tests finished
 [CLOSE] Final report:
-  ScoreboardTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 
+  LanguageLoaderTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 

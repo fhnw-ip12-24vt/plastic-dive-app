@@ -2,7 +2,6 @@ package ch.IP12.fish.fileInterpreters;
 
 import ch.IP12.fish.model.World;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,7 +9,7 @@ import java.nio.file.*;
 import java.util.*;
 
 /**
- * Reads language pack selected in config, and stores values read from file into World's textMap variable
+ * Reads language pack selected in config, and stores values read from a file into the World's textMap variable
  */
 public class LanguageLoader {
     private final Logger logger = Logger.getInstance();
@@ -79,26 +78,27 @@ public class LanguageLoader {
     private void readElements(){
         langElements = new ArrayList<>();
 
-        if (!Files.exists(elementsPath)) {
+        if (elementsPath == null || !Files.exists(elementsPath)) {
             logger.logError("Could not find config Elements definition file");
             throw new RuntimeException("Could not find config Elements definition file");
         }
 
-        try (BufferedReader reader = Files.newBufferedReader(elementsPath)) {
-            String line = "";
-            while (reader.ready()) {
-                String tempLine = reader.readLine();
+        try {
+            List<String> lines = Files.readAllLines(elementsPath);
 
-                if (tempLine.trim().isEmpty()) continue;
+            StringBuilder line = new StringBuilder();
+            for (String s : lines) {
 
-                for (int i = 0; i < tempLine.length(); i++) {
-                    char tempChar = tempLine.charAt(i);
-                    line += tempChar;
+                if (s.trim().isEmpty()) continue;
 
-                    if (line.endsWith(";")) {
-                        line = line.substring(0, line.length() - 1);
-                        langElements.add(line.trim().toLowerCase());
-                        line = "";
+                for (int i = 0; i < s.length(); i++) {
+                    char tempChar = s.charAt(i);
+                    line.append(tempChar);
+
+                    if (line.toString().endsWith(";")) {
+                        line = new StringBuilder(line.substring(0, line.length() - 1));
+                        langElements.add(line.toString().trim().toLowerCase());
+                        line = new StringBuilder();
                     }
                 }
             }
@@ -116,36 +116,35 @@ public class LanguageLoader {
             throw new RuntimeException("Language definition file does not exist");
         }
 
-        try (BufferedReader reader = Files.newBufferedReader(path)) {
-            List<String> lines = new ArrayList<>();
+        try {
+            List<String> lines = Files.readAllLines(path);
+            List<String> langTexts = new ArrayList<>();
 
-            String line = "";
+            StringBuilder line = new StringBuilder();
             boolean openString = false;
 
-            while (reader.ready()) {
-                String tempLine = reader.readLine();
+            for (String s : lines) {
+                if (s.trim().isEmpty()) continue;
 
-                if (tempLine.trim().isEmpty()) continue;
-
-                for (int i = 0; i < tempLine.length(); i++) {
-                    char tempChar = tempLine.charAt(i);
+                for (int i = 0; i < s.length(); i++) {
+                    char tempChar = s.charAt(i);
 
                     if (openString && tempChar == '"') openString = false;
                     else if (!openString && tempChar == '"') openString = true;
-                    else if (tempChar == '/' && tempLine.charAt(i + 1) == '/'&& !openString) break;
-                    else line += tempChar;
+                    else if (tempChar == '/' && s.charAt(i + 1) == '/'&& !openString) break;
+                    else line.append(tempChar);
 
-                    if (line.endsWith(";")) {
-                        line = line.substring(0, line.length() - 1);
-                        lines.add(line);
-                        line = "";
+                    if (line.toString().endsWith(";")) {
+                        line = new StringBuilder(line.substring(0, line.length() - 1));
+                        langTexts.add(line.toString());
+                        line = new StringBuilder();
                     }
                 }
 
-                if (!line.trim().isEmpty()) line = line + "\n";
+                if (!line.toString().trim().isEmpty()) line.append("\n");
             }
 
-            interpretLanguageFile(lines);
+            interpretLanguageFile(langTexts);
         } catch (IOException e) {
             logger.logError(e.getMessage(), world.getConfigValue("log").equals("detailed") ? e.getStackTrace(): null);
 
@@ -165,21 +164,34 @@ public class LanguageLoader {
 
             //
             String key = sections[0].trim().toLowerCase();
-            String value = "";
+            StringBuilder value = new StringBuilder();
 
             //readd extra colons
             for (int i = 1; i < sections.length; i++) {
-                if(i > 1) value = value + (":" + sections[i]);
-                else value = sections[i];
+                if(i > 1) value.append(":").append(sections[i]);
+                else value = new StringBuilder(sections[i]);
             }
 
             //if .elements contains found key, insert it into stored configs
             if (langElements.contains(key)) {
-                textMap.merge(key, value, (oldValue, newValue) -> newValue);
+                textMap.merge(key, value.toString(), (oldValue, newValue) -> newValue);
             }
         });
 
-        if (textMap.size() < langElements.size()) throw new RuntimeException("Missing text in language pack");
+        if (textMap.size() < langElements.size()) {
+            ArrayList<String> missing = new ArrayList<>();
+            for (String key: langElements)
+                if (!textMap.containsKey(key))
+                    missing.add(key);
+
+            StringBuilder text = new StringBuilder("Missing " + missing.size() + " text element" + (missing.size() > 1 ? "s" : "") + " in language pack\nMissing:");
+
+            for (String s: missing)
+                text.append("   \n").append(s);
+
+            logger.logError(text.toString());
+            throw new RuntimeException(text.toString());
+        }
 
         world.setTextMapData(textMap);
     }

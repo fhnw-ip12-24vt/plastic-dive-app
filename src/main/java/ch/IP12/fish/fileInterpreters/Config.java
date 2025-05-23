@@ -9,6 +9,7 @@ import java.net.URISyntaxException;
 import java.nio.file.*;
 import java.util.*;
 
+import static java.nio.file.FileSystems.newFileSystem;
 import static java.nio.file.StandardOpenOption.*;
 
 /**
@@ -31,11 +32,11 @@ public class Config {
 
             if ("jar".equals(elementsUri.getScheme())) {
                 // Open the JAR filesystem if it's not already opened
-                FileSystem fs = FileSystems.newFileSystem(elementsUri, Map.of());
+                FileSystem fs = newFileSystem(elementsUri, Map.of());
                 elementsPath = fs.getPath("/defaultConfig/.elements");
                 defaultConfigPath = fs.getPath("/defaultConfig/config");
             } else {
-                // Running from file system (e.g., in IDE or unpacked build)
+                // Running from a file system (e.g. in IDE or unpacked build)
                 elementsPath = Path.of(elementsUri);
                 defaultConfigPath = Path.of(configUri);
             }
@@ -55,32 +56,33 @@ public class Config {
     private void readElements(){
         configElements = new ArrayList<>();
 
-        if (!Files.exists(elementsPath)) {
+        if (elementsPath == null || !Files.exists(elementsPath)) {
             logger.logError("Could not find config Elements definition file");
             throw new RuntimeException("Could not find config Elements definition file");
         }
 
-        try (BufferedReader reader = Files.newBufferedReader(elementsPath)) {
-            String line = "";
-            while (reader.ready()) {
-                String tempLine = reader.readLine();
+        try {
+            List<String> lines = Files.readAllLines(elementsPath);
 
-                if (tempLine.trim().isEmpty()) continue;
+            StringBuilder line = new StringBuilder();
+            for (String s : lines) {
 
-                for (int i = 0; i < tempLine.length(); i++) {
-                    char tempChar = tempLine.charAt(i);
-                    line += tempChar;
+                if (s.trim().isEmpty()) continue;
 
-                    if (line.endsWith(";")) {
-                        line = line.substring(0, line.length() - 1);
-                        configElements.add(line.trim().toLowerCase());
-                        line = "";
+                for (int i = 0; i < s.length(); i++) {
+                    char tempChar = s.charAt(i);
+                    line.append(tempChar);
+
+                    if (line.toString().endsWith(";")) {
+                        line = new StringBuilder(line.substring(0, line.length() - 1));
+                        configElements.add(line.toString().trim().toLowerCase());
+                        line = new StringBuilder();
                     }
                 }
             }
-        } catch (IOException e){
-            logger.logError("Could not read config elements definition file");
-            throw new RuntimeException("Could not read config elements definition file");
+        } catch (IOException e) {
+            logger.logError("Could not read config Elements definition file");
+            throw new RuntimeException("Could not read config Elements definition file");
         }
     }
 
@@ -99,36 +101,35 @@ public class Config {
         if (!Files.exists(path))
             throw new RuntimeException("Config not generated at specified location");
 
-        try (BufferedReader reader = Files.newBufferedReader(path)) {
-            List<String> lines = new ArrayList<>();
+        try {
+            List<String> lines = Files.readAllLines(path);
+            List<String> configs = new ArrayList<>();
 
-            String line = "";
+            StringBuilder line = new StringBuilder();
             boolean openString = false;
 
-            while (reader.ready()) {
-                String tempLine = reader.readLine();
+            for (String s : lines) {
+                if (s.trim().isEmpty()) continue;
 
-                if (tempLine.trim().isEmpty()) continue;
-
-                for (int i = 0; i < tempLine.length(); i++) {
-                    char tempChar = tempLine.charAt(i);
+                for (int i = 0; i < s.length(); i++) {
+                    char tempChar = s.charAt(i);
 
                     if (openString && tempChar == '"') openString = false;
                     else if (!openString && tempChar == '"') openString = true;
-                    else if (tempChar == '/' && tempLine.charAt(i + 1) == '/'&& !openString) break;
-                    else line += tempChar;
+                    else if (tempChar == '/' && s.charAt(i + 1) == '/'&& !openString) break;
+                    else line.append(tempChar);
 
-                    if (line.endsWith(";")) {
-                        line = line.substring(0, line.length() - 1);
-                        lines.add(line);
-                        line = "";
+                    if (line.toString().endsWith(";")) {
+                        line = new StringBuilder(line.substring(0, line.length() - 1));
+                        configs.add(line.toString());
+                        line = new StringBuilder();
                     }
                 }
 
-                if (!line.trim().isEmpty()) line = line + "\n";
+                if (!line.toString().trim().isEmpty()) line.append("\n");
             }
 
-            interpretConfig(lines);
+            interpretConfig(configs);
         } catch (IOException e) {
             logger.logError(e.getMessage());
         }
@@ -147,7 +148,7 @@ public class Config {
         try{
             Files.createFile(path);
 
-            //ensure file exists before moving forward
+            //ensure a file exists before moving forward
             //noinspection StatementWithEmptyBody
             while(!Files.exists(path)){}
 
@@ -165,22 +166,22 @@ public class Config {
         }
 
         try (BufferedReader reader = Files.newBufferedReader(defaultConfigPath)) {
-            String text = "";
+            StringBuilder text = new StringBuilder();
             boolean first = true;
 
             while (reader.ready()) {
                 String tempLine = reader.readLine();
 
                 if (!first) {
-                    text = text + "\n";
+                    text.append("\n");
                 } else {
                     first = false;
                 }
 
-                text = text + tempLine;
+                text.append(tempLine);
             }
 
-            Files.write(path, text.getBytes(), WRITE, SYNC);
+            Files.write(path, text.toString().getBytes(), WRITE, SYNC);
         }catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -198,23 +199,33 @@ public class Config {
 
             //
             String key = sections[0].trim().toLowerCase();
-            String value = "";
+            StringBuilder value = new StringBuilder();
 
             //readd extra colons
             for (int i = 1; i < sections.length; i++) {
-                if(i > 1) value = value + (":" + sections[i]);
-                else value = sections[i].trim().toLowerCase();
+                if(i > 1) value.append(":").append(sections[i]);
+                else value = new StringBuilder(sections[i].trim().toLowerCase());
             }
 
             //if .elements contains found key, insert it into stored configs
             if (configElements.contains(key)) {
-                config.merge(key, value, (oldValue, newValue) -> newValue);
+                config.merge(key, value.toString(), (oldValue, newValue) -> newValue);
             }
         });
 
         if (config.size() < configElements.size()) {
-            logger.logError("Missing config elements");
-            throw new RuntimeException("Missing config elements");
+            ArrayList<String> missing = new ArrayList();
+            for (String key: configElements)
+                if (!config.containsKey(key))
+                    missing.add(key);
+
+            StringBuilder text = new StringBuilder("Missing " + missing.size() + " element" + (missing.size() > 1 ? "s" : "") + " in config\nMissing:");
+
+            for (String s: missing)
+                text.append("   \n").append(s);
+
+            logger.logError(text.toString());
+            throw new RuntimeException(text.toString());
         }
 
         world.setConfigData(config);
