@@ -10,6 +10,7 @@ import ch.IP12.fish.utils.Difficulty;
 import ch.IP12.fish.utils.GamePhase;
 import com.pi4j.context.Context;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
 
 import java.awt.*;
 import java.util.*;
@@ -51,7 +52,9 @@ public class World {
         JoystickAnalog joystick2 = new JoystickAnalog(ads1115, Ads1115.Channel.A2, Ads1115.Channel.A3);
 
         Player player1 = new Player(0, height / 2.0 + 100, 300, Spritesheets.Player.getSpriteAnimation(), joystick1, this);
-        Player player2 = new Player(0, height / 2.0 - 100, 300, Spritesheets.Player.getSpriteAnimation(), joystick2, this);
+        Player player2 = new Player(0, height / 2.0 - 100, 300, Spritesheets.Player2.getSpriteAnimation(), joystick2, this);
+        // jump to a later frame so that the animations aren't the same
+        player2.getAnimation().jumpTo(Duration.millis(200));
 
         players = new ArrayList<>(List.of(player1,player2));
 

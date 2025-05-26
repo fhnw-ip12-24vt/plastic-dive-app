@@ -12,6 +12,7 @@ import java.util.Random;
 public enum Spritesheets {
     //to add more obstacle variations add an entry to the list bellow.
     Player(1,new SpriteAnimation(new ImageView(new Image("assets/player.png")), 8, 8, 0, 0, 92, 41, Duration.millis(1000))),
+    Player2(1,new SpriteAnimation(new ImageView(new Image("assets/player.png")), 8, 8, 0, 0, 92, 41, Duration.millis(1000))),
     SmallCluster(1,new SpriteAnimation(new ImageView(new Image("https://upload.wikimedia.org/wikipedia/commons/7/73/The_Horse_in_Motion.jpg")), 0, 0, 0, 0, 20, 20, Duration.millis(200))),
     MediumCluster(2,new SpriteAnimation(new ImageView(new Image("https://upload.wikimedia.org/wikipedia/commons/7/73/The_Horse_in_Motion.jpg")), 0, 0, 0, 0, 35, 35, Duration.millis(200))),
     LargeCluster(3,new SpriteAnimation(new ImageView(new Image("https://upload.wikimedia.org/wikipedia/commons/7/73/The_Horse_in_Motion.jpg")), 0, 0, 0, 0, 50, 50, Duration.millis(200))),
