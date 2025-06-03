@@ -139,6 +139,8 @@ public class Config {
         if (!Files.exists(path.getParent())) {
             try {
                 Files.createDirectories(path.getParent());
+                //noinspection StatementWithEmptyBody
+                while (!Files.exists(path.getParent())) {}
             } catch (IOException e) {
                 logger.logError("Could not create directory: " + path.getParent());
                 return false;
@@ -190,7 +192,7 @@ public class Config {
     private void interpretConfig(List<String> lines){
         Map<String, String> config = new HashMap<>();
 
-        lines.parallelStream().filter(l -> !l.trim().isEmpty()).forEach(s -> {
+        lines.stream().filter(l -> !l.trim().isEmpty()).forEach(s -> {
             s = s.replace("\r", "");
             String[] sections = s.split(":");
 

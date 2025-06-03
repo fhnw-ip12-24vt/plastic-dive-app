@@ -1,10 +1,11 @@
 [INIT] Starting tests
 
-[INIT] Starting Tests from: LanguageLoaderTest
-[SUCCESS] Test Successful: testInstantiationOfLanguagePack
-[SUCCESS] Test Successful: testValueStorageOfTextMapSize
-[AFTER] Finishing Tests from: LanguageLoaderTest
+[INIT] Starting Tests from: ConfigTest
+[SUCCESS] Test Successful: testInstantiationOfConfigWhenFileDoesNotExists
+[SUCCESS] Test Successful: testCallOfConfigWhenFileExists
+[SUCCESS] Test Successful: testValueStorageOfConfig
+[AFTER] Finishing Tests from: ConfigTest
 
 [CLOSE] All tests finished
 [CLOSE] Final report:
-  LanguageLoaderTest: 2 passed, 0 failed, 0 skipped, 0 aborted, 
+  ConfigTest: 3 passed, 0 failed, 0 skipped, 0 aborted, 
