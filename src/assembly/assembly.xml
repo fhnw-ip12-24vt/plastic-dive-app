@@ -30,6 +30,7 @@
 			<lineEnding>unix</lineEnding>
 			<includes>
 				<include>*.sh</include>
+				<include>*.service</include>
 			</includes>
 		</fileSet>
 	</fileSets>
