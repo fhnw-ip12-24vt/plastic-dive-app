@@ -24,7 +24,7 @@ public class View {
 
     private final Image frontLayer = new Image("/assets/frontLayer.png");
     private final Image middleLayer = new Image("/assets/middleLayer.png");
-    private final Image backLayer = new Image("/assets/middleLayer.png");
+    private final Image backLayer = new Image("/assets/backLayer.png");
     private final Image scannerImage = new Image("/assets/barcodeScanner.png");
 
     private double upAndDownBobbing = 0;
@@ -55,6 +55,7 @@ public class View {
         graphicsContext.setFill(Color.web("#3e79dd"));
         graphicsContext.fillRect(0, 0, world.getWidth(), world.getHeight());
 
+        drawBackground(backLayer, backLayerShift);
         drawBackground(middleLayer, middleLayerShift);
         drawBackground(frontLayer, frontLayerShift);
 
@@ -101,10 +102,12 @@ public class View {
             if (layerShiftScalar - 0.15 > 0) {
                 layerShiftScalar -= 0.15;
             }
+            backLayerShift += 3 * layerShiftScalar;
             middleLayerShift += 5 * layerShiftScalar;
             frontLayerShift += 7 * layerShiftScalar;
         } else if (world.getDeltaClock() > 8.5) {
             layerShiftScalar += 0.2;
+            backLayerShift += 3 * layerShiftScalar;
             middleLayerShift += 5 * layerShiftScalar;
             frontLayerShift += 7 * layerShiftScalar;
         }
@@ -112,6 +115,7 @@ public class View {
 
     private void running() {
         //shift background to left
+        backLayerShift -= 3;
         middleLayerShift -= 5;
         frontLayerShift -= 7;
         graphicsContext.setFill(Color.BLACK);
