@@ -47,14 +47,6 @@ public class Obstacle extends Moveable {
         // this is an empty function since we want the default to move in a straight line.
     }
 
-    /*
-    @Override
-    public synchronized void drawAnimation(GraphicsContext graphicsContext) {
-        // temporary for demo
-        graphicsContext.setFill(color);
-        graphicsContext.fillOval(this.getX(), this.getY(), this.getSize(), this.getSize());
-    }
-    */
     /**
      * @return Whether Obstacle is out of bounds
      */

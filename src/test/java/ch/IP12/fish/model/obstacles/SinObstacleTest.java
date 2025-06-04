@@ -38,14 +38,14 @@ public class SinObstacleTest {
     @Test
     public void instanciateObstacle(){
         assertDoesNotThrow(() -> {
-            Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
+            Obstacle obstacle = new Obstacle(0, 0, world);
             SinObstacle sinObstacle = new SinObstacle(obstacle);
         });
     }
 
     @Test
     public void adjustDirectionTest(){
-        Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
+        Obstacle obstacle = new Obstacle(0, 0, world);
         SinObstacle sinObstacle = new SinObstacle(obstacle);
 
         assertEquals(Math.PI, sinObstacle.getDirection());

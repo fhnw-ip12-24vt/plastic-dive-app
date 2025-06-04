@@ -38,14 +38,14 @@ public class ForkObstacleTest {
     @Test
     public void instanciateObstacle(){
         assertDoesNotThrow(() -> {
-            Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
+            Obstacle obstacle = new Obstacle(0, 0, world);
             new ForkObstacle(obstacle);
         });
     }
 
     @Test
     public void adjustDirectionTest(){
-        Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
+        Obstacle obstacle = new Obstacle(0, 0, world);
         ForkObstacle splitterObstacle = new ForkObstacle(obstacle);
 
         assertDoesNotThrow(splitterObstacle::adjustDirection);
