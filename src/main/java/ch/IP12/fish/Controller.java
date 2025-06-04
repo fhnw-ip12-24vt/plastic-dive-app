@@ -52,9 +52,7 @@ public class Controller {
     void createGameKeyListeners(Scene scene) {
         scene.setOnKeyReleased(e -> {
             if (e.getCode() == KeyCode.I) {
-                phaseChange(0, () -> {
-                    lastHitTime = world.currentTimeSeconds();
-                });
+                phaseChange(0, () -> lastHitTime = world.currentTimeSeconds());
             }
         });
     }
@@ -192,7 +190,7 @@ public class Controller {
     }
 
     //Shift the phase to the next one and execute an action after n number of seconds have passed
-    private void phaseChange(int timeInPhase, Runnable action) {
+    private synchronized void phaseChange(int timeInPhase, Runnable action) {
         if (world.getDeltaClock() >= timeInPhase) {
             action.run();
 
@@ -201,7 +199,7 @@ public class Controller {
         }
     }
 
-    private void phaseChange(int timeInPhase) {
+    private synchronized void phaseChange(int timeInPhase) {
         phaseChange(timeInPhase, () -> {});
     }
 }

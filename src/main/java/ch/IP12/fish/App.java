@@ -113,7 +113,7 @@ public class App extends Application {
         stage.setResizable(false);
         stage.setFullScreenExitHint("");
         stage.setFullScreen(true);
-        stage.setTitle("IP12 Prototype");
+        stage.setTitle("Plastic Dive");
     }
 
     private Canvas setupCanvas(World world) {

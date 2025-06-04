@@ -129,7 +129,7 @@ public class World {
     /**
      * @return Current GamePhase
      */
-    public GamePhase getGamePhase() {
+    public synchronized GamePhase getGamePhase() {
         return gamePhase;
     }
 
@@ -137,7 +137,7 @@ public class World {
      * Sets GamePhase to provided one
      * @param gamePhase Gamephase to change to
      */
-    public void setGamePhase(GamePhase gamePhase) {
+    public synchronized void setGamePhase(GamePhase gamePhase) {
         this.gamePhase = gamePhase;
     }
 
@@ -189,7 +189,7 @@ public class World {
     /**
      * Sets clock to current time since the unix epoch in seconds
      */
-    public void resetClock() {
+    public synchronized void resetClock() {
         clock = currentTimeSeconds();
     }
 

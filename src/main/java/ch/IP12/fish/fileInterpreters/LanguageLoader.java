@@ -155,7 +155,7 @@ public class LanguageLoader {
     private void interpretLanguageFile(List<String> lines){
         Map<String, String> textMap = new HashMap<>();
 
-        lines.parallelStream().filter(l -> !l.trim().isEmpty()).forEach(s -> {
+        lines.stream().filter(l -> !l.trim().isEmpty()).forEach(s -> {
             s = s.replace("\r", "");
             String[] sections = s.split(":");
 
