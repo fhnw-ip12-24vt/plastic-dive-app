@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class IntUtilsTest {
     World world = new World(Pi4J.newAutoContext());
     Player player = new Player(0,0,0, Spritesheets.Player.getSpriteAnimation(),null, world);
-    Obstacle obstacle = new Obstacle(0,0, Spritesheets.getRandomAnimation(), world);
+    Obstacle obstacle = new Obstacle(0,0, world);
 
     @BeforeAll
     public static void initJfxRuntime() {

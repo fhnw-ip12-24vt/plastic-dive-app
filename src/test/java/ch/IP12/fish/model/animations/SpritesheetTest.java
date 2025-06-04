@@ -23,21 +23,17 @@ public class SpritesheetTest {
     @Test
     public void getSpriteAnimationTest() {
         assertInstanceOf(SpriteAnimation.class, Spritesheets.Player.getSpriteAnimation());
-        assertInstanceOf(SpriteAnimation.class, Spritesheets.getRandomAnimation());
     }
 
     @Test
     public void animationUniquenessTest() {
-        SpriteAnimation spriteAnimation1 = Spritesheets.LargeCluster.getSpriteAnimation();
+        SpriteAnimation spriteAnimation1 = Spritesheets.AtPlayerSprite.getSpriteAnimation();
 
-        SpriteAnimation spriteAnimation2 = Spritesheets.SmallCluster.getSpriteAnimation();
+        SpriteAnimation spriteAnimation2 = Spritesheets.AtPlayerSprite.getSpriteAnimation();
         assertNotEquals(spriteAnimation1, spriteAnimation2);
 
-        spriteAnimation1 = Spritesheets.SmallCluster.getSpriteAnimation();
-        assertNotEquals(spriteAnimation1, spriteAnimation2);
-
-        spriteAnimation1 = Spritesheets.LargeCluster.getSpriteAnimation();
-        spriteAnimation2 = Spritesheets.LargeCluster.getSpriteAnimation();
+        spriteAnimation1 = Spritesheets.SinSprite.getSpriteAnimation();
+        spriteAnimation2 = Spritesheets.SinSprite.getSpriteAnimation();
         assertNotEquals(spriteAnimation1, spriteAnimation2);
     }
 }

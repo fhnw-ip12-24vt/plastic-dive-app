@@ -34,20 +34,20 @@ public class ObstacleTest {
 
     @Test
     public void instanciateObstacle(){
-        assertDoesNotThrow(() -> new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world));
+        assertDoesNotThrow(() -> new Obstacle(0, 0, world));
     }
     
     @Test
     public void instanciateObstacleWithCopyConstructor(){
         assertDoesNotThrow(() -> {
-            Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
+            Obstacle obstacle = new Obstacle(0, 0, world);
             new Obstacle(obstacle);
         });
     }
 
     @Test
     public void updateTest(){
-        Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
+        Obstacle obstacle = new Obstacle(0, 0, world);
 
         assertDoesNotThrow(() -> {
             obstacle.update(0);
@@ -59,14 +59,14 @@ public class ObstacleTest {
 
     @Test
     public void drawAnimationTest(){
-        Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
+        Obstacle obstacle = new Obstacle(0, 0, world);
         
         assertDoesNotThrow(() -> obstacle.drawAnimation(graphicsContext));
     }
 
     @Test
     public void checkOutOfBounds(){
-        Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
+        Obstacle obstacle = new Obstacle(0, 0, world);
         System.out.println(obstacle.getSize());
         assertFalse(obstacle.isOutsideBounds());
 

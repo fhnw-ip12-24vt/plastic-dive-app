@@ -62,7 +62,8 @@ public abstract class Moveable {
     public void drawAnimation(GraphicsContext graphicsContext) {
         animation.play();
         Rectangle2D viewRect = animation.getImageView().getViewport();
-        graphicsContext.drawImage(animation.getImageView().getImage(), viewRect.getMinX(), viewRect.getMinY(), viewRect.getWidth(), viewRect.getHeight(), x, y, animation.getWidth(), animation.getHeight());
+        graphicsContext.drawImage(animation.getImageView().getImage(), viewRect.getMinX(), viewRect.getMinY(),
+                viewRect.getWidth(), viewRect.getHeight(), x, y, animation.getWidth(), animation.getHeight());
     }
 
     /**

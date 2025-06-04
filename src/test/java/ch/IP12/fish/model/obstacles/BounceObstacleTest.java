@@ -37,14 +37,14 @@ public class BounceObstacleTest {
     @Test
     public void instanciateObstacle(){
         assertDoesNotThrow(() -> {
-            Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
+            Obstacle obstacle = new Obstacle(0, 0, world);
             BounceObstacle bounceObstacle = new BounceObstacle(obstacle);
         });
     }
 
     @Test
     public void adjustDirectionTest(){
-        Obstacle obstacle = new Obstacle(0, 0, Spritesheets.Player.getSpriteAnimation(), world);
+        Obstacle obstacle = new Obstacle(0, 0, world);
         BounceObstacle bounceObstacle = new BounceObstacle(obstacle);
 
         assertTrue(bounceObstacle.getDirection() >= 0 && bounceObstacle.getDirection() < 6.3);
