@@ -1,6 +1,7 @@
 package ch.IP12.fish.model.obstacles;
 
 import ch.IP12.fish.model.Player;
+import ch.IP12.fish.model.animations.Spritesheets;
 import javafx.scene.paint.Color;
 
 public class AtPlayerObstacle extends Obstacle {
@@ -14,8 +15,9 @@ public class AtPlayerObstacle extends Obstacle {
     public AtPlayerObstacle(Obstacle obstacle) {
         super(obstacle);
         this.player = world.getRandomPlayer();
-        this.color = Color.RED;
+        setAnimation(Spritesheets.AtPlayerSprite.getSpriteAnimation());
         this.setSpeed(this.getSpeed()/2);
+
     }
 
     /**

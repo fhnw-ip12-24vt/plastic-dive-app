@@ -1,6 +1,6 @@
 package ch.IP12.fish.model.obstacles;
 
-import javafx.scene.paint.Color;
+import ch.IP12.fish.model.animations.Spritesheets;
 
 public class BounceObstacle extends Obstacle {
     /**
@@ -8,8 +8,8 @@ public class BounceObstacle extends Obstacle {
      */
     public BounceObstacle(Obstacle obstacle) {
         super(obstacle);
+        setAnimation(Spritesheets.BounceSprite.getSpriteAnimation());
         setDirection(Math.toRadians((Math.random() * 120) + 120));
-        this.color = Color.BURLYWOOD;
     }
 
     /**

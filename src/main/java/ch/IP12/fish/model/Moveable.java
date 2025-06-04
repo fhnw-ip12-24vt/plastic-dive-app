@@ -21,7 +21,7 @@ public abstract class Moveable {
 
 
     //path to animation images
-    private final SpriteAnimation animation;
+    private SpriteAnimation animation;
     /**
      * @param x x-axis postion to spawn object at
      * @param y y-axis position to spawn object at
@@ -162,5 +162,12 @@ public abstract class Moveable {
      */
     public World getWorld() {
         return world;
+    }
+
+    /**
+     * @param animation Sets SpriteAnimation
+     */
+    public void setAnimation(SpriteAnimation animation) {
+        this.animation = animation;
     }
 }

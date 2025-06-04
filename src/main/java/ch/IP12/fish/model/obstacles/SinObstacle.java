@@ -1,6 +1,6 @@
 package ch.IP12.fish.model.obstacles;
 
-import javafx.scene.paint.Color;
+import ch.IP12.fish.model.animations.Spritesheets;
 
 public class SinObstacle extends Obstacle {
     //Randomised wave generation (random change and random start direction)
@@ -15,7 +15,7 @@ public class SinObstacle extends Obstacle {
      */
     public SinObstacle(Obstacle obstacle) {
         super(obstacle);
-        this.color = Color.YELLOW;
+        setAnimation(Spritesheets.SinSprite.getSpriteAnimation());
     }
 
     /**

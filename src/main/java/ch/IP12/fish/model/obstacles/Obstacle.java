@@ -3,21 +3,19 @@ package ch.IP12.fish.model.obstacles;
 import ch.IP12.fish.model.Moveable;
 import ch.IP12.fish.model.World;
 import ch.IP12.fish.model.animations.SpriteAnimation;
+import ch.IP12.fish.model.animations.Spritesheets;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 
 public class Obstacle extends Moveable {
-    protected Color color = Color.SEAGREEN; // temporary for demo
-
     /**
      * @param y position on the y-axis to spawn at
      * @param speed speed obstacle moves at
-     * @param spriteAnimation Animation that is used to draw obstacle
      * @param world DTO (Data Transfer Object)
      */
-    public Obstacle(double y, double speed, SpriteAnimation spriteAnimation, World world) {
-        super(world.getWidth(), y, speed, spriteAnimation, ((Math.random() + 0.5) * 2), world);
+    public Obstacle(double y, double speed,  World world) {
+        super(world.getWidth(), y, speed, Spritesheets.ObstacleSprite.getSpriteAnimation(), ((Math.random() + 0.5) * 2), world);
         //-200 because we dont want anything to be on the very bottom of the screen since it depicts the bottom of the ocean
         //forces the Obstacle to move to the left side of the screen.
         setDirection(Math.PI);
@@ -28,8 +26,8 @@ public class Obstacle extends Moveable {
      */
     public Obstacle(Obstacle obstacle) {
         super(obstacle.getX(), obstacle.getY(), obstacle.getSpeed(), obstacle.getAnimation(), obstacle.getSpriteScale(), obstacle.getWorld());
-        color = obstacle.color;
         setDirection(Math.PI);
+        setAnimation(Spritesheets.ObstacleSprite.getSpriteAnimation());
     }
 
     /**
@@ -49,13 +47,14 @@ public class Obstacle extends Moveable {
         // this is an empty function since we want the default to move in a straight line.
     }
 
+    /*
     @Override
     public synchronized void drawAnimation(GraphicsContext graphicsContext) {
         // temporary for demo
         graphicsContext.setFill(color);
         graphicsContext.fillOval(this.getX(), this.getY(), this.getSize(), this.getSize());
     }
-
+    */
     /**
      * @return Whether Obstacle is out of bounds
      */

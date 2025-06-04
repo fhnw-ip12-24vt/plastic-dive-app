@@ -1,6 +1,7 @@
 package ch.IP12.fish.model.obstacles;
 
-import javafx.scene.paint.Color;
+
+import ch.IP12.fish.model.animations.Spritesheets;
 
 /**
  * Obstacle that forks into two different ones after a set amount of time since it creation
@@ -13,7 +14,7 @@ public class ForkObstacle extends Obstacle {
      */
     public ForkObstacle(Obstacle obstacle) {
         super(obstacle);
-        this.color = Color.PURPLE;
+        setAnimation(Spritesheets.ForkSprite.getSpriteAnimation());
     }
 
     /**
@@ -27,8 +28,6 @@ public class ForkObstacle extends Obstacle {
     }
 
     private void split() {
-        Obstacle base = new Obstacle(this);
-        base.color = Color.RED;
         Obstacle obstacle1 = new Obstacle(this);
         obstacle1.setDirection(this.getDirection() + 0.2);
         world.getObstacles().add(obstacle1);
