@@ -1,0 +1,11 @@
+[Unit]
+Description=Starts game at beginning of user session
+After=graphical-session.target
+
+[Service]
+RemainAfterExit=true
+ExecStart=/bin/bash -c /home/pi/gameStarterScript.sh
+Restart=no
+
+[Install]
+WantedBy=default.target

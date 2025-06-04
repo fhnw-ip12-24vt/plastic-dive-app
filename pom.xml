@@ -31,7 +31,7 @@
         <!-- Setup for the RaspPi -->
         <pi.hostname>pi4j</pi.hostname>
         <!-- <pi.ipnumber>10.175.12.156</pi.ipnumber> -->
-        <pi.ipnumber>10.175.2.126</pi.ipnumber>
+        <pi.ipnumber>10.175.18.32</pi.ipnumber>
         <pi.port>22</pi.port>
         <pi.username>pi</pi.username>
         <pi.password>pi4j</pi.password>
@@ -393,6 +393,19 @@
                                                  username="${pi.username}" password="${pi.password}" trust="true"
                                                  failonerror="false" usepty="true" useSystemIn="true"
                                                  command="chmod u+x ${pi.deploydirectory}/${jar.name}/${pi.download}"/>
+
+
+                                        <sshexec host="${pi.ipnumber}" port="${pi.port}"
+                                                 username="${pi.username}" password="${pi.password}" trust="true"
+                                                 failonerror="false" usepty="true" useSystemIn="true"
+                                                 command="chmod +x ${pi.deploydirectory}/${jar.name}/gameStarterScript.sh"/>
+
+
+                                        <sshexec host="${pi.ipnumber}" port="${pi.port}"
+                                                 username="${pi.username}" password="${pi.password}" trust="true"
+                                                 failonerror="false" usepty="true" useSystemIn="true"
+                                                 command="mv ${pi.deploydirectory}/${jar.name}/gameStarterScript.sh /home/pi/"/>
+
                                         <!-- Run application on Raspberry Pi -->
                                         <sshexec host="${pi.ipnumber}" port="${pi.port}"
                                                  username="${pi.username}" password="${pi.password}" trust="true"
