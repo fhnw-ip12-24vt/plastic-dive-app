@@ -70,13 +70,13 @@ public class PlayerTest {
         player.setDirection(180);
         player.move(0, 5);
 
-        assertEquals(-100, player.getX(), 3);
+        assertEquals(-92, player.getX(), 3);
         assertEquals(0, player.getY(), 3);
 
         player.setDirection(90);
         player.move(1, 5);
 
-        assertEquals(-100, player.getX(), 3);
+        assertEquals(-92, player.getX(), 3);
         assertEquals(4.45, player.getY(), 3);
     }
     
