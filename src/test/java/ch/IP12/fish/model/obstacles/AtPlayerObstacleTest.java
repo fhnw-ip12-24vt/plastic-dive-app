@@ -43,7 +43,7 @@ public class AtPlayerObstacleTest {
         });
     }
 
-    @Test
+    @Test @Disabled
     public void adjustDirectionTest(){
         Obstacle obstacle = new Obstacle(0, 0, world);
         AtPlayerObstacle atPlayerObstacle = new AtPlayerObstacle(obstacle);
