@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ch.IP12.fish</groupId>
-    <artifactId>Ueberduengung</artifactId>
-    <name>Ueberduengung</name>
-    <version>0.0.1</version>
+    <artifactId>PlasticDive</artifactId>
+    <name>PlasticDive</name>
+    <version>1.0.1</version>
     
     <repositories>
         <repository>
@@ -26,11 +26,10 @@
     <properties>
          <launcher.class>ch.IP12.fish.App</launcher.class>
 
-        <jar.name>Ueberduengung</jar.name>
+        <jar.name>PlasticDive</jar.name>
 
         <!-- Setup for the RaspPi -->
         <pi.hostname>pi4j</pi.hostname>
-        <!-- <pi.ipnumber>10.175.12.156</pi.ipnumber> -->
         <pi.ipnumber>10.175.11.179</pi.ipnumber>
         <pi.port>22</pi.port>
         <pi.username>pi</pi.username>
@@ -394,7 +393,7 @@
                                                  failonerror="false" usepty="true" useSystemIn="true"
                                                  command="chmod u+x ${pi.deploydirectory}/${jar.name}/${pi.download}"/>
 
-
+                                        <!-- make start script runnable and move it to home directory of user -->
                                         <sshexec host="${pi.ipnumber}" port="${pi.port}"
                                                  username="${pi.username}" password="${pi.password}" trust="true"
                                                  failonerror="false" usepty="true" useSystemIn="true"
@@ -404,7 +403,39 @@
                                         <sshexec host="${pi.ipnumber}" port="${pi.port}"
                                                  username="${pi.username}" password="${pi.password}" trust="true"
                                                  failonerror="false" usepty="true" useSystemIn="true"
-                                                 command="mv ${pi.deploydirectory}/${jar.name}/gameStarterScript.sh /home/pi/"/>
+                                                 command="mv ${pi.deploydirectory}/${jar.name}/gameStarterScript.sh /home/${pi.username}/"/>
+
+                                        <!-- create and enable service that starts game on boot -->
+
+                                        <sshexec host="${pi.ipnumber}" port="${pi.port}"
+                                                 username="${pi.username}" password="${pi.password}" trust="true"
+                                                 failonerror="false" usepty="true" useSystemIn="true"
+                                                 command="mv chmod +x ${pi.deploydirectory}/${jar.name}/gameStarterScript.service"/>
+
+                                        <sshexec host="${pi.ipnumber}" port="${pi.port}"
+                                                 username="${pi.username}" password="${pi.password}" trust="true"
+                                                 failonerror="false" usepty="true" useSystemIn="true"
+                                                 command="mkdir /home/${pi.username}/.config/systemd/user/"/>
+
+                                        <sshexec host="${pi.ipnumber}" port="${pi.port}"
+                                                 username="${pi.username}" password="${pi.password}" trust="true"
+                                                 failonerror="false" usepty="true" useSystemIn="true"
+                                                 command="mv ${pi.deploydirectory}/${jar.name}/gameStarterScript.service /home/${pi.username}/.config/systemd/user/"/>
+
+                                        <sshexec host="${pi.ipnumber}" port="${pi.port}"
+                                                 username="${pi.username}" password="${pi.password}" trust="true"
+                                                 failonerror="false" usepty="true" useSystemIn="true"
+                                                 command="sudo loginctl enable-linger ${pi.username}"/>
+
+                                        <sshexec host="${pi.ipnumber}" port="${pi.port}"
+                                                 username="${pi.username}" password="${pi.password}" trust="true"
+                                                 failonerror="false" usepty="true" useSystemIn="true"
+                                                 command="systemctl --user daemon-reload"/>
+
+                                        <sshexec host="${pi.ipnumber}" port="${pi.port}"
+                                                 username="${pi.username}" password="${pi.password}" trust="true"
+                                                 failonerror="false" usepty="true" useSystemIn="true"
+                                                 command="systemctl --user enable gameStarterScript.service"/>
 
                                         <!-- Run application on Raspberry Pi -->
                                         <sshexec host="${pi.ipnumber}" port="${pi.port}"

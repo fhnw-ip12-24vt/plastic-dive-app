@@ -1,6 +1,6 @@
 #!/bin/bash
-cd /home/pi/
+cd $HOME
 sleep 5
-sh ./deploy/Ueberduengung/start.sh ./deploy/Ueberduengung/ Ueberduengung &
+sh ./deploy/PlasticDive/start.sh ./deploy/PlasticDive/ PlasticDive &
 sleep 5
 wmctrl -a "Plastic Dive"
