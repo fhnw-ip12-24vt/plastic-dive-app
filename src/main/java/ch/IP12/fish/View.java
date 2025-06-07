@@ -91,9 +91,7 @@ public class View {
         //draw player animation in the beginning
         world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
 
-        writeText(world.getTextMapValue("shirtInfoText"));
 
-        world.getDifficulty().drawAnimation(graphicsContext,world);
 
         //Timings for start animation
         if (world.getDeltaClock() > 9.9) {
@@ -110,6 +108,15 @@ public class View {
             backLayerShift += 3 * layerShiftScalar;
             middleLayerShift += 5 * layerShiftScalar;
             frontLayerShift += 7 * layerShiftScalar;
+        } else if (world.getDeltaClock() > 4.5) {
+            world.getDifficulty().drawWashingAnimation(graphicsContext,world);
+            writeText("dodge the plastic balls");
+        } else if (world.getDeltaClock() > 0.8) {
+            writeText(world.getTextMapValue("shirtInfoText"));
+            world.getDifficulty().drawWashingAnimation(graphicsContext,world);
+        } else {
+            writeText(world.getTextMapValue("shirtInfoText"));
+            world.getDifficulty().drawOpeningAnimation(graphicsContext,world);
         }
     }
 

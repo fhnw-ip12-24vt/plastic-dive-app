@@ -4,8 +4,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
-import java.util.Random;
-
 /**
  * List of available Spritesheets
  */
@@ -19,9 +17,15 @@ public enum Spritesheets {
     Player(1,new SpriteAnimation(new ImageView(new Image("assets/player.png")), 8, 8, 0, 0, 92, 41, Duration.millis(1000))),
     Player2(1,new SpriteAnimation(new ImageView(new Image("assets/player.png")), 8, 8, 0, 0, 92, 41, Duration.millis(1000))),
 
-    easyDifficultyAnimation(3.5,new SpriteAnimation(new ImageView(new Image("assets/washingMachineEasy.png")), 9, 9, 0, 0, 100, 100, Duration.millis(400))),
-    mediumDifficultyAnimation(3.5,new SpriteAnimation(new ImageView(new Image("assets/washingMachineEasy.png")), 9, 9, 0, 0, 100, 100, Duration.millis(400))),
-    hardDifficultyAnimation(3.5,new SpriteAnimation(new ImageView(new Image("assets/washingMachineEasy.png")), 9, 9, 0, 0, 100, 100, Duration.millis(400))),
+
+    easyOpening(3.5,new SpriteAnimation(new ImageView(new Image("assets/openingEasy.png")), 16, 16, 0, 0, 100, 50, Duration.millis(800))),
+    easyWashing(3.5,new SpriteAnimation(new ImageView(new Image("assets/washingEasy.png")), 9, 9, 0, 0, 100, 100, Duration.millis(400))),
+
+    mediumOpening(3.5,new SpriteAnimation(new ImageView(new Image("assets/openingEasy.png")), 16, 16, 0, 0, 100, 50, Duration.millis(800))),
+    mediumWashing(3.5,new SpriteAnimation(new ImageView(new Image("assets/washingEasy.png")), 9, 9, 0, 0, 100, 100, Duration.millis(400))),
+
+    hardOpening(3.5,new SpriteAnimation(new ImageView(new Image("assets/openingEasy.png")), 16, 16, 0, 0, 100, 50, Duration.millis(800))),
+    hardWashing(3.5,new SpriteAnimation(new ImageView(new Image("assets/washingEasy.png")), 9, 9, 0, 0, 100, 100, Duration.millis(400))),
     ;
 
     public final double spriteScaling;
