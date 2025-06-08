@@ -8,11 +8,11 @@ import javafx.scene.canvas.GraphicsContext;
 
 public enum Difficulty {
     Easy(
-            5181539527925L, Spritesheets.easyOpening, Spritesheets.easyWashing, 1.0, 1),
+            5181539527925L, Spritesheets.easyOpening, Spritesheets.easyWashing, 1.0, 1, "Easy"),
     Medium(
-            6211734858490L, Spritesheets.easyOpening, Spritesheets.easyWashing, 0.6, 1.25),
+            6211734858490L, Spritesheets.easyOpening, Spritesheets.easyWashing, 0.6, 1.25, "Medium"),
     Hard(
-            7751064387950L, Spritesheets.easyOpening, Spritesheets.easyWashing, 0.4, 1.5),
+            7751064387950L, Spritesheets.easyOpening, Spritesheets.easyWashing, 0.4, 1.5, "Hard"),
     ;
 
     public final long barcode;
@@ -20,13 +20,15 @@ public enum Difficulty {
     public final SpriteAnimation washingAnimation;
     public final double timeBetweenSpawns;
     public final double pointScaling;
+    public final String textName;
 
-    Difficulty(long barcode, Spritesheets openingSprites, Spritesheets washingSprites,double timeBetweenSpawns, double pointScaling) {
+    Difficulty(long barcode, Spritesheets openingSprites, Spritesheets washingSprites,double timeBetweenSpawns, double pointScaling, String textName) {
         this.barcode = barcode;
         this.openingAnimation = openingSprites.getSpriteAnimation();
         this.washingAnimation = washingSprites.getSpriteAnimation();
         this.timeBetweenSpawns = timeBetweenSpawns;
         this.pointScaling = pointScaling;
+        this.textName = textName;
     }
 
 

@@ -1,4 +1,7 @@
 scanText;
-shirtInfoText;
+shirtInfoTextEasy;
+shirtInfoTextMedium;
+shirtInfoTextHard;
+tutorialText;
 highscoreText;
 highscoreLoadingErrorText;

@@ -110,12 +110,12 @@ public class View {
             frontLayerShift += 7 * layerShiftScalar;
         } else if (world.getDeltaClock() > 4.5) {
             world.getDifficulty().drawWashingAnimation(graphicsContext,world);
-            writeText("dodge the plastic balls");
+            writeText(world.getTextMapValue("tutorialText"));
         } else if (world.getDeltaClock() > 0.8) {
-            writeText(world.getTextMapValue("shirtInfoText"));
+            writeText(world.getTextMapValue(("shirtInfoText" + world.getDifficulty().textName)));
             world.getDifficulty().drawWashingAnimation(graphicsContext,world);
         } else {
-            writeText(world.getTextMapValue("shirtInfoText"));
+            writeText(world.getTextMapValue(("shirtInfoText" + world.getDifficulty().textName)));
             world.getDifficulty().drawOpeningAnimation(graphicsContext,world);
         }
     }
@@ -127,7 +127,7 @@ public class View {
         frontLayerShift -= 7;
         graphicsContext.setFill(Color.BLACK);
 
-        //Draw score text in top left corner
+        //Draw score text in the top left corner
         graphicsContext.setFont(world.getFont());
         Text text = new Text("" + world.getScoreWithoutDecimals());
         text.setFont(world.getFont());
