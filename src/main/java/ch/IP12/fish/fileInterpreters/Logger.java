@@ -70,6 +70,7 @@ public class Logger {
      */
     public synchronized void log(String message) {
         String log = "\n[" + (getDateTimeString()) + "] "+(message);
+        System.out.println(log);
 
         buffer.append(log);
         sync();
@@ -84,6 +85,7 @@ public class Logger {
         String log = "\n------Error------\n" + "[" + (getDateTimeString()) + "]\n" + (message);
         if (stackTrace != null) log += "\nStacktrace" + formatStacktraceArray(stackTrace);
         log += "\n-----------------";
+        System.out.println(log);
 
         buffer.append(log);
         sync();

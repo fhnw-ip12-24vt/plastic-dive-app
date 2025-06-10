@@ -62,7 +62,13 @@ public class Controller {
      */
     public void startGameLogic() {
         // Run the game logic at a fixed rate
-        executor.scheduleAtFixedRate(this::gameStep, 0, 16666666, TimeUnit.NANOSECONDS); // 16ms ≈ 60 updates per second
+        executor.scheduleAtFixedRate(() -> {
+            try {
+                gameStep();
+            } catch (Exception e) {
+                logger.logError(e.getMessage(), world.getConfigValue("log").equals("detailed") ? e.getStackTrace(): null);
+            }
+        }, 0, 16666666, TimeUnit.NANOSECONDS); // 16ms ≈ 60 updates per second
         world.setDifficulty(Difficulty.Hard);
     }
 
@@ -84,7 +90,7 @@ public class Controller {
 
 
     private void gameStep() {
-        deltaTime = (System.currentTimeMillis() - deltaTimeClock) / 1000; // Approx. 60 FPS
+        deltaTime = (System.currentTimeMillis() - deltaTimeClock) / 1000.0; // Approx. 60 FPS
         deltaTimeClock = System.currentTimeMillis();
         gameTicks += deltaTime;
         switch (world.getGamePhase()) {
@@ -178,7 +184,18 @@ public class Controller {
         }
 
         world.getPlayers().forEach(player -> player.moveRight(deltaTime));
-        phaseChange(6);
+        boolean bothPlayersOutOfScreen = true;
+        for (Player player : world.getPlayers()) {
+            if (player.xBoundsCheck(-(player.getSize()*4))){
+                bothPlayersOutOfScreen = false;
+            }
+        }
+
+        if (bothPlayersOutOfScreen) {
+            phaseChange(0, () ->{});
+        }
+
+        phaseChange(6, () -> {});
     }
 
     private void highScore() {
@@ -197,9 +214,5 @@ public class Controller {
             world.resetClock();
             world.nextPhase();
         }
-    }
-
-    private synchronized void phaseChange(int timeInPhase) {
-        phaseChange(timeInPhase, () -> {});
     }
 }

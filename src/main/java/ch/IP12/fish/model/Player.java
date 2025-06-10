@@ -1,6 +1,7 @@
 package ch.IP12.fish.model;
 
 import ch.IP12.fish.components.JoystickAnalog;
+import ch.IP12.fish.fileInterpreters.Logger;
 import ch.IP12.fish.model.animations.SpriteAnimation;
 import ch.IP12.fish.model.obstacles.Obstacle;
 import ch.IP12.fish.utils.IntUtils;
@@ -38,13 +39,21 @@ public class Player extends Moveable {
         double xChange = (Math.cos(getDirection()) * (getSpeed() * strength)) * deltaTime;
         double yChange = (Math.sin(getDirection()) * (getSpeed() * strength)) * deltaTime;
 
-        if (!(getY() + yChange > getMaxY() - getSize()) && !(getY() + yChange < 0)) {
+        if (yBoundsCheck(yChange)) {
             setY(getY() + yChange);
         }
 
-        if (!(getX() + xChange > getMaxX() - getSize()) && !(getX() + xChange < 0)) {
+        if (xBoundsCheck(xChange)) {
             setX(getX() + xChange);
         }
+    }
+
+    public boolean yBoundsCheck(double yChange) {
+        return !(getY() + yChange > getMaxY() - getSize()) && !(getY() + yChange < 0);
+    }
+
+    public boolean xBoundsCheck(double xChange) {
+        return !(getX() + xChange > getMaxX() - (getSize()*2)) && !(getX() + xChange < 0);
     }
 
     /**
@@ -79,10 +88,10 @@ public class Player extends Moveable {
      * Starts player joystick logic
      */
     public void startJoystick() {
-        if (hasJoystick()) {
+        if (hasJoystick() && joystick.getAds1115().isContinuousReadingActive()) {
             joystick.onMove((double xPos, double yPos) -> {}, () -> {});
         } else {
-            System.out.println("No joystick found");
+            Logger.getInstance().log("No joystick found for player");
         }
     }
 

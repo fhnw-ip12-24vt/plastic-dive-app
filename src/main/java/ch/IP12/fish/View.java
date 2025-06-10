@@ -91,8 +91,6 @@ public class View {
         //draw player animation in the beginning
         world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
 
-
-
         //Timings for start animation
         if (world.getDeltaClock() > 9.9) {
             return;
@@ -158,7 +156,7 @@ public class View {
             Scoreboard scoreboard = Scoreboard.getInstance(world);
             scoreboard.draw(graphicsContext);
         } catch (Exception e) {
-            graphicsContext.fillText(world.getTextMapValue("highscoreLoadingErrorText"), world.getWidth() / 2f, world.getHeight() / 2f);
+            writeText(world.getTextMapValue("highscoreLoadingErrorText"), 0);
             Logger.getInstance().logError(e.getMessage(), world.getConfigValue("log").equals("detailed") ? e.getStackTrace(): null);
         }
         graphicsContext.setFont(world.getFont());
