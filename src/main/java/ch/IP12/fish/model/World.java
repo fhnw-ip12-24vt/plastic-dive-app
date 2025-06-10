@@ -182,7 +182,7 @@ public class World {
      * @param amount Decreases shared score by this amount
      */
     public void decrementScore(long amount) {
-        score -= amount;
+        score = ((score-amount) < 0) ? 0 : score-amount ;
     }
 
 
