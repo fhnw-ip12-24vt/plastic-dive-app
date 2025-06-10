@@ -39,13 +39,21 @@ public class Player extends Moveable {
         double xChange = (Math.cos(getDirection()) * (getSpeed() * strength)) * deltaTime;
         double yChange = (Math.sin(getDirection()) * (getSpeed() * strength)) * deltaTime;
 
-        if (!(getY() + yChange > getMaxY() - getSize()) && !(getY() + yChange < 0)) {
+        if (yBoundsCheck(yChange)) {
             setY(getY() + yChange);
         }
 
-        if (!(getX() + xChange > getMaxX() - getSize()) && !(getX() + xChange < 0)) {
+        if (xBoundsCheck(xChange)) {
             setX(getX() + xChange);
         }
+    }
+
+    public boolean yBoundsCheck(double yChange) {
+        return !(getY() + yChange > getMaxY() - getSize()) && !(getY() + yChange < 0);
+    }
+
+    public boolean xBoundsCheck(double xChange) {
+        return !(getX() + xChange > getMaxX() - (getSize()*2)) && !(getX() + xChange < 0);
     }
 
     /**

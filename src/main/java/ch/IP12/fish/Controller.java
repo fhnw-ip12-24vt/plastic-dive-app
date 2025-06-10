@@ -184,6 +184,17 @@ public class Controller {
         }
 
         world.getPlayers().forEach(player -> player.moveRight(deltaTime));
+        boolean bothPlayersOutOfScreen = true;
+        for (Player player : world.getPlayers()) {
+            if (player.xBoundsCheck(-(player.getSize()*4))){
+                bothPlayersOutOfScreen = false;
+            }
+        }
+
+        if (bothPlayersOutOfScreen) {
+            phaseChange(0, () ->{});
+        }
+
         phaseChange(6, () -> {});
     }
 
