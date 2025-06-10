@@ -8,11 +8,11 @@ import javafx.scene.canvas.GraphicsContext;
 
 public enum Difficulty {
     Easy(
-            5181539527925L, Spritesheets.easyOpening, Spritesheets.easyWashing, 1.0, 1, "Easy"),
+            5181539527925L, Spritesheets.easyOpening, Spritesheets.easyWashing, 1.5, 1, "Easy"),
     Medium(
-            6211734858490L, Spritesheets.easyOpening, Spritesheets.easyWashing, 0.6, 1.25, "Medium"),
+            6211734858490L, Spritesheets.mediumOpening, Spritesheets.mediumWashing, 1, 1.25, "Medium"),
     Hard(
-            7751064387950L, Spritesheets.easyOpening, Spritesheets.easyWashing, 0.4, 1.5, "Hard"),
+            7751064387950L, Spritesheets.hardOpening, Spritesheets.hardWashing, 0.3, 1.5, "Hard"),
     ;
 
     public final long barcode;
@@ -48,14 +48,12 @@ public enum Difficulty {
         openingAnimation.play();
         Rectangle2D viewRect = openingAnimation.getImageView().getViewport();
         graphicsContext.drawImage(openingAnimation.getImageView().getImage(), viewRect.getMinX(), viewRect.getMinY(), viewRect.getWidth(), viewRect.getHeight(), world.getWidth() / 2 - viewRect.getWidth()/2, world.getHeight()/2-200, viewRect.getWidth()*3.5, viewRect.getHeight()*3.5);
-        //graphicsContext.drawImage(animation.getImageView().getImage(), viewRect.getMinX(), viewRect.getMinY(), viewRect.getWidth(), viewRect.getHeight(), x, y, length, height);
     }
 
     public synchronized void drawWashingAnimation(GraphicsContext graphicsContext, World world) {
         washingAnimation.play();
         Rectangle2D viewRect = washingAnimation.getImageView().getViewport();
         graphicsContext.drawImage(washingAnimation.getImageView().getImage(), viewRect.getMinX(), viewRect.getMinY(), viewRect.getWidth(), viewRect.getHeight(), world.getWidth() / 2 - viewRect.getWidth()/2, world.getHeight()/2-200, viewRect.getWidth()*3.5, viewRect.getHeight()*3.5);
-        //graphicsContext.drawImage(animation.getImageView().getImage(), viewRect.getMinX(), viewRect.getMinY(), viewRect.getWidth(), viewRect.getHeight(), x, y, length, height);
     }
 }
 

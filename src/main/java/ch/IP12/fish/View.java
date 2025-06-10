@@ -108,7 +108,7 @@ public class View {
             backLayerShift += 3 * layerShiftScalar;
             middleLayerShift += 5 * layerShiftScalar;
             frontLayerShift += 7 * layerShiftScalar;
-        } else if (world.getDeltaClock() > 4.5) {
+        } else if (world.getDeltaClock() > 5) {
             world.getDifficulty().drawWashingAnimation(graphicsContext,world);
             writeText(world.getTextMapValue("tutorialText"), 35);
         } else if (world.getDeltaClock() > 0.8) {

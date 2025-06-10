@@ -1,5 +1,5 @@
 //options are en, de or fr
-lang:de;
+lang:fr;
 //options are detailed or simple
 log:detailed;
 //options are 1 or 2
