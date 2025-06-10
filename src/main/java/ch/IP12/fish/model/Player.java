@@ -1,6 +1,7 @@
 package ch.IP12.fish.model;
 
 import ch.IP12.fish.components.JoystickAnalog;
+import ch.IP12.fish.fileInterpreters.Logger;
 import ch.IP12.fish.model.animations.SpriteAnimation;
 import ch.IP12.fish.model.obstacles.Obstacle;
 import ch.IP12.fish.utils.IntUtils;
@@ -79,10 +80,10 @@ public class Player extends Moveable {
      * Starts player joystick logic
      */
     public void startJoystick() {
-        if (hasJoystick()) {
+        if (hasJoystick() && joystick.getAds1115().isContinuousReadingActive()) {
             joystick.onMove((double xPos, double yPos) -> {}, () -> {});
         } else {
-            System.out.println("No joystick found");
+            Logger.getInstance().log("No joystick found for player");
         }
     }
 

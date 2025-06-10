@@ -91,8 +91,6 @@ public class View {
         //draw player animation in the beginning
         world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
 
-
-
         //Timings for start animation
         if (world.getDeltaClock() > 9.9) {
             return;

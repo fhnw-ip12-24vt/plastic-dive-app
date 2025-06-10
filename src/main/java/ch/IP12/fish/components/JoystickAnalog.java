@@ -82,7 +82,7 @@ public class JoystickAnalog extends Component {
             yActualValue = -yPos;
             updateVals(onMove, onCenter);
         });
-        new Thread(() -> ads1115.startContinuousReading(0.1)).start();
+        ads1115.startContinuousReading(0.1);
     }
 
     private synchronized void updateVals(PositionConsumer onMove, Runnable onCenter){

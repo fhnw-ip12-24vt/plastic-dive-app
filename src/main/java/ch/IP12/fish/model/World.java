@@ -58,7 +58,7 @@ public class World {
 
         players = new ArrayList<>(List.of(player1,player2));
 
-        obstacles = new ArrayList<>();
+        obstacles = Collections.synchronizedList(new ArrayList<>());
 
         spawner = new Spawner(this);
     }

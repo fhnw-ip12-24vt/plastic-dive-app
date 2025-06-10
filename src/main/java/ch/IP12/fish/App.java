@@ -31,6 +31,7 @@ public class App extends Application {
         }
         catch (Exception e) {
             try {
+                Logger.getInstance().logError(e.getMessage(), null);
                 Logger.getInstance().end();
             } catch (Exception e1) {
                 throw e;
