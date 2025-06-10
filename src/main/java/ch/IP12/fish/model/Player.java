@@ -87,7 +87,7 @@ public class Player extends Moveable {
     /**
      * Starts player joystick logic
      */
-    public void startJoystick() {
+    public void setUpJoystick() {
         if (hasJoystick()) {
             if (!isJoystickReading()) joystick.onMove((double xPos, double yPos) -> {}, () -> {});
             else Logger.getInstance().logError("Joystick is already reading.");
@@ -103,6 +103,11 @@ public class Player extends Moveable {
         if (!hasJoystick()) return;
         joystick.reset();
     }
+
+    public JoystickAnalog getJoystick() {
+        return joystick;
+    }
+
     /**
      * Checks if the current instance collides with another object.
      *

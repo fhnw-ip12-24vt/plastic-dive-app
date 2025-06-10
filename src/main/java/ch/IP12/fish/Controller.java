@@ -115,7 +115,8 @@ public class Controller {
 
         phaseChange(10, () -> {
             lastHitTime = world.currentTimeSeconds();
-            world.getPlayers().forEach(Player::startJoystick);
+            world.getPlayers().forEach(Player::setUpJoystick);
+            world.getPlayers().getFirst().getJoystick().startReadingAllJoysticks();
         });
     }
 
