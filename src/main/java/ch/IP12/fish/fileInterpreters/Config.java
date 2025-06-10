@@ -216,7 +216,7 @@ public class Config {
         });
 
         if (config.size() < configElements.size()) {
-            ArrayList<String> missing = new ArrayList();
+            ArrayList<String> missing = new ArrayList<>();
             for (String key: configElements)
                 if (!config.containsKey(key))
                     missing.add(key);

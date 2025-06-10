@@ -79,7 +79,7 @@ public class View {
         //drawing starting image
         graphicsContext.drawImage(scannerImage, world.getWidth() / 2 - scannerImage.getWidth() * 1.5, world.getHeight() / 2 - scannerImage.getHeight() * 1.5 + Math.sin(upAndDownBobbing) * 5 - 100, scannerImage.getWidth() * 3, scannerImage.getHeight() * 3);
 
-        writeText(world.getTextMapValue("scanText"));
+        writeText(world.getTextMapValue("scanText"), 70);
 
         //initial scalar values set
         frontLayerShift = middleLayerShift = backLayerShift = 0;
@@ -110,12 +110,12 @@ public class View {
             frontLayerShift += 7 * layerShiftScalar;
         } else if (world.getDeltaClock() > 4.5) {
             world.getDifficulty().drawWashingAnimation(graphicsContext,world);
-            writeText(world.getTextMapValue("tutorialText"));
+            writeText(world.getTextMapValue("tutorialText"), 35);
         } else if (world.getDeltaClock() > 0.8) {
-            writeText(world.getTextMapValue(("shirtInfoText" + world.getDifficulty().textName)));
+            writeText(world.getTextMapValue(("shirtInfoText" + world.getDifficulty().textName)), 35);
             world.getDifficulty().drawWashingAnimation(graphicsContext,world);
         } else {
-            writeText(world.getTextMapValue(("shirtInfoText" + world.getDifficulty().textName)));
+            writeText(world.getTextMapValue(("shirtInfoText" + world.getDifficulty().textName)), 35);
             world.getDifficulty().drawOpeningAnimation(graphicsContext,world);
         }
     }
@@ -182,13 +182,13 @@ public class View {
         }
     }
 
-    private void writeText(String string) {
+    private void writeText(String string, int yOffsetDown) {
         Text text = new Text(string);
         text.setFont(world.getFont());
 
         graphicsContext.setFill(Color.BLACK);
         graphicsContext.setFont(world.getFont());
-        graphicsContext.fillText(text.getText(), world.getWidth() / 2 - text.getLayoutBounds().getWidth() / 2, world.getHeight() / 2 + scannerImage.getHeight() * 1.5);
+        graphicsContext.fillText(text.getText(), world.getWidth() / 2 - text.getLayoutBounds().getWidth() / 2, world.getHeight() / 2 + yOffsetDown);
 
     }
 }
