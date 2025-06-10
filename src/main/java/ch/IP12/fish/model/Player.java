@@ -88,7 +88,7 @@ public class Player extends Moveable {
      * Starts player joystick logic
      */
     public void startJoystick() {
-        if (hasJoystick() && joystick.getAds1115().isContinuousReadingActive()) {
+        if (hasJoystick() && !isJoystickReading()) {
             joystick.onMove((double xPos, double yPos) -> {}, () -> {});
         } else {
             Logger.getInstance().log("No joystick found for player");
@@ -114,5 +114,9 @@ public class Player extends Moveable {
 
     private boolean hasJoystick() {
         return joystick != null;
+    }
+
+    private boolean isJoystickReading() {
+        return joystick.getAds1115().isContinuousReadingActive();
     }
 }
