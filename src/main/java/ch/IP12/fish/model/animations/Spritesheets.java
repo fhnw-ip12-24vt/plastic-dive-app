@@ -17,12 +17,15 @@ public enum Spritesheets {
     Player(1,new SpriteAnimation(new ImageView(new Image("assets/player.png")), 8, 8, 0, 0, 92, 41, Duration.millis(1000))),
     Player2(1,new SpriteAnimation(new ImageView(new Image("assets/player.png")), 8, 8, 0, 0, 92, 41, Duration.millis(1000))),
 
+    easyStarting(3.5,new SpriteAnimation(new ImageView(new Image("assets/openingEasy.png")), 1, 1, 0, 0, 100, 50, Duration.millis(800))),
     easyOpening(3.5,new SpriteAnimation(new ImageView(new Image("assets/openingEasy.png")), 16, 16, 0, 0, 100, 50, Duration.millis(800))),
     easyWashing(3.5,new SpriteAnimation(new ImageView(new Image("assets/washingEasy.png")), 9, 9, 0, 0, 100, 100, Duration.millis(400))),
 
+    mediumStarting(3.5,new SpriteAnimation(new ImageView(new Image("assets/openingMedium.png")), 1, 1, 0, 0, 100, 50, Duration.millis(800))),
     mediumOpening(3.5,new SpriteAnimation(new ImageView(new Image("assets/openingMedium.png")), 16, 16, 0, 0, 100, 50, Duration.millis(800))),
     mediumWashing(3.5,new SpriteAnimation(new ImageView(new Image("assets/washingMedium.png")), 9, 9, 0, 0, 100, 100, Duration.millis(400))),
 
+    hardStarting(3.5,new SpriteAnimation(new ImageView(new Image("assets/openingHard.png")), 1, 1, 0, 0, 100, 50, Duration.millis(800))),
     hardOpening(3.5,new SpriteAnimation(new ImageView(new Image("assets/openingHard.png")), 16, 16, 0, 0, 100, 50, Duration.millis(800))),
     hardWashing(3.5,new SpriteAnimation(new ImageView(new Image("assets/washingHard.png")), 9, 9, 0, 0, 100, 100, Duration.millis(400))),
     ;

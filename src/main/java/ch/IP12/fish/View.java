@@ -118,6 +118,8 @@ public class View {
         } else if(world.getDeltaClock() > 3.2) {
             writeText(world.getTextMapValue(("shirtInfoText" + world.getDifficulty().textName)), 35);
             world.getDifficulty().drawOpeningAnimation(graphicsContext,world);
+        } else {
+            world.getDifficulty().drawStartingAnimation(graphicsContext,world);
         }
     }
 
