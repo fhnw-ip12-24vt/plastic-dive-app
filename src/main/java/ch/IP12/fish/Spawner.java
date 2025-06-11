@@ -45,7 +45,7 @@ public class Spawner {
      * @param <T> Class that must extend Obstacle
      */
     public <T extends Obstacle> T create(Class<T> obstacleClass, double speed, Object... params) {
-        int spawnAreaBoundaryLimits = 150;
+        int spawnAreaBoundaryLimits = 10;
         factoryPattern factory = factories.get(obstacleClass);
         if (factory == null) {
             throw new IllegalArgumentException("No factory registered for " + obstacleClass.getName());
@@ -59,5 +59,14 @@ public class Spawner {
      */
     public void spawnRandom() {
         world.getObstacles().add(create(classes.get(rand.nextInt(classes.size())), rand.nextDouble(200,300)));
+    }
+
+    public void spawnStartObstacles() {
+        for (Class clazz : classes) {
+            Obstacle obstacle = create(clazz, 0);
+            obstacle.setX(rand.nextDouble(600,1000));
+            obstacle.setY(rand.nextDouble(550,560));
+            world.getObstacles().add(obstacle);
+        }
     }
 }

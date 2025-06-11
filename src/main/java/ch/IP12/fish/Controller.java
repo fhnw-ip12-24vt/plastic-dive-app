@@ -47,12 +47,16 @@ public class Controller {
     /**
      * Creates Key listeners for debugging to skip phases.
      * **MAY CREATE UNEXPECTED BEHAVIOUR**
+     *
      * @param scene The Scene object which will receive the listeners
      */
     void createGameKeyListeners(Scene scene) {
         scene.setOnKeyReleased(e -> {
             if (e.getCode() == KeyCode.I) {
-                phaseChange(0, () -> lastHitTime = world.currentTimeSeconds());
+                phaseChange(0, () -> {
+                    lastHitTime = world.currentTimeSeconds();
+                    world.getSpawner().spawnStartObstacles();
+                });
             }
         });
     }
@@ -66,10 +70,10 @@ public class Controller {
             try {
                 gameStep();
             } catch (Exception e) {
-                logger.logError(e.getMessage(), world.getConfigValue("log").equals("detailed") ? e.getStackTrace(): null);
+                logger.logError(e.getMessage(), world.getConfigValue("log").equals("detailed") ? e.getStackTrace() : null);
             }
         }, 0, 16666666, TimeUnit.NANOSECONDS); // 16ms ≈ 60 updates per second
-        world.setDifficulty(Difficulty.Hard);
+        world.setDifficulty(Difficulty.Easy);
     }
 
     /**
@@ -118,6 +122,7 @@ public class Controller {
             lastHitTime = world.currentTimeSeconds();
             world.getPlayers().forEach(Player::setUpJoystick);
             world.getPlayers().getFirst().getJoystick().startReadingAllJoysticks();
+            world.clearObstacles();
         });
     }
 
@@ -159,7 +164,7 @@ public class Controller {
 
         //Score increments after not being hit for 5 seconds. This increment increases with more time passed while not hit.
         if (world.currentTimeSeconds() > lastHitTime + 2)
-            world.incrementScore((1 * deltaTime * (1 + ((world.currentTimeSeconds()) - lastHitTime)))*world.getDifficulty().pointScaling);
+            world.incrementScore((1 * deltaTime * (1 + ((world.currentTimeSeconds()) - lastHitTime))) * world.getDifficulty().pointScaling);
 
 
         if (world.isObstaclesEmpty())
@@ -180,7 +185,7 @@ public class Controller {
                 //Scoreboard.getInstance().insertValues();
                 world.setScoreSaved(true);
             } catch (IOException e) {
-                logger.logError(e.getMessage(), world.getConfigValue("log").equals("detailed") ? e.getStackTrace(): null);
+                logger.logError(e.getMessage(), world.getConfigValue("log").equals("detailed") ? e.getStackTrace() : null);
                 System.out.println(e.getMessage());
             }
         }
@@ -188,20 +193,22 @@ public class Controller {
         world.getPlayers().forEach(player -> player.moveRight(deltaTime));
         boolean bothPlayersOutOfScreen = true;
         for (Player player : world.getPlayers()) {
-            if (player.xBoundsCheck(-(player.getSize()*4))){
+            if (player.xBoundsCheck(-(player.getSize() * 4))) {
                 bothPlayersOutOfScreen = false;
             }
         }
 
         if (bothPlayersOutOfScreen) {
-            phaseChange(0, () ->{});
+            phaseChange(0, () -> {
+            });
         }
 
-        phaseChange(6, () -> {});
+        phaseChange(6, () -> {
+        });
     }
 
     private void highScore() {
-        if(world.getScoreSaved()){
+        if (world.getScoreSaved()) {
             world.setScoreSaved(false);
         }
 

@@ -33,6 +33,7 @@ public class BarcodeScanner {
                 s += "\n";
                 try {
                     world.setDifficulty(Difficulty.getDifficulty(Long.parseLong(s.replace("\n", ""))));
+                    world.getSpawner().spawnStartObstacles();
                     world.setGamePhase(GamePhase.StartingAnimation);
                     stopListening();
                 } catch (RuntimeException ignore) {
