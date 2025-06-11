@@ -68,6 +68,10 @@ public class JoystickAnalog extends Component {
         this.normThreshold = normThreshold;
     }
 
+    /**
+     * @param onMove Additional logic to be done when joystick moves outside the dead zone
+     * @param onCenter Additional logic to be done when joystick moves into the dead zone
+     */
     public void onMove(PositionConsumer onMove, Runnable onCenter){
         xAxis.onNormalizedValueChange((xPos) -> {
             xActualValue = -xPos;
@@ -78,7 +82,11 @@ public class JoystickAnalog extends Component {
             yActualValue = -yPos;
             updateVals(onMove, onCenter);
         });
-        new Thread(() -> ads1115.startContinuousReading(0.1)).start();
+    }
+
+    public void startReadingAllJoysticks(){
+        if (!ads1115.isContinuousReadingActive())
+            ads1115.startContinuousReading(0.1);
     }
 
     private synchronized void updateVals(PositionConsumer onMove, Runnable onCenter){
@@ -115,10 +123,16 @@ public class JoystickAnalog extends Component {
         }
     }
 
+    /**
+     * @return Direction joystick is pointing in, in radians
+     */
     public double getDirection() {
         return direction;
     }
 
+    /**
+     * @return How far from the center the joystick is (Scale: 0-1)
+     */
     public double getStrength(){
         return strength;
     }
@@ -133,10 +147,16 @@ public class JoystickAnalog extends Component {
         yAxis.reset();
     }
 
+    /**
+     * @return Ads1115 instance that this joystick is connected to
+     */
     public Ads1115 getAds1115() {
         return ads1115;
     }
 
+    /**
+     * Interface to be used in lambda statements instead of a regular function
+     */
     @FunctionalInterface
     public interface PositionConsumer{
         void accept(double xPos, double YPos);

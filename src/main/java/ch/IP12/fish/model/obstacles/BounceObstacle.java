@@ -1,18 +1,22 @@
-package ch.IP12.fish.model;
+package ch.IP12.fish.model.obstacles;
 
-import ch.IP12.fish.Controller;
 import ch.IP12.fish.model.animations.Spritesheets;
-import javafx.scene.paint.Color;
 
 public class BounceObstacle extends Obstacle {
-
+    /**
+     * @param obstacle Obstacle to inherit values from
+     */
     public BounceObstacle(Obstacle obstacle) {
         super(obstacle);
+        setAnimation(Spritesheets.BounceSprite.getSpriteAnimation());
         setDirection(Math.toRadians((Math.random() * 120) + 120));
-        this.color = Color.BURLYWOOD;
     }
+
+    /**
+     * Obstacle will bounce if it is at or over the edge
+     */
     protected void adjustDirection() {
-        if ((getY() + getHeight()) >= getMaxY() || getY() <= 0) {
+        if ((getY() + getSize()) >= getMaxY() || getY() <= 0) {
             setDirection(-(getDirection()));
         }
     }

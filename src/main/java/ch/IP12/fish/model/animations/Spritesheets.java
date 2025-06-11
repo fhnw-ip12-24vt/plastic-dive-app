@@ -4,43 +4,43 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
-import java.util.Random;
-
+/**
+ * List of available Spritesheets
+ */
 public enum Spritesheets {
-    //to add more obstacle variations add an entry to the list bellow.
-    Player(new SpriteAnimation(new ImageView(new Image("playerSpritesheets/player.png")), 2, 2, 0, 1, 16, 7, Duration.millis(200))),
-    SmallCluster(new SpriteAnimation(new ImageView(new Image("https://upload.wikimedia.org/wikipedia/commons/7/73/The_Horse_in_Motion.jpg")), 0, 0, 0, 0, 20, 20, Duration.millis(1000))),
-    MediumCluster(new SpriteAnimation(new ImageView(new Image("https://upload.wikimedia.org/wikipedia/commons/7/73/The_Horse_in_Motion.jpg")), 0, 0, 0, 0, 35, 35, Duration.millis(1000))),
-    LargeCluster(new SpriteAnimation(new ImageView(new Image("https://upload.wikimedia.org/wikipedia/commons/7/73/The_Horse_in_Motion.jpg")), 0, 0, 0, 0, 50, 50, Duration.millis(1000))),
+    AtPlayerSprite(1,new SpriteAnimation(new ImageView(new Image("assets/plasticBallsBlue.png")), 4, 4, 1, 1, 17, 17, Duration.millis(400))),
+    BounceSprite(1,new SpriteAnimation(new ImageView(new Image("assets/plasticBallsBlueGreen.png")), 4, 4, 1, 1, 17, 17, Duration.millis(400))),
+    ForkSprite(1,new SpriteAnimation(new ImageView(new Image("assets/plasticBallsBurple.png")), 4, 4, 1, 1, 17, 17, Duration.millis(400))),
+    ObstacleSprite(1,new SpriteAnimation(new ImageView(new Image("assets/plasticBallsGreenYellow.png")), 4, 4, 1, 1, 17, 17, Duration.millis(400))),
+    SinSprite(1,new SpriteAnimation(new ImageView(new Image("assets/plasticBallsRed.png")), 4, 4, 1, 1, 17, 17, Duration.millis(400))),//to add more obstacle variations, add an entry to the list bellow.
+
+    Player(1,new SpriteAnimation(new ImageView(new Image("assets/player.png")), 8, 8, 0, 0, 92, 41, Duration.millis(1000))),
+    Player2(1,new SpriteAnimation(new ImageView(new Image("assets/player.png")), 8, 8, 0, 0, 92, 41, Duration.millis(1000))),
+
+    easyOpening(3.5,new SpriteAnimation(new ImageView(new Image("assets/openingEasy.png")), 16, 16, 0, 0, 100, 50, Duration.millis(800))),
+    easyWashing(3.5,new SpriteAnimation(new ImageView(new Image("assets/washingEasy.png")), 9, 9, 0, 0, 100, 100, Duration.millis(400))),
+
+    mediumOpening(3.5,new SpriteAnimation(new ImageView(new Image("assets/openingMedium.png")), 16, 16, 0, 0, 100, 50, Duration.millis(800))),
+    mediumWashing(3.5,new SpriteAnimation(new ImageView(new Image("assets/washingMedium.png")), 9, 9, 0, 0, 100, 100, Duration.millis(400))),
+
+    hardOpening(3.5,new SpriteAnimation(new ImageView(new Image("assets/openingHard.png")), 16, 16, 0, 0, 100, 50, Duration.millis(800))),
+    hardWashing(3.5,new SpriteAnimation(new ImageView(new Image("assets/washingHard.png")), 9, 9, 0, 0, 100, 100, Duration.millis(400))),
     ;
 
-    public static final double spriteScaling = 3.5;
+    public final double spriteScaling;
     private final SpriteAnimation spriteAnimation;
 
-    Spritesheets(SpriteAnimation spriteAnimation) {
+    Spritesheets(double spriteScaling, SpriteAnimation spriteAnimation) {
+        this.spriteScaling = spriteScaling;
         this.spriteAnimation = spriteAnimation;
     }
 
     /**
-     * Gets a random obstacle animation and sprite sheet.
-     *
-     * @return Obstacle sprite sheet.
-     */
-    public static Spritesheets getRandomSpritesheet() {
-        if (values().length == 1) {
-            return values()[0];
-        }
-        //random number based on the size of the sprite sheet list.
-        int randInt = new Random().nextInt(1, values().length);
-        return values()[randInt];
-    }
-
-    /**
-     * Returns animation object for selected sprite sheet.
+     * Returns new instance of animation object for selected sprite sheet.
      *
      * @return Sprite animation object.
      */
     public SpriteAnimation getSpriteAnimation() {
-        return spriteAnimation;
+        return new SpriteAnimation(spriteAnimation);
     }
 }

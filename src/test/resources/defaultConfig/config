@@ -1,0 +1,12 @@
+//this is a comment
+testVal1:"Test simple";
+testVal2:"Multiline
+
+test";
+testVal3:"test multiline empty
+
+
+";
+lang:en;
+log:detailed;
+maxPlayerCount:1;

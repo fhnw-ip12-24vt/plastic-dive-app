@@ -1,29 +1,34 @@
 package ch.IP12.fish.utils;
 
+import ch.IP12.fish.model.World;
+import ch.IP12.fish.model.animations.SpriteAnimation;
+import ch.IP12.fish.model.animations.Spritesheets;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.canvas.GraphicsContext;
+
 public enum Difficulty {
-    Easy("Baumwolle – Natürlich, aber ressourcenintensiv\n" +
-            "Baumwolle ist eine beliebte Naturfaser, die weich und biologisch abbaubar ist.\n" +
-            "Doch ihre Produktion hat Schattenseiten: Der Anbau benötigt enorme Wassermengen (bis zu 2.700 Liter pro Shirt) und große Mengen Chemikalien,\n" +
-            "die Böden und Gewässer belasten.\n" +
-            "Alternativen wie Bio-Baumwolle setzen auf umweltfreundlichere Methoden. Durch bewusstes Konsumieren und Recycling kann jeder helfen,\n" +
-            "den ökologischen Fußabdruck von Baumwollprodukten zu verringern.",
-            7624841656535L),
-    Medium("Mischfasern - Beim Waschen besonders problematisch\n" +
-            "Kleidungsstücke aus Mischfasern, wie Baumwolle-Polyester- Mixe, setzen beim Waschen sowohl Mikroplastik als auch natürliche Fasern frei. Polyester, das in solchen Kombinationen oft vorkommt, gibt Mikroplastik in das Wasser ab, während Baumwolle schneller abgebaut wird.\n" +
-            "Diese Kombination macht die Reinigung von Mischfasern umwelttechnisch problematisch, da beide Materialien unterschiedliche Auswirkungen auf die Umwelt haben.\n" +
-            "Um die Belastung zu verringern, hilft es, Mischfaser-Kleidung seltener zu waschen und nachhaltigere Alternativen zu wählen.",
-            6211734858498L),
-    Hard("Polyester - Praktisch, aber problematisch\n" +
-            "Polyester, eine synthetische Faser aus Plastik, ist langlebig, günstig und knitterarm. Doch die Herstellung basiert auf Erdöl, verursacht hohe CO2-Emissionen und setzt beim Waschen Mikroplastik frei, das unsere Meere belastet.\n" +
-            "Recycling-Polyester und ein bewusster Umgang mit Kleidung können helfen, die Umweltauswirkungen zu reduzieren.",
-            7751064387955L);
+    Easy(
+            5181539527925L, Spritesheets.easyOpening, Spritesheets.easyWashing, 1.5, 1, "Easy"),
+    Medium(
+            6211734858490L, Spritesheets.mediumOpening, Spritesheets.mediumWashing, 1, 1.25, "Medium"),
+    Hard(
+            7751064387950L, Spritesheets.hardOpening, Spritesheets.hardWashing, 0.3, 1.5, "Hard"),
+    ;
 
-    public final String text;
     public final long barcode;
+    public final SpriteAnimation openingAnimation;
+    public final SpriteAnimation washingAnimation;
+    public final double timeBetweenSpawns;
+    public final double pointScaling;
+    public final String textName;
 
-    Difficulty(String text, long barcode) {
-        this.text = text;
+    Difficulty(long barcode, Spritesheets openingSprites, Spritesheets washingSprites,double timeBetweenSpawns, double pointScaling, String textName) {
         this.barcode = barcode;
+        this.openingAnimation = openingSprites.getSpriteAnimation();
+        this.washingAnimation = washingSprites.getSpriteAnimation();
+        this.timeBetweenSpawns = timeBetweenSpawns;
+        this.pointScaling = pointScaling;
+        this.textName = textName;
     }
 
 
@@ -39,6 +44,16 @@ public enum Difficulty {
         //if provided barcode is invalid throw error
         throw new RuntimeException("bad barcode: " + barcode);
     }
+    public synchronized void drawOpeningAnimation(GraphicsContext graphicsContext, World world) {
+        openingAnimation.play();
+        Rectangle2D viewRect = openingAnimation.getImageView().getViewport();
+        graphicsContext.drawImage(openingAnimation.getImageView().getImage(), viewRect.getMinX(), viewRect.getMinY(), viewRect.getWidth(), viewRect.getHeight(), world.getWidth() / 2 - viewRect.getWidth()/2, world.getHeight()/2-200, viewRect.getWidth()*3.5, viewRect.getHeight()*3.5);
+    }
 
+    public synchronized void drawWashingAnimation(GraphicsContext graphicsContext, World world) {
+        washingAnimation.play();
+        Rectangle2D viewRect = washingAnimation.getImageView().getViewport();
+        graphicsContext.drawImage(washingAnimation.getImageView().getImage(), viewRect.getMinX(), viewRect.getMinY(), viewRect.getWidth(), viewRect.getHeight(), world.getWidth() / 2 - viewRect.getWidth()/2, world.getHeight()/2-200, viewRect.getWidth()*3.5, viewRect.getHeight()*3.5);
+    }
 }
 

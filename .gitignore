@@ -15,3 +15,5 @@
 
 /system/
 /logs/
+/config
+Highscore.json

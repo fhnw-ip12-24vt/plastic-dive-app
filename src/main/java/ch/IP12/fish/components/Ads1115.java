@@ -145,7 +145,7 @@ public class Ads1115 extends I2CDevice {
      */
     public void startContinuousReading(double threshold) {
         if (continuousReadingActive) {
-            throw new IllegalStateException("continuous reading already active");
+            throw new IllegalStateException("Continuous reading already active");
         } else {
             //set fast continuous reading active to lock slow continuous reading
             continuousReadingActive = true;
@@ -160,9 +160,11 @@ public class Ads1115 extends I2CDevice {
      * stops continuous reading
      */
     public void stopContinuousReading() {
-        continuousReadingActive = false;
+        if(continuousReadingActive) continuousReadingActive = false; logDebug("Continuous reading stopped");
+    }
 
-        logDebug("Continuous reading stopped");
+    public boolean isContinuousReadingActive() {
+        return continuousReadingActive;
     }
 
     /**

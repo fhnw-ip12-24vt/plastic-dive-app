@@ -1,0 +1,6 @@
+//options are en, de or fr
+lang:de;
+//options are detailed or simple
+log:detailed;
+//options are 1 or 2
+maxPlayerCount:2;

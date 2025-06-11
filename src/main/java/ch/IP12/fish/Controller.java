@@ -1,56 +1,58 @@
 package ch.IP12.fish;
 
 import ch.IP12.fish.components.BarcodeScanner;
+import ch.IP12.fish.fileInterpreters.Logger;
 import ch.IP12.fish.model.*;
+import ch.IP12.fish.scoreBoard.DataDealer;
+import ch.IP12.fish.model.obstacles.Obstacle;
 import ch.IP12.fish.utils.Difficulty;
-import ch.IP12.fish.utils.GamePhase;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Controller {
-    private final List<Player> players;
-    private final List<Obstacle> obstacles;
+    private final World world;
     private final ScheduledExecutorService executor;
 
-    private final Spawner spawner;
+    private final Logger logger = Logger.getInstance();
+
     private double deltaTimeClock = 0;
+    private double deltaTime = 0;
     private double lastHitTime = 0;
-    private final AtomicInteger gameTicks = new AtomicInteger(0);
+    private double gameTicks = 0;
 
-    public static volatile GamePhase GAMEPHASE = GamePhase.Start;
-    public static double SCORE = 500;
-    public static Difficulty DIFFICULTY;
-    public static double CLOCK;
-    private BarcodeScanner barcodeScanner;
+    private final BarcodeScanner barcodeScanner;
 
-    Controller(List<Player> players, List<Obstacle> obstacles, Scene scene) {
-        this.players = players;
-        this.obstacles = obstacles;
+    /**
+     * General logic controller for the Game
+     *
+     * @param world DTO (Data Transfer Object)
+     * @param scene Scene to listen for inputs on
+     */
+    Controller(World world, Scene scene) {
+        this.world = world;
         this.executor = Executors.newSingleThreadScheduledExecutor();
-        this.spawner = new Spawner(obstacles);
-        this.barcodeScanner = new BarcodeScanner(scene);
+        this.barcodeScanner = new BarcodeScanner(scene, world);
     }
 
     /**
-     * Creates Key listeners for movement logic.
-     *
+     * Creates Key listeners for debugging to skip phases.
+     * **MAY CREATE UNEXPECTED BEHAVIOUR**
      * @param scene The Scene object which will receive the listeners
      */
     void createGameKeyListeners(Scene scene) {
-
         scene.setOnKeyReleased(e -> {
             if (e.getCode() == KeyCode.I) {
-                nextPhase();
-                Controller.DIFFICULTY = Difficulty.Easy;
+                phaseChange(0, () -> lastHitTime = world.currentTimeSeconds());
             }
         });
     }
@@ -60,8 +62,14 @@ public class Controller {
      */
     public void startGameLogic() {
         // Run the game logic at a fixed rate
-        executor.scheduleAtFixedRate(this::gameStep, 0, 16666666, TimeUnit.NANOSECONDS); // 16ms ≈ 60 updates per second
-        barcodeScanner.startListening();
+        executor.scheduleAtFixedRate(() -> {
+            try {
+                gameStep();
+            } catch (Exception e) {
+                logger.logError(e.getMessage(), world.getConfigValue("log").equals("detailed") ? e.getStackTrace(): null);
+            }
+        }, 0, 16666666, TimeUnit.NANOSECONDS); // 16ms ≈ 60 updates per second
+        world.setDifficulty(Difficulty.Hard);
     }
 
     /**
@@ -71,122 +79,141 @@ public class Controller {
         executor.shutdown();
     }
 
+    /**
+     * Reset game state to same state as just before a round
+     */
     public void reset() {
-        players.forEach(Player::resetPosition);
-        GAMEPHASE = GamePhase.Start;
+        world.reset();
+        world.clearObstacles();
         barcodeScanner.startListening();
-        SCORE = 500;
     }
 
-    public static GamePhase GETGAMEPHASE() {
-        return GAMEPHASE;
-    }
 
     private void gameStep() {
-        switch (Controller.GETGAMEPHASE()) {
+        deltaTime = (System.currentTimeMillis() - deltaTimeClock) / 1000.0; // Approx. 60 FPS
+        deltaTimeClock = System.currentTimeMillis();
+        gameTicks += deltaTime;
+        switch (world.getGamePhase()) {
             case Start -> start();
             case StartingAnimation -> startingAnimation();
             case Running -> running();
-            case PreEndAnimation -> preEndAnimation();
             case End -> end();
-            case HighScore -> highscore();
+            case HighScore -> highScore();
         }
     }
 
     private void start() {
         deltaTimeClock = System.currentTimeMillis();
-        CLOCK = CURRENTTIMESECONDS();
+        world.resetClock();
+        reset();
     }
 
     private void startingAnimation() {
-        if (GETDELTACLOCK() > 10) {
-            lastHitTime = CURRENTTIMESECONDS();
-            nextPhase();
-            players.forEach(Player::startJoystick);
-            CLOCK = CURRENTTIMESECONDS();
-        } else if (GETDELTACLOCK() > 9.5) {
-            players.forEach(Player::moveRight);
+        if (world.getDeltaClock() > 9.4) {
+            world.getPlayers().forEach(player -> player.moveRight(deltaTime));
         }
+
+        phaseChange(10, () -> {
+            lastHitTime = world.currentTimeSeconds();
+            world.getPlayers().forEach(Player::setUpJoystick);
+            world.getPlayers().getFirst().getJoystick().startReadingAllJoysticks();
+        });
     }
 
     private void running() {
-        double deltaTime = (System.currentTimeMillis() - deltaTimeClock) / 1000; // Approx. 60 FPS
-        deltaTimeClock = System.currentTimeMillis();
-
         final List<Obstacle> deletionList = Collections.synchronizedList(new ArrayList<>());
-        // Update the model (logic)
-        gameTicks.getAndIncrement();
 
-        if (gameTicks.get() >= 75 && !(CURRENTTIMESECONDS() - CLOCK > 30)) {
-            Random rand = new Random();
-            spawner.spawnRandom(players.get(rand.nextInt(players.size())));
-            gameTicks.set(0);
+        if (gameTicks >= world.getDifficulty().timeBetweenSpawns && !(world.getDeltaClock() > 30)) {
+            world.getSpawner().spawnRandom();
+            gameTicks = 0;
         }
 
-        players.forEach(player -> player.update(deltaTime));
-        obstacles.parallelStream().forEach(obstacle -> {
+        world.getPlayers().forEach(player -> player.update(deltaTime));
+
+        for (int i = world.getObstacles().size() - 1; i >= 0; i--) {
+            Obstacle obstacle = world.getObstacles().get(i);
             //Obstacle updates
             obstacle.update(deltaTime);
 
-            //adds obstacle to deletion list if it is entirely out of frame for the player
-            if (obstacle.isOutsideBounds()) deletionList.add(obstacle);
+            //adds an obstacle to a deletion list if it is entirely out of frame for the player
+            if (obstacle.isOutsideBounds()) {
+                deletionList.add(obstacle);
+            }
 
-            //collision stops prototype
-            players.forEach(player -> {
+            //collision deletes obstacle from existence
+            world.getPlayers().forEach(player -> {
                 if (player.collidesWith(obstacle)) {
-                    lastHitTime = CURRENTTIMESECONDS();
-                    SCORE -= 50;
+                    lastHitTime = world.currentTimeSeconds();
+                    world.decrementScore(50);
                     deletionList.add(obstacle);
                 }
             });
 
-        });
+        }
 
         //removes obstacles from main obstacle array
         //and clears the deletion list.
-        obstacles.removeAll(deletionList);
+        world.removeObstacle(deletionList);
         deletionList.clear();
 
-        if (CURRENTTIMESECONDS() > lastHitTime + 5) {
-            SCORE += 1 * deltaTime * (1 + ((CURRENTTIMESECONDS() - lastHitTime) / 15));
-        }
+        //Score increments after not being hit for 5 seconds. This increment increases with more time passed while not hit.
+        if (world.currentTimeSeconds() > lastHitTime + 2)
+            world.incrementScore((1 * deltaTime * (1 + ((world.currentTimeSeconds()) - lastHitTime)))*world.getDifficulty().pointScaling);
 
-        if (CURRENTTIMESECONDS() - CLOCK > 30) {
-            if (obstacles.isEmpty()) {
-                nextPhase();
-                players.forEach(Player::resetJoystick);
-                CLOCK = CURRENTTIMESECONDS();
-            }
-        }
 
-    }
+        if (world.isObstaclesEmpty())
+            phaseChange(30, () -> world.getPlayers().forEach(Player::resetJoystick));
 
-    void preEndAnimation() {
-        nextPhase();
     }
 
     private void end() {
-        players.forEach(Player::moveRight);
-        if (GETDELTACLOCK() > 10) {
-            reset();
+        // Score nur beim ersten Aufruf speichern
+        if (!world.getScoreSaved()) {
+            try {
+                DataDealer dealer = DataDealer.getInstance("Highscore");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                String timestamp = LocalDateTime.now().format(formatter);
+
+                //json file updated with new possible entry and sorted
+                dealer.dataStore("Datum: " + timestamp, world.getScoreWithoutDecimals());
+                //Scoreboard.getInstance().insertValues();
+                world.setScoreSaved(true);
+            } catch (IOException e) {
+                logger.logError(e.getMessage(), world.getConfigValue("log").equals("detailed") ? e.getStackTrace(): null);
+                System.out.println(e.getMessage());
+            }
         }
-    }
 
-    private void highscore() {
-        if (GETDELTACLOCK() > 10) {
-            nextPhase();
+        world.getPlayers().forEach(player -> player.moveRight(deltaTime));
+        boolean bothPlayersOutOfScreen = true;
+        for (Player player : world.getPlayers()) {
+            if (player.xBoundsCheck(-(player.getSize()*4))){
+                bothPlayersOutOfScreen = false;
+            }
         }
+
+        if (bothPlayersOutOfScreen) {
+            phaseChange(0, () ->{});
+        }
+
+        phaseChange(6, () -> {});
     }
 
-    private synchronized void nextPhase() {
-        GAMEPHASE = GAMEPHASE.next();
+    private void highScore() {
+        if(world.getScoreSaved()){
+            world.setScoreSaved(false);
+        }
+
+        phaseChange(10, () -> logger.log("Round finished, final score: " + world.getScoreWithoutDecimals()));
     }
 
-    public static double CURRENTTIMESECONDS() {
-        return System.currentTimeMillis() / 1000.0;
-    }
+    //Shift the phase to the next one and execute an action after n number of seconds have passed
+    private synchronized void phaseChange(int timeInPhase, Runnable action) {
+        if (world.getDeltaClock() >= timeInPhase) {
+            action.run();
 
-    public static double GETDELTACLOCK() {
-        return CURRENTTIMESECONDS() - CLOCK;
+            world.resetClock();
+            world.nextPhase();
+        }
     }
 }
