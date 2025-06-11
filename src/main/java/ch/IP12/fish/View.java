@@ -112,7 +112,6 @@ public class View {
         } else if (world.getDeltaClock() > 11) {
             //write tutorial text
             world.getDifficulty().drawWashingAnimation(graphicsContext,world);
-            System.out.println(world.getObstacles().size());
             for (Obstacle obstacle : world.getObstacles()) {
                 obstacle.drawAnimation(graphicsContext);
             }
