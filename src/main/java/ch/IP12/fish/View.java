@@ -92,27 +92,30 @@ public class View {
         world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
 
         //Timings for start animation
-        if (world.getDeltaClock() > 9.9) {
+        if (world.getDeltaClock() > 15.9) {
             return;
-        } else if (world.getDeltaClock() > 9) {
+        } else if (world.getDeltaClock() > 15) {
+            //slow shift down for start of game
             if (layerShiftScalar - 0.15 > 0) {
                 layerShiftScalar -= 0.15;
             }
             backLayerShift += 3 * layerShiftScalar;
             middleLayerShift += 5 * layerShiftScalar;
             frontLayerShift += 7 * layerShiftScalar;
-        } else if (world.getDeltaClock() > 8.5) {
+        } else if (world.getDeltaClock() > 14.5) {
+            //shift background to the left so that everything leaves the screen to the right
             layerShiftScalar += 0.2;
             backLayerShift += 3 * layerShiftScalar;
             middleLayerShift += 5 * layerShiftScalar;
             frontLayerShift += 7 * layerShiftScalar;
-        } else if (world.getDeltaClock() > 5) {
+        } else if (world.getDeltaClock() > 11) {
+            //write tutorial text
             world.getDifficulty().drawWashingAnimation(graphicsContext,world);
             writeText(world.getTextMapValue("tutorialText"), 35);
-        } else if (world.getDeltaClock() > 0.8) {
+        } else if (world.getDeltaClock() > 4.0) {
             writeText(world.getTextMapValue(("shirtInfoText" + world.getDifficulty().textName)), 35);
             world.getDifficulty().drawWashingAnimation(graphicsContext,world);
-        } else {
+        } else if(world.getDeltaClock() > 3.2) {
             writeText(world.getTextMapValue(("shirtInfoText" + world.getDifficulty().textName)), 35);
             world.getDifficulty().drawOpeningAnimation(graphicsContext,world);
         }
@@ -135,7 +138,6 @@ public class View {
         world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
 
         //draw all obstacles
-        graphicsContext.setFill(Color.SEAGREEN);
         world.getObstacles().forEach(obstacle -> obstacle.drawAnimation(graphicsContext));
     }
 

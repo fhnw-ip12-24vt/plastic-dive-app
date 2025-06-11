@@ -109,11 +109,12 @@ public class Controller {
     }
 
     private void startingAnimation() {
-        if (world.getDeltaClock() > 9.4) {
+        //shift player into view
+        if (world.getDeltaClock() > 15.4) {
             world.getPlayers().forEach(player -> player.moveRight(deltaTime));
         }
 
-        phaseChange(10, () -> {
+        phaseChange(16, () -> {
             lastHitTime = world.currentTimeSeconds();
             world.getPlayers().forEach(Player::setUpJoystick);
             world.getPlayers().getFirst().getJoystick().startReadingAllJoysticks();
