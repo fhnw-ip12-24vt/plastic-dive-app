@@ -136,7 +136,7 @@ public class DataDealer {
             Files.createFile(filePath);
             while (!Files.exists(filePath)) {}
         }
-        Files.write(filePath, JSONString.getBytes(), StandardOpenOption.WRITE, StandardOpenOption.DSYNC);
+        Files.write(filePath, JSONString.getBytes(), StandardOpenOption.WRITE, StandardOpenOption.DSYNC, StandardOpenOption.TRUNCATE_EXISTING);
     }
 
     //Parse JSON file provided for a JSON object
