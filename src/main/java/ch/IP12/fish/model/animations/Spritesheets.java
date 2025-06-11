@@ -15,7 +15,7 @@ public enum Spritesheets {
     SinSprite(1,new SpriteAnimation(new ImageView(new Image("assets/plasticBallsRed.png")), 4, 4, 1, 1, 17, 17, Duration.millis(400))),//to add more obstacle variations, add an entry to the list bellow.
 
     Player(1,new SpriteAnimation(new ImageView(new Image("assets/player.png")), 8, 8, 0, 0, 92, 41, Duration.millis(1000))),
-    Player2(1,new SpriteAnimation(new ImageView(new Image("assets/player.png")), 8, 8, 0, 0, 92, 41, Duration.millis(1000))),
+    Player2(1,new SpriteAnimation(new ImageView(new Image("assets/player2.png")), 8, 8, 0, 0, 92, 41, Duration.millis(1000))),
 
     easyStarting(3.5,new SpriteAnimation(new ImageView(new Image("assets/openingEasy.png")), 1, 1, 0, 0, 100, 50, Duration.millis(800))),
     easyOpening(3.5,new SpriteAnimation(new ImageView(new Image("assets/openingEasy.png")), 16, 16, 0, 0, 100, 50, Duration.millis(800))),
