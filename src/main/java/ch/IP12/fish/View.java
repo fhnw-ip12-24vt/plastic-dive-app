@@ -124,6 +124,7 @@ public class View {
             writeText(world.getTextMapValue(("shirtInfoText" + world.getDifficulty().textName)), 35);
             world.getDifficulty().drawOpeningAnimation(graphicsContext,world);
         } else {
+            writeText(world.getTextMapValue(("shirtInfoText" + world.getDifficulty().textName)), 35);
             world.getDifficulty().drawStartingAnimation(graphicsContext,world);
         }
     }

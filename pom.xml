@@ -30,7 +30,7 @@
 
         <!-- Setup for the RaspPi -->
         <pi.hostname>pi4j</pi.hostname>
-        <pi.ipnumber>192.168.193.165</pi.ipnumber>
+        <pi.ipnumber>192.168.179.165</pi.ipnumber>
         <pi.port>22</pi.port>
         <pi.username>pi</pi.username>
         <pi.password>pi4j</pi.password>
