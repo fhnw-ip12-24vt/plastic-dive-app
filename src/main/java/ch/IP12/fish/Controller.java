@@ -181,7 +181,7 @@ public class Controller {
                 String timestamp = LocalDateTime.now().format(formatter);
 
                 //json file updated with new possible entry and sorted
-                dealer.dataStore("Datum: " + timestamp, world.getScoreWithoutDecimals());
+                dealer.dataStore(timestamp, world.getScoreWithoutDecimals());
                 //Scoreboard.getInstance().insertValues();
                 world.setScoreSaved(true);
             } catch (IOException e) {

@@ -48,9 +48,8 @@ public enum Difficulty {
     }
 
     public synchronized void drawStartingAnimation(GraphicsContext graphicsContext, World world) {
-        startingAnimation.play();
-        Rectangle2D viewRect = openingAnimation.getImageView().getViewport();
-        graphicsContext.drawImage(openingAnimation.getImageView().getImage(), viewRect.getMinX(), viewRect.getMinY(), viewRect.getWidth(), viewRect.getHeight(), world.getWidth() / 2 - viewRect.getWidth()/2, world.getHeight()/2-200, viewRect.getWidth()*3.5, viewRect.getHeight()*3.5);
+        Rectangle2D viewRect = startingAnimation.getImageView().getViewport();
+        graphicsContext.drawImage(startingAnimation.getImageView().getImage(), viewRect.getMinX(), viewRect.getMinY(), viewRect.getWidth(), viewRect.getHeight(), world.getWidth() / 2 - viewRect.getWidth()/2, world.getHeight()/2-200, viewRect.getWidth()*3.5, viewRect.getHeight()*3.5);
     }
 
     public synchronized void drawOpeningAnimation(GraphicsContext graphicsContext, World world) {

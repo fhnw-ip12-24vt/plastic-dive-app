@@ -2,7 +2,6 @@ package ch.IP12.fish;
 
 import ch.IP12.fish.fileInterpreters.Logger;
 import ch.IP12.fish.model.World;
-import ch.IP12.fish.model.animations.Spritesheets;
 import ch.IP12.fish.model.obstacles.Obstacle;
 import ch.IP12.fish.scoreBoard.Scoreboard;
 import javafx.animation.AnimationTimer;
@@ -134,13 +133,13 @@ public class View {
         backLayerShift -= 3;
         middleLayerShift -= 5;
         frontLayerShift -= 7;
-        graphicsContext.setFill(Color.BLACK);
+        graphicsContext.setFill(Color.YELLOW);
 
         //Draw score text in the top left corner
-        graphicsContext.setFont(world.getFont());
-        Text text = new Text("" + world.getScoreWithoutDecimals());
+        graphicsContext.setFont(fontHighscore);
+        Text text = new Text("Score: " + world.getScoreWithoutDecimals());
         text.setFont(world.getFont());
-        graphicsContext.fillText("" + world.getScoreWithoutDecimals(), world.getWidth() - 5 - text.getLayoutBounds().getWidth(), 25);
+        graphicsContext.fillText("Score: " + world.getScoreWithoutDecimals(), world.getWidth() - 5 - text.getLayoutBounds().getWidth(), 30);
 
         //draw each player
         world.getPlayers().forEach(player -> player.drawAnimation(graphicsContext));
