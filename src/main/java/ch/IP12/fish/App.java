@@ -73,6 +73,7 @@ public class App extends Application {
         Scene scene = createScene(canvas);
         stage.setScene(scene);
         stage.show();
+        stage.requestFocus();
         logger.log("Window initialized and setup");
 
         //Initializes the controller and starts the game
