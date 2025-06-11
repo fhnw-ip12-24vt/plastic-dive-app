@@ -2,6 +2,8 @@ package ch.IP12.fish;
 
 import ch.IP12.fish.fileInterpreters.Logger;
 import ch.IP12.fish.model.World;
+import ch.IP12.fish.model.animations.Spritesheets;
+import ch.IP12.fish.model.obstacles.Obstacle;
 import ch.IP12.fish.scoreBoard.Scoreboard;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
@@ -111,6 +113,10 @@ public class View {
         } else if (world.getDeltaClock() > 11) {
             //write tutorial text
             world.getDifficulty().drawWashingAnimation(graphicsContext,world);
+            System.out.println(world.getObstacles().size());
+            for (Obstacle obstacle : world.getObstacles()) {
+                obstacle.drawAnimation(graphicsContext);
+            }
             writeText(world.getTextMapValue("tutorialText"), 35);
         } else if (world.getDeltaClock() > 4.0) {
             writeText(world.getTextMapValue(("shirtInfoText" + world.getDifficulty().textName)), 35);
